@@ -1,16 +1,13 @@
+import javazoom.jlgui.basicplayer.BasicPlayer;
+import javazoom.jlgui.basicplayer.BasicPlayerException;
+
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javazoom.jlgui.basicplayer.BasicPlayer;
-import javazoom.jlgui.basicplayer.BasicPlayerException;
-
-import java.awt.event.ComponentListener;
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 
 public class mp3Player extends JFrame {
@@ -19,6 +16,7 @@ public class mp3Player extends JFrame {
     private JButton backButton;
     private JSlider volumeSlider;
     private JPanel contentPane;
+    private JButton addPlaylistBtn;
 
     BasicPlayer myPlayer = new BasicPlayer();       // Creates basic player object to play music
     String mp3File;                     // Stores files location of mp3 to be played
@@ -30,10 +28,6 @@ public class mp3Player extends JFrame {
     public mp3Player() {
         setContentPane(contentPane);                        // Setup window
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-        //volumeSlider.setMaximum(6);                         //set max gain
-        //volumeSlider.setMinimum(0);                         //set min gain
-
 
         playButton.addActionListener(new ActionListener() {
             @Override
@@ -78,6 +72,13 @@ public class mp3Player extends JFrame {
                 }
             }
         });
+        addPlaylistBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Create pop-up for creating a playlist
+                System.out.println("Adding playlist");
+            }
+        });
     }
 
     private void getFileLocation() {
@@ -87,6 +88,44 @@ public class mp3Player extends JFrame {
         myInput.setModal(true);
 
         mp3File = myInput.getFileLocation();            // Save and get file location input
+    }
+
+    // TODO: Finish this
+    private void showPlaylists() {
+        // Grab Playlists titles from User profile JSON
+        // Display titles above "+ New Playlist"
+    }
+
+    private boolean createPlaylist() {
+        // TODO: FINISH
+        boolean created = false;
+        String pID;
+        String pName = "hello";
+
+        if (!pName.equals("")) {
+            pID = "";   // TODO: Automate somehow
+            Playlist newPlaylist = new Playlist(pID, pName);
+
+            System.out.println("Playlist is created");
+            created = true;
+        }
+
+        return created;
+    }
+
+    private boolean deletePlaylist() {
+        // TODO:
+        boolean deleted = false;
+        Playlist playlist = new Playlist("100", "Name");    // TODO: Change to user selected playlist
+
+        // TODO: right-click and choose delete
+
+        if (playlist != null) {
+            playlist = null;    // Let garbage collection handle it
+            deleted = true;
+        }
+
+        return deleted;
     }
 
     public static void main(String[] args) {
