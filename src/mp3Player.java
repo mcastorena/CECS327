@@ -9,8 +9,6 @@ import javazoom.jlgui.basicplayer.BasicPlayerException;
 
 import java.awt.event.ComponentListener;
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 
 public class mp3Player extends JFrame {
@@ -30,6 +28,7 @@ public class mp3Player extends JFrame {
     public mp3Player() {
         setContentPane(contentPane);                        // Setup window
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setTitle("MP3 Player");
 
         //volumeSlider.setMaximum(6);                         //set max gain
         //volumeSlider.setMinimum(0);                         //set min gain
@@ -56,10 +55,33 @@ public class mp3Player extends JFrame {
                     try {
                         System.out.println("File opened, trying to play");
                         myPlayer.play();
+                        isPlaying = true;
                     } catch (BasicPlayerException e1) {
                         e1.printStackTrace();
                     }
                     isPlaying = true;                               // Set isPlaying flag to true
+                    playButton.setText("||");                       // Change play button to pause button
+                    return;
+                }
+                if (isPlaying) {                                      // If a song is currently playing, pause the song
+                    try {
+                        myPlayer.pause();                           // Pause the song
+                        isPlaying = false;                          // Set isPlaying flag to false
+                        return;
+                    } catch (BasicPlayerException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+                if (!isPlaying && !mp3File.isEmpty()) {                  //If a song is paused, play it again
+                    try {
+                        myPlayer.resume();
+                        isPlaying = true;
+                        playButton.setText("||");
+                        return;
+                    } catch (BasicPlayerException e1) {
+                        e1.printStackTrace();
+                    }
+
 
                 }
 
@@ -68,13 +90,15 @@ public class mp3Player extends JFrame {
         volumeSlider.addChangeListener(new ChangeListener() {                   //sets mp3Player volume
             @Override
             public void stateChanged(ChangeEvent e) {
-                playerVolume = volumeSlider.getValue();
-                playerVolume = (playerVolume / 100) * 3.02;
+                playerVolume = volumeSlider.getValue();                         // Get volumeSlider's value
+                playerVolume = (playerVolume / 100);                            // BasicPlayer's setGain() accepts input from 0.0 - 1.0
                 System.out.println("Volume slider value:\t" + playerVolume);
-                try {
-                    myPlayer.setGain(playerVolume);
-                } catch (BasicPlayerException e1) {
-                    e1.printStackTrace();
+                if (isPlaying) {                                                // If a song is playing
+                    try {
+                        myPlayer.setGain(playerVolume);                         // Set the volume
+                    } catch (BasicPlayerException e1) {
+                        e1.printStackTrace();
+                    }
                 }
             }
         });
@@ -115,6 +139,7 @@ public class mp3Player extends JFrame {
         final com.intellij.uiDesigner.core.Spacer spacer1 = new com.intellij.uiDesigner.core.Spacer();
         contentPane.add(spacer1, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 2, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, 1, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         volumeSlider = new JSlider();
+        volumeSlider.setValue(100);
         contentPane.add(volumeSlider, new com.intellij.uiDesigner.core.GridConstraints(2, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         skipButton = new JButton();
         skipButton.setText(">|");
