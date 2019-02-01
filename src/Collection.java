@@ -6,6 +6,7 @@ public class Collection
     private Artist artist;
     private Song song;
     private long id;
+    private boolean isSongArtistFormat = true;
 
     public Collection(Release release, Artist artist, Song song) {
         this.release = release;
@@ -57,12 +58,19 @@ public class Collection
         return artist.getName();
     }
 
+    public void setPrintFormat(boolean format) //true:song/artist, false: artist
+    {
+        if(format)
+            isSongArtistFormat = true;
+        else
+            isSongArtistFormat = false;
+    }
+
     @Override
     public String toString() {
-        return "Collection{" +
-                "release=" + release +
-                ", artist=" + artist +
-                ", song=" + song +
-                '}';
+        if(isSongArtistFormat)
+            return (song.getTitle() + ", " + artist.getName());
+        else
+            return artist.getName();
     }
 }

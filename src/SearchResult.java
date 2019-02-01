@@ -11,7 +11,16 @@ public class SearchResult {
         this.artists = artists;
     }
 
-    // TODO: Add setters/getters for Lists songs/artists?
+    public List<Collection> getSongResultList()
+    {
+        return songs;
+    }
+
+    public List<Collection> getArtistResultList()
+    {
+        return artists;
+    }
+
 
     public String getSongTitle(int index) {
         return songs.get(index).getSongTitle();

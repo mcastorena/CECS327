@@ -42,10 +42,12 @@ public class Search {
             if(!artistInList) {
                 if (artist.equals(name))
                 {
+                    currentCollection.setPrintFormat(false);
                     searchArtistList.add(0, currentCollection);
                 }
                 else if (Pattern.compile(Pattern.quote(name), Pattern.CASE_INSENSITIVE).matcher(artist).find())
                 {
+                    currentCollection.setPrintFormat(false);
                     searchArtistList.add(currentCollection);
                 }
                 duplicateArtists.add(artist);
