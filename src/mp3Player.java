@@ -13,41 +13,31 @@ import javazoom.jlgui.basicplayer.BasicPlayer;
 import javazoom.jlgui.basicplayer.BasicPlayerException;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import javazoom.jlgui.basicplayer.BasicPlayer;
-import javazoom.jlgui.basicplayer.BasicPlayerException;
-
-import java.awt.event.ComponentListener;
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-
-
-
+// mp3Player is a Singleton because we only want 1 song to play at a time.
 public class mp3Player extends JFrame {
     private JButton playButton;
     private JButton skipButton;
     private JButton backButton;
     private JSlider volumeSlider;
     private JPanel contentPane;
+    private static mp3Player instance;
 
-    BasicPlayer myPlayer = new BasicPlayer();       // Creates basic player object to play music
-    String mp3File;                     // Stores files location of mp3 to be played
-    boolean isPlaying = false;          // Boolean stores whether a mp3 is currently being played or not
-    double playerVolume;                // Stores player volume
+    private BasicPlayer myPlayer = new BasicPlayer();       // Creates basic player object to play music
+    private String mp3File;                     // Stores files location of mp3 to be played
+    private boolean isPlaying = false;          // Boolean stores whether a mp3 is currently being played or not
+    private double playerVolume;                // Stores player volume
 
     fileLocationInputWindow myInput;            // Input window for mp3 file location
 
-    public mp3Player() {
+    private mp3Player() {
         setContentPane(contentPane);                        // Setup window
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setTitle("MP3 Player");
 
         //volumeSlider.setMaximum(6);                         //set max gain
         //volumeSlider.setMinimum(0);                         //set min gain
@@ -74,10 +64,33 @@ public class mp3Player extends JFrame {
                     try {
                         System.out.println("File opened, trying to play");
                         myPlayer.play();
+                        isPlaying = true;
                     } catch (BasicPlayerException e1) {
                         e1.printStackTrace();
                     }
                     isPlaying = true;                               // Set isPlaying flag to true
+                    playButton.setText("||");                       // Change play button to pause button
+                    return;
+                }
+                if (isPlaying) {                                      // If a song is currently playing, pause the song
+                    try {
+                        myPlayer.pause();                           // Pause the song
+                        isPlaying = false;                          // Set isPlaying flag to false
+                        return;
+                    } catch (BasicPlayerException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+                if (!isPlaying && !mp3File.isEmpty()) {                  //If a song is paused, play it again
+                    try {
+                        myPlayer.resume();
+                        isPlaying = true;
+                        playButton.setText("||");
+                        return;
+                    } catch (BasicPlayerException e1) {
+                        e1.printStackTrace();
+                    }
+
 
                 }
 
@@ -86,16 +99,52 @@ public class mp3Player extends JFrame {
         volumeSlider.addChangeListener(new ChangeListener() {                   //sets mp3Player volume
             @Override
             public void stateChanged(ChangeEvent e) {
-                playerVolume = volumeSlider.getValue();
-                playerVolume = (playerVolume / 100) * 3.02;
+                playerVolume = volumeSlider.getValue();                         // Get volumeSlider's value
+                playerVolume = (playerVolume / 100);                            // BasicPlayer's setGain() accepts input from 0.0 - 1.0
                 System.out.println("Volume slider value:\t" + playerVolume);
-                try {
-                    myPlayer.setGain(playerVolume);
-                } catch (BasicPlayerException e1) {
-                    e1.printStackTrace();
+                if (isPlaying) {                                                // If a song is playing
+                    try {
+                        myPlayer.setGain(playerVolume);                         // Set the volume
+                    } catch (BasicPlayerException e1) {
+                        e1.printStackTrace();
+                    }
                 }
             }
         });
+    }
+
+    public static mp3Player getInstance()
+    {
+        if(instance == null)
+        {
+            instance = new mp3Player();
+        }
+        return instance;
+    }
+
+    public void changeSong(String mp3File)
+    {
+        try {
+            myPlayer.stop();
+            isPlaying = false;
+
+            this.mp3File = mp3File;
+            myPlayer.open(new File(mp3File));
+            myPlayer.play();
+            isPlaying = true;
+            playButton.setText("||");
+        } catch (BasicPlayerException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getCurrentSong()
+    {
+        if(mp3File != null)
+        {
+            return mp3File;
+        }
+        return "";
     }
 
     private void getFileLocation() {
@@ -107,7 +156,7 @@ public class mp3Player extends JFrame {
         mp3File = myInput.getFileLocation();            // Save and get file location input
     }
 
-    public static void main(String[] args) {
+
 
     {
 // GUI initializer generated by IntelliJ IDEA GUI Designer
@@ -140,6 +189,8 @@ public class mp3Player extends JFrame {
         playButton.setText("►");
         contentPane.add(playButton, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
+
+    public static void main(String[] args) {
 
         // Process JSON file
         Gson gson = new Gson();
@@ -197,30 +248,19 @@ public class mp3Player extends JFrame {
         }
         catch (IOException e) {
             e.printStackTrace();
-        }
+        } // End Json Processing
 
-        //Testing Searches
-        String searchQuery = "friend";
-        SearchResult sResult = Search.search(searchQuery, collection);
-        System.out.println("\n" + sResult);
 
-        System.out.println("\n\n SONG RESULTS FOR \"" + searchQuery + "\":");
-        System.out.printf("%20s %70s\n\n", "Song", "Artist");
-        for(int i = 0; i < sResult.getSongResultSize(); i++)
-        {
-            System.out.printf("%-80s %-80s\n", sResult.getSongTitle(i), sResult.getArtistForSong(i));
-        }
-
-        System.out.println("\n\n ARTIST RESULTS:");
-        for(int i = 0; i < sResult.getArtistResultSize(); i++)
-        {
-            System.out.println(sResult.getArtistName(i));
-        }
+        SearchView searchView = new SearchView(collection);
+        searchView.pack();
+        searchView.setVisible(true);
 
         // Open mp3
-        mp3Player myPlayer = new mp3Player();
+        mp3Player myPlayer = mp3Player.getInstance();
         myPlayer.pack();
         myPlayer.setVisible(true);
+
+
     }
 
 }

@@ -1,48 +1,38 @@
 import javax.swing.*;
 import java.awt.*;
 
+// Enables multiline list cells and creates cell border
 public class SearchListCellRenderer implements ListCellRenderer {
-    private JPanel p;
-    private JPanel iconPanel;
-    private JLabel l;
-    private JTextArea ta;
+    private JPanel panel;
+    private JTextArea textArea;
 
-    public SearchListCellRenderer() {
-        p = new JPanel();
-        p.setLayout(new BorderLayout());
+    SearchListCellRenderer() {
+        panel = new JPanel();
+        panel.setLayout(new BorderLayout());
 
-        // icon
-        //iconPanel = new JPanel(new BorderLayout());
-        //l = new JLabel("icon");
-        // text
-        //iconPanel.add(l, BorderLayout.NORTH);
-        //p.add(iconPanel, BorderLayout.WEST);
-
-        // text
-        ta = new JTextArea();
-        ta.setLineWrap(true);
-        ta.setWrapStyleWord(true);
-        p.add(ta, BorderLayout.CENTER);
+        textArea = new JTextArea();
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        panel.add(textArea, BorderLayout.CENTER);
     }
 
     @Override
     public Component getListCellRendererComponent(final JList list,
-                                                  final Object value, final int index, final boolean isSelected,
+                                                  final Object collection, final int index, final boolean isSelected,
                                                   final boolean hasFocus) {
 
-        ta.setText(value.toString());
-        int width = list.getWidth();
-        // this is just to lure the ta's internal sizing mechanism into action
-        if (width > 0)
-            ta.setSize(width, Short.MAX_VALUE);
-        if(hasFocus)
-        {
-            ta.setBackground(Color.lightGray);
-        }
-        else
-            ta.setBackground(Color.white);
-        return p;
+        textArea.setText(collection.toString());
 
+        // Change list item color when selected
+        if(hasFocus)
+            textArea.setBackground(Color.lightGray);
+        else
+            textArea.setBackground(Color.white);
+
+        // Set border between list items
+        textArea.setBorder(BorderFactory.createEtchedBorder());
+
+        return panel;
     }
 }
 

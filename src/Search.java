@@ -42,6 +42,7 @@ public class Search {
             if(!artistInList) {
                 if (artist.equals(name))
                 {
+                    // Set the toString method to the artist name
                     currentCollection.setPrintFormat(false);
                     searchArtistList.add(0, currentCollection);
                 }

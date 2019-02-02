@@ -69,8 +69,8 @@ public class Collection
     @Override
     public String toString() {
         if(isSongArtistFormat)
-            return (song.getTitle() + ", " + artist.getName());
+            return  String.format("%s \n - %s", getSongTitle(), getArtistName());
         else
-            return artist.getName();
+            return getArtistName();
     }
 }
