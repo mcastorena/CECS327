@@ -20,8 +20,8 @@ public class SearchListCellRenderer implements ListCellRenderer {
     public Component getListCellRendererComponent(final JList list,
                                                   final Object collection, final int index, final boolean isSelected,
                                                   final boolean hasFocus) {
-
-        textArea.setText(collection.toString());
+        Collection c = (Collection) collection;
+        textArea.setText(String.format("%s \n - %s", c.getSongTitle(), c.getArtistName()));
 
         // Change list item color when selected
         if(hasFocus)

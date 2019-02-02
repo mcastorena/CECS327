@@ -32,7 +32,9 @@
         <children>
           <component id="8c0b" class="javax.swing.JList" binding="list2" default-binding="true">
             <constraints/>
-            <properties/>
+            <properties>
+              <selectionMode value="0"/>
+            </properties>
           </component>
         </children>
       </scrollpane>
