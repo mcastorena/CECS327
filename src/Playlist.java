@@ -6,11 +6,10 @@ public class Playlist {
     private String name;
     private ArrayList<String> songList;
 
-
     /**
      * Default constructor for creating a new playlist. Instantiates a new ArrayList for songList.
      *
-     * @param id - ID number to reference the Playlist
+     * @param id   - ID number to reference the Playlist
      * @param name - Name of the Playlist as given by the User
      */
     public Playlist(String id, String name) {

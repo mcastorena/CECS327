@@ -17,13 +17,18 @@ import java.util.List;
 
 // mp3Player is a Singleton because we only want 1 song to play at a time.
 public class mp3Player extends JFrame {
+
+    private static mp3Player instance;
+
+    /* Swing components */
     private JButton playButton;
     private JButton skipButton;
     private JButton backButton;
     private JSlider volumeSlider;
     private JPanel contentPane;
-    private static mp3Player instance;
     private JButton addPlaylistBtn;
+    private JScrollPane playlistsPane;
+    private JList<Object> playlistList;
 
     private BasicPlayer myPlayer = new BasicPlayer();       // Creates basic player object to play music
     private String mp3File;                     // Stores files location of mp3 to be played
@@ -31,6 +36,8 @@ public class mp3Player extends JFrame {
     private double playerVolume;                // Stores player volume
 
     fileLocationInputWindow myInput;            // Input window for mp3 file location
+
+    private List<Collection> playlistTitles;
 
     private mp3Player() {
         setContentPane(contentPane);                        // Setup window
@@ -45,6 +52,7 @@ public class mp3Player extends JFrame {
 
                     JFileChooser myFileChooser = new JFileChooser();                // Create new JFileChooser object
                     int choice = myFileChooser.showOpenDialog(null);        // Show file chooser window with open option selected
+
                     if (choice == JFileChooser.APPROVE_OPTION) {                   // If user selects a file and hits open, then store selected filepath into string
                         mp3File = myFileChooser.getSelectedFile().getAbsolutePath();
                         System.out.println(mp3File);
@@ -90,6 +98,7 @@ public class mp3Player extends JFrame {
 
             }
         });
+
         volumeSlider.addChangeListener(new ChangeListener() {                   //sets mp3Player volume
             @Override
             public void stateChanged(ChangeEvent e) {
@@ -105,6 +114,7 @@ public class mp3Player extends JFrame {
                 }
             }
         });
+
         volumeSlider.addChangeListener(new ChangeListener() {                   //sets mp3Player volume
             @Override
             public void stateChanged(ChangeEvent e) {
@@ -118,6 +128,12 @@ public class mp3Player extends JFrame {
                 }
             }
         });
+
+        // TODO: Load playlists from User profile
+        this.showPlaylists();
+
+        // TODO: Make deleting playlist an option that appears when you right-click an item
+
         addPlaylistBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -169,6 +185,12 @@ public class mp3Player extends JFrame {
     private void showPlaylists() {
         // Grab Playlists titles from User profile JSON
         // Display titles above "+ New Playlist"
+        playlistList = new JList();
+
+        // TODO: playlistTitles = user.playlists or whatever
+        // TODO: playlistList.setListData(playlistTitles.toArray());
+
+
     }
 
     private boolean createPlaylist() {
