@@ -191,7 +191,6 @@ public class mp3Player extends JFrame {
         // TODO: playlistTitles = user.playlists or whatever
         // TODO: playlistList.setListData(playlistTitles.toArray());
 
-
     }
 
     private boolean createPlaylist() {
