@@ -29,6 +29,7 @@ public class mp3Player extends JFrame {
     private JButton addPlaylistBtn;
     private JScrollPane playlistsPane;
     private JList<Object> playlistList;
+    private JScrollPane songsPane;
 
     private BasicPlayer myPlayer = new BasicPlayer();       // Creates basic player object to play music
     private String mp3File;                     // Stores files location of mp3 to be played
