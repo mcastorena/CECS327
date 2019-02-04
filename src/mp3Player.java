@@ -1,5 +1,3 @@
-import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
 import javazoom.jlgui.basicplayer.BasicPlayer;
 import javazoom.jlgui.basicplayer.BasicPlayerException;
 
@@ -8,11 +6,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 // mp3Player is a Singleton because we only want 1 song to play at a time.
@@ -24,9 +18,9 @@ public class mp3Player extends JFrame {
     private JPanel contentPane;
 
     // Player controls
+    private JButton backButton;
     private JButton playButton;
     private JButton skipButton;
-    private JButton backButton;
     private JSlider volumeSlider;
 
     // Playlist controls
@@ -237,73 +231,70 @@ public class mp3Player extends JFrame {
         return deleted;
     }
 
-    public static void main(String[] args) {
-
-        // Process JSON file
-        Gson gson = new Gson();
-        List<Collection> collection = new ArrayList<>();
-
-        try {
-            BufferedReader br = new BufferedReader(new FileReader("music.json"));
-            JsonReader jsonReader = new JsonReader(br);
-
-            // Clear the first "[" in the json file
-            jsonReader.beginArray();
-
-            // Parse the json file
-            while (jsonReader.hasNext()) {
-                Release release;
-                Artist artist;
-                Song song;
-
-                // If the artist has already been parsed, don't add new object.
-                boolean oldArtist = false;
-
-                // Clear the first "{" for each json object
-                jsonReader.beginObject();
-
-                jsonReader.nextName();
-                release = gson.fromJson(jsonReader, Release.class);
-
-                jsonReader.nextName();
-                artist = gson.fromJson(jsonReader, Artist.class);
-
-                jsonReader.nextName();
-                song = gson.fromJson(jsonReader, Song.class);
-
-                jsonReader.endObject();
-
-                // Check if artist was previously parsed
-                for (int i = 0; i < collection.size(); i++) {
-                    Artist artistInCollection = collection.get(i).getArtist();
-                    if (artistInCollection.getName().equals(artist.getName())) {
-                        oldArtist = true;
-                        collection.add(new Collection(release, artistInCollection, song));
-                        break;
-                    }
-                }
-                if (!oldArtist) {
-                    collection.add(new Collection(release, artist, song));
-                }
-            }
-            jsonReader.endArray();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        // End Json Processing
-
-        SearchView searchView = new SearchView(collection);
-        searchView.pack();
-        searchView.setVisible(true);
-
-        // Open mp3
-        mp3Player myPlayer = mp3Player.getInstance();
-        myPlayer.pack();
-        myPlayer.setVisible(true);
-
-        MusicPlayer mp = MusicPlayer.getInstance();
-        mp.pack();
-        mp.setVisible(true);
-    }
+//    public static void main(String[] args) {
+//
+//        // Process JSON file
+//        Gson gson = new Gson();
+//        List<Collection> collection = new ArrayList<>();
+//
+//        try {
+//            BufferedReader br = new BufferedReader(new FileReader("music.json"));
+//            JsonReader jsonReader = new JsonReader(br);
+//
+//            // Clear the first "[" in the json file
+//            jsonReader.beginArray();
+//
+//            // Parse the json file
+//            while (jsonReader.hasNext()) {
+//                Release release;
+//                Artist artist;
+//                Song song;
+//
+//                // If the artist has already been parsed, don't add new object.
+//                boolean oldArtist = false;
+//
+//                // Clear the first "{" for each json object
+//                jsonReader.beginObject();
+//
+//                jsonReader.nextName();
+//                release = gson.fromJson(jsonReader, Release.class);
+//
+//                jsonReader.nextName();
+//                artist = gson.fromJson(jsonReader, Artist.class);
+//
+//                jsonReader.nextName();
+//                song = gson.fromJson(jsonReader, Song.class);
+//
+//                jsonReader.endObject();
+//
+//                // Check if artist was previously parsed
+//                for (int i = 0; i < collection.size(); i++) {
+//                    Artist artistInCollection = collection.get(i).getArtist();
+//                    if (artistInCollection.getName().equals(artist.getName())) {
+//                        oldArtist = true;
+//                        collection.add(new Collection(release, artistInCollection, song));
+//                        break;
+//                    }
+//                }
+//                if (!oldArtist) {
+//                    collection.add(new Collection(release, artist, song));
+//                }
+//            }
+//            jsonReader.endArray();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        // End Json Processing
+//
+//        SearchView searchView = new SearchView(collection);
+//        searchView.pack();
+//        searchView.setVisible(true);
+//
+//        // Open mp3
+//        mp3Player myPlayer = mp3Player.getInstance();
+//        myPlayer.pack();
+//        myPlayer.setVisible(true);
+//
+//    }
 
 }
