@@ -20,7 +20,7 @@ public class mp3Player extends JFrame {
 
     private static mp3Player instance;
 
-    /* Swing components */
+    //region Swing components
     private JPanel contentPane;
 
     // Player controls
@@ -36,6 +36,7 @@ public class mp3Player extends JFrame {
 
     // TODO: For future placement of songs, i.e., SearchView
     private JScrollPane songsPane;
+    //endregion
 
     private BasicPlayer myPlayer = new BasicPlayer();       // Creates basic player object to play music
     private String mp3File;                     // Stores files location of mp3 to be played
@@ -47,7 +48,7 @@ public class mp3Player extends JFrame {
     private List<Collection> playlistTitles;
 
     private mp3Player() {
-        setContentPane(contentPane);                        // Setup window
+        setContentPane(contentPane);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setTitle("MP3 Player");
 
@@ -57,19 +58,20 @@ public class mp3Player extends JFrame {
                 if (mp3File == null) {           // Check to see if there is a song to be played, if not prompt user to play one
                     //getFileLocation();
 
-                    JFileChooser myFileChooser = new JFileChooser();                // Create new JFileChooser object
-                    int choice = myFileChooser.showOpenDialog(null);        // Show file chooser window with open option selected
+                    JFileChooser myFileChooser = new JFileChooser();            // Create new JFileChooser object
+                    int choice = myFileChooser.showOpenDialog(null);    // Show file chooser window with open option selected
 
-                    if (choice == JFileChooser.APPROVE_OPTION) {                   // If user selects a file and hits open, then store selected filepath into string
+                    if (choice == JFileChooser.APPROVE_OPTION) {                // If user selects a file and hits open, then store selected filepath into string
                         mp3File = myFileChooser.getSelectedFile().getAbsolutePath();
                         System.out.println(mp3File);
                     }
 
                     try {
-                        myPlayer.open(new File(mp3File));           //
+                        myPlayer.open(new File(mp3File));
                     } catch (BasicPlayerException e1) {
                         e1.printStackTrace();
                     }
+
                     try {
                         System.out.println("File opened, trying to play");
                         myPlayer.play();
@@ -77,32 +79,32 @@ public class mp3Player extends JFrame {
                     } catch (BasicPlayerException e1) {
                         e1.printStackTrace();
                     }
-                    isPlaying = true;                               // Set isPlaying flag to true
-                    playButton.setText("||");                       // Change play button to pause button
+
+                    isPlaying = true;           // Set isPlaying flag to true
+                    playButton.setText("||");   // Change play button to pause button
+
                     return;
                 }
-                if (isPlaying) {                                      // If a song is currently playing, pause the song
+
+                if (isPlaying) {                // If a song is currently playing, pause the song
                     try {
-                        myPlayer.pause();                           // Pause the song
-                        isPlaying = false;                          // Set isPlaying flag to false
+                        myPlayer.pause();       // Pause the song
+                        isPlaying = false;      // Set isPlaying flag to false
                         return;
                     } catch (BasicPlayerException e1) {
                         e1.printStackTrace();
                     }
                 }
+
                 if (!isPlaying && !mp3File.isEmpty()) {                  //If a song is paused, play it again
                     try {
                         myPlayer.resume();
                         isPlaying = true;
                         playButton.setText("||");
-                        return;
                     } catch (BasicPlayerException e1) {
                         e1.printStackTrace();
                     }
-
-
                 }
-
             }
         });
 
@@ -112,6 +114,7 @@ public class mp3Player extends JFrame {
                 playerVolume = volumeSlider.getValue();                         // Get volumeSlider's value
                 playerVolume = (playerVolume / 100);                            // BasicPlayer's setGain() accepts input from 0.0 - 1.0
                 System.out.println("Volume slider value:\t" + playerVolume);
+
                 if (isPlaying) {                                                // If a song is playing
                     try {
                         myPlayer.setGain(playerVolume);                         // Set the volume
@@ -128,6 +131,7 @@ public class mp3Player extends JFrame {
                 playerVolume = volumeSlider.getValue();
                 playerVolume = (playerVolume / 100) * 3.02;
                 System.out.println("Volume slider value:\t" + playerVolume);
+
                 try {
                     myPlayer.setGain(playerVolume);
                 } catch (BasicPlayerException e1) {
@@ -154,6 +158,7 @@ public class mp3Player extends JFrame {
         if (instance == null) {
             instance = new mp3Player();
         }
+
         return instance;
     }
 
@@ -176,6 +181,7 @@ public class mp3Player extends JFrame {
         if (mp3File != null) {
             return mp3File;
         }
+
         return "";
     }
 
@@ -283,8 +289,8 @@ public class mp3Player extends JFrame {
             jsonReader.endArray();
         } catch (IOException e) {
             e.printStackTrace();
-
-        } // End Json Processing
+        }
+        // End Json Processing
 
         SearchView searchView = new SearchView(collection);
         searchView.pack();
@@ -294,6 +300,10 @@ public class mp3Player extends JFrame {
         mp3Player myPlayer = mp3Player.getInstance();
         myPlayer.pack();
         myPlayer.setVisible(true);
+
+        MusicPlayer mp = MusicPlayer.getInstance();
+        mp.pack();
+        mp.setVisible(true);
     }
 
 }
