@@ -21,14 +21,20 @@ public class mp3Player extends JFrame {
     private static mp3Player instance;
 
     /* Swing components */
+    private JPanel contentPane;
+
+    // Player controls
     private JButton playButton;
     private JButton skipButton;
     private JButton backButton;
     private JSlider volumeSlider;
-    private JPanel contentPane;
-    private JButton addPlaylistBtn;
+
+    // Playlist controls
     private JScrollPane playlistsPane;
     private JList<Object> playlistList;
+    private JButton addPlaylistBtn;
+
+    // TODO: For future placement of songs, i.e., SearchView
     private JScrollPane songsPane;
 
     private BasicPlayer myPlayer = new BasicPlayer();       // Creates basic player object to play music
