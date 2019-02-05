@@ -87,7 +87,12 @@
           <font name="SansSerif" size="14" style="1"/>
           <title-color color="-16777216"/>
         </border>
-        <children/>
+        <children>
+          <component id="8848c" class="javax.swing.JList" binding="songsList">
+            <constraints/>
+            <properties/>
+          </component>
+        </children>
       </scrollpane>
     </children>
   </grid>

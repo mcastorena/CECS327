@@ -48,12 +48,12 @@ public class Main {
                 jr.beginArray();    // parse '[' of the "playlists" array
 
                 while (jr.hasNext()) {
-                    jr.beginObject();   // '{'
+                    jr.beginObject();   // parse '{'
                     playlistTitle = jr.nextName();
                     userProfile.addPlaylist(playlistTitle, new Playlist(playlistTitle));
                     System.out.println(playlistTitle);
 
-                    jr.beginArray();    // '['
+                    jr.beginArray();    // parse '['
                     while (jr.hasNext()) {
                         songID = jr.nextString();    // each song ID in the playlist array
                         userProfile.getPlaylist(playlistTitle).addToPlaylist(songID);
@@ -72,8 +72,12 @@ public class Main {
             }
 
             // TODO: Show titles of playlists in `playlistsPane`
-            usersPLs = userProfile.playlists;
-            System.out.println(usersPLs.keySet());
+            usersPLs = userProfile.playlists;       // Get the users playlists
+            System.out.println(usersPLs.keySet());  // get the playlists titles
+            Object[] titles = usersPLs.keySet().toArray();  // Turn to an array
+//            for (Object t : titles) {
+//                System.out.println(t.toString());   // Get the title as a String
+//            }
 
 
             //region Process JSON file
@@ -137,6 +141,7 @@ public class Main {
             // Open player
             mp3Player myPlayer = mp3Player.getInstance();
             myPlayer.pack();
+            myPlayer.showPlaylists(titles);
             myPlayer.setVisible(true);
 
             //region GUI Upgrade?

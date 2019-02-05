@@ -30,6 +30,7 @@ public class mp3Player extends JFrame {
 
     // TODO: For future placement of songs, i.e., SearchView
     private JScrollPane songsPane;
+    private JList songsList;
     //endregion
 
     private BasicPlayer myPlayer = new BasicPlayer();       // Creates basic player object to play music
@@ -134,9 +135,6 @@ public class mp3Player extends JFrame {
             }
         });
 
-        // TODO: Load playlists from User profile
-        this.showPlaylists();
-
         // TODO: Make deleting playlist an option that appears when you right-click an item
 
         addPlaylistBtn.addActionListener(new ActionListener() {
@@ -189,10 +187,10 @@ public class mp3Player extends JFrame {
     }
 
     // TODO: Finish this
-    private void showPlaylists() {
+    public void showPlaylists(Object[] playlistTitles) {
         // Grab Playlists titles from User profile JSON
         // Display titles above "+ New Playlist"
-        playlistList = new JList();
+        playlistList.setListData(playlistTitles);
 
         // TODO: playlistTitles = user.playlists or whatever
         // TODO: playlistList.setListData(playlistTitles.toArray());
