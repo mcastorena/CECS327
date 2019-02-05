@@ -18,6 +18,12 @@ public class Playlist {
         this.songList = new ArrayList<>();
     }
 
+    public Playlist(String name) {
+        this.id = "001";
+        this.name = name;
+        this.songList = new ArrayList<>();
+    }
+
     public String getId() {
         return id;
     }
@@ -38,14 +44,14 @@ public class Playlist {
         return songList;
     }
 
-    private boolean addToPlaylist(String song) {    // TODO: Change to a Song POJO
+    public boolean addToPlaylist(String song) {    // TODO: Change to a Song POJO
         boolean added = false;
 
         if (song != null) {
             this.songList.add(song);
             added = true;
 
-            System.out.println("Song added to playlist");
+            System.out.printf("%s added to playlist\n", song);
         }
 
         return added;

@@ -124,7 +124,7 @@ public class MusicPlayer extends JFrame {
         volumeSlider.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                
+
             }
         });
     }
