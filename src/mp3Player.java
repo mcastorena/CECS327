@@ -10,6 +10,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -40,6 +42,11 @@ public class mp3Player extends JFrame {
     private JList<Object> playlistList;
     private ListSelectionListener selectedSong;
     private JButton addPlaylistBtn;
+
+    // Right-click Playlist pane controls
+    private JPopupMenu playlistOptions = new JPopupMenu();                                     // Set up playlist list rightclick pop-up menu
+    private JMenuItem deletePlaylistButton = new JMenuItem("Delete playlist");           // Set up delete playlist button
+    private String delete = "";                                                               // Holds playlist title to delete
 
     // TODO: For future placement of songs, i.e., SearchView
     private JScrollPane songsPane;
@@ -159,6 +166,36 @@ public class mp3Player extends JFrame {
 
         playlistList.addListSelectionListener(selectedSong);
         songsList.addListSelectionListener(selectedSong);
+
+        playlistOptions.add(deletePlaylistButton);                                  // Add delete playlist button to pop-up menu
+
+        playlistList.addMouseListener( new MouseAdapter()                           // Add right-click action listener to playlist list
+        {
+            public void mousePressed(MouseEvent e)
+            {
+                if ( SwingUtilities.isRightMouseButton(e) )
+                {
+                    JList list = (JList)e.getSource();
+                    int row = list.locationToIndex(e.getPoint());
+                    list.setSelectedIndex(row);
+                    delete = list.getModel().getElementAt(row).toString();          // Set delete strign as selected playlist title
+                    playlistOptions.show(e.getComponent(), e.getX(), e.getY());     // Show pop-up menu
+                }
+            }
+
+        });
+
+        deletePlaylistButton.addActionListener(new ActionListener() {           // Add action listener to delete button
+
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Deleting: "+ delete);
+                userProfile.removePlaylist(delete);
+                showPlaylists(userProfile.playlists.keySet().toArray());
+            }
+        });
+
+
+
     }
 
     public static mp3Player getInstance() {
