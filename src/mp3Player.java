@@ -197,15 +197,16 @@ public class mp3Player extends JFrame {
 
     }
 
-    private boolean createPlaylist() {
+    private boolean createPlaylist(String pName) {
         // TODO: FINISH
         boolean created = false;
         String pID;
-        String pName = "hello";
 
         if (!pName.equals("")) {
             pID = "";   // TODO: Automate somehow
             Playlist newPlaylist = new Playlist(pID, pName);
+
+            // TODO: Also add to `user.json`
 
             System.out.println("Playlist is created");
             created = true;
@@ -214,15 +215,17 @@ public class mp3Player extends JFrame {
         return created;
     }
 
-    private boolean deletePlaylist() {
-        // TODO:
+    private boolean deletePlaylist(Playlist playlist) {
+
         boolean deleted = false;
-        Playlist playlist = new Playlist("100", "Name");    // TODO: Change to user selected playlist
 
         // TODO: right-click and choose delete
 
         if (playlist != null) {
             playlist = null;    // Let garbage collection handle it
+
+            // TODO: Remove from `user.json`
+
             deleted = true;
         }
 
