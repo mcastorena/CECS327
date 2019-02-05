@@ -31,6 +31,9 @@ public class SearchView extends JFrame {
 
     SearchView(List<Collection> collection) {
         setContentPane(searchListPane);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setTitle("MP3 Player");
+
         textField1.setText("friend"); // For testing: initialize the search for "friend" (1st 6 songs play)
 
         this.collection = collection;

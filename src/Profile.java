@@ -3,6 +3,7 @@ import java.util.HashMap;
 
 // Access modifiers left out for now...
 public class Profile {
+
     BufferedImage avatar;
     HashMap<String, Playlist> playlists; // key: playlist name | value: the playlist
 

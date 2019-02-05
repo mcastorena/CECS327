@@ -4,6 +4,7 @@ import javazoom.jlgui.basicplayer.BasicPlayerException;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.ListSelectionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -26,6 +27,7 @@ public class mp3Player extends JFrame {
     // Playlist controls
     private JScrollPane playlistsPane;
     private JList<Object> playlistList;
+    private ListSelectionListener selectedSong;
     private JButton addPlaylistBtn;
 
     // TODO: For future placement of songs, i.e., SearchView
@@ -120,27 +122,12 @@ public class mp3Player extends JFrame {
             }
         });
 
-        volumeSlider.addChangeListener(new ChangeListener() {                   //sets mp3Player volume
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                playerVolume = volumeSlider.getValue();
-                playerVolume = (playerVolume / 100) * 3.02;
-                System.out.println("Volume slider value:\t" + playerVolume);
-
-                try {
-                    myPlayer.setGain(playerVolume);
-                } catch (BasicPlayerException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        });
-
         // TODO: Make deleting playlist an option that appears when you right-click an item
 
         addPlaylistBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Create pop-up for creating a playlist
+                // TODO: Create pop-up for creating a playlist
                 System.out.println("Adding playlist");
             }
         });
@@ -186,17 +173,21 @@ public class mp3Player extends JFrame {
         mp3File = myInput.getFileLocation();            // Save and get file location input
     }
 
-    // TODO: Finish this
+    /**
+     * Lists the User's already created playlists
+     *
+     * @param playlistTitles - Array of playlist titles pulled from `user.json`
+     */
     public void showPlaylists(Object[] playlistTitles) {
-        // Grab Playlists titles from User profile JSON
-        // Display titles above "+ New Playlist"
         playlistList.setListData(playlistTitles);
-
-        // TODO: playlistTitles = user.playlists or whatever
-        // TODO: playlistList.setListData(playlistTitles.toArray());
-
     }
 
+    /**
+     * Called when the "Create" button is clicked
+     *
+     * @param pName - Name of the playlist to be created
+     * @return - true if the playlist was created
+     */
     private boolean createPlaylist(String pName) {
         // TODO: FINISH
         boolean created = false;

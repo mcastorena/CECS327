@@ -20,7 +20,6 @@ public class Main {
 
         loggedInUser = testData();  // TODO: Authentic user from Sign-In
 
-
         // TODO: If not a user, DON'T LET THEM IN, i.e., re-prompt for credentials
         if (loggedInUser != null) {
 
@@ -75,9 +74,6 @@ public class Main {
             usersPLs = userProfile.playlists;       // Get the users playlists
             System.out.println(usersPLs.keySet());  // get the playlists titles
             Object[] titles = usersPLs.keySet().toArray();  // Turn to an array
-//            for (Object t : titles) {
-//                System.out.println(t.toString());   // Get the title as a String
-//            }
 
 
             //region Process JSON file
@@ -141,7 +137,7 @@ public class Main {
             // Open player
             mp3Player myPlayer = mp3Player.getInstance();
             myPlayer.pack();
-            myPlayer.showPlaylists(titles);
+            myPlayer.showPlaylists(titles); // Show playlist titles
             myPlayer.setVisible(true);
 
             //region GUI Upgrade?
