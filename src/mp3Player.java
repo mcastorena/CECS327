@@ -169,6 +169,17 @@ public class mp3Player extends JFrame {
         return instance;
     }
 
+
+    public JButton getSkipButton()
+    {
+        return skipButton;
+    }
+
+    public JButton getBackButton()
+    {
+        return backButton;
+    }
+
     public void changeSong(String mp3File) {
         try {
             myPlayer.stop();

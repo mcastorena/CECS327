@@ -120,5 +120,21 @@ public class SearchView extends JFrame {
             }
         };
         list2.addListSelectionListener(newArtistListener);
+
+        mp3.getSkipButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int inx = list1.getSelectedIndex();
+                list1.setSelectedIndex(inx+1);
+            }
+        });
+
+        mp3.getBackButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int inx = list1.getSelectedIndex();
+                list1.setSelectedIndex(inx-1);
+            }
+        });
     }
 }
