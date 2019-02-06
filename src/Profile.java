@@ -1,12 +1,5 @@
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.annotations.Expose;
-
 import java.awt.image.BufferedImage;
 import java.util.*;
-import java.util.Map;
-import javax.json.Json;
 
 // Access modifiers left out for now...
 public class Profile {
