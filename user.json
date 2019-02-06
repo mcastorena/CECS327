@@ -1,0 +1,26 @@
+{
+	"users" : [
+		{
+			"username" : "user",
+			"password" : "pass",
+			"email" : "example@email.com",
+			
+			"playlists" : [
+				{
+					"first" : [
+						101,
+						102,
+						103
+					]
+				},
+				{
+					"second" : [
+						202,
+						203,
+						204
+					]
+				}
+			]
+		}
+	]
+}
