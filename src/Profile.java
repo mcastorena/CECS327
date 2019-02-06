@@ -85,15 +85,4 @@ public class Profile {
     List<Playlist> getIterablePlaylists() {
         return new ArrayList<>(playlists.values());
     }
-
-    public static void main(String[] args) {
-        Profile profile = new Profile();
-        Playlist playlist = new Playlist("Test");
-//        playlist.addToPlaylist("a");
-//        playlist.addToPlaylist("b");
-//        playlist.addToPlaylist("c");
-
-        profile.addPlaylist(playlist.getName(), playlist);
-//        System.out.println(profile.playlistsToJson());
-    }
 }
