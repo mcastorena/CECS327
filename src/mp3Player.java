@@ -60,8 +60,6 @@ public class mp3Player extends JFrame {
     private boolean isPlaying = false;          // Boolean stores whether a mp3 is currently being played or not
     private double playerVolume;                // Stores player volume
 
-    fileLocationInputWindow myInput;            // Input window for mp3 file location
-
     private List<Collection> playlistTitles;
 
     private mp3Player() {
@@ -160,10 +158,16 @@ public class mp3Player extends JFrame {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 if (!e.getValueIsAdjusting()) {
-                    String plTitle = playlistList.getSelectedValue().toString();    // Title of selected playlist
-                    Playlist playlist = loggedInProfile.getPlaylist(plTitle);           // Playlist object
-                    ArrayList<String> songs = playlist.getSongList();               // Song list
-                    songsList.setListData(songs.toArray());
+                    String plTitle = playlistList.getSelectedValue().toString();  // Title of selected playlist
+                    Playlist playlist = loggedInProfile.getPlaylist(plTitle);     // Playlist object
+                    ArrayList<Song> songs = playlist.getSongList();               // Song list
+                    ArrayList<String> songTitles = new ArrayList<>();
+
+                    for (Song s : songs) {
+                        songTitles.add(s.getId());
+                    }
+
+                    songsList.setListData(songTitles.toArray());
                 }
             }
         };
@@ -239,15 +243,6 @@ public class mp3Player extends JFrame {
         }
 
         return "";
-    }
-
-    private void getFileLocation() {
-        myInput = new fileLocationInputWindow();        // Setup and display input prompt window
-        myInput.pack();
-        myInput.setVisible(true);
-        myInput.setModal(true);
-
-        mp3File = myInput.getFileLocation();            // Save and get file location input
     }
 
     /**
@@ -346,7 +341,10 @@ public class mp3Player extends JFrame {
                     jr.beginArray();    // parse '['
                     while (jr.hasNext()) {
                         songID = jr.nextString();    // each song ID in the playlist array
-                        loggedInProfile.getPlaylist(playlistTitle).addToPlaylist(songID);
+                        Song adding = new Song();
+                        adding.setId(songID);
+                        adding.setTitle("Song Title");
+                        loggedInProfile.getPlaylist(playlistTitle).addToPlaylist(adding);
                     }
 
                     System.out.println();
