@@ -26,7 +26,7 @@ public class mp3Player extends JFrame {
     private static mp3Player instance;
     private static MusicPlayer musicPlayer;
     static User loggedInUser;  // TODO: Reference later
-    static Profile userProfile;
+    static Profile loggedInProfile;
 
     //region Swing components
     private JPanel contentPane;
@@ -147,7 +147,9 @@ public class mp3Player extends JFrame {
             public void actionPerformed(ActionEvent e) {
 
                 // TODO: Create pop-up for creating a playlist
-
+                CreatePlaylist cp = new CreatePlaylist(loggedInUser, mp3Player.instance);
+                cp.pack();
+                cp.setVisible(true);
                 System.out.println("Adding playlist");
             }
         });
@@ -157,7 +159,7 @@ public class mp3Player extends JFrame {
             public void valueChanged(ListSelectionEvent e) {
                 if (!e.getValueIsAdjusting()) {
                     String plTitle = playlistList.getSelectedValue().toString();    // Title of selected playlist
-                    Playlist playlist = userProfile.getPlaylist(plTitle);           // Playlist object
+                    Playlist playlist = loggedInProfile.getPlaylist(plTitle);           // Playlist object
                     ArrayList<String> songs = playlist.getSongList();               // Song list
                     songsList.setListData(songs.toArray());
                 }
@@ -189,13 +191,10 @@ public class mp3Player extends JFrame {
 
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Deleting: "+ delete);
-                userProfile.removePlaylist(delete);
-                showPlaylists(userProfile.playlists.keySet().toArray());
+                loggedInProfile.removePlaylist(delete);
+                showPlaylists(loggedInProfile.playlists.keySet().toArray());
             }
         });
-
-
-
     }
 
     public static mp3Player getInstance() {
@@ -308,8 +307,9 @@ public class mp3Player extends JFrame {
         // TODO: If not a user, DON'T LET THEM IN, i.e., re-prompt for credentials
         if (loggedInUser != null) {
 
-            // Authentic user -> grab their Playlists
-            userProfile = new Profile();
+            loggedInProfile = new Profile();
+            loggedInUser.userProfile = loggedInProfile;
+
             HashMap<String, Playlist> usersPLs;
 
             //region Process user.JSON
@@ -336,14 +336,14 @@ public class mp3Player extends JFrame {
                     jr.beginObject();   // parse '{'
                     playlistTitle = jr.nextName();
 
-                    userProfile.addPlaylist(playlistTitle, new Playlist(playlistTitle));
+                    loggedInProfile.addPlaylist(playlistTitle, new Playlist(playlistTitle));
 
                     System.out.println(playlistTitle);
 
                     jr.beginArray();    // parse '['
                     while (jr.hasNext()) {
                         songID = jr.nextString();    // each song ID in the playlist array
-                        userProfile.getPlaylist(playlistTitle).addToPlaylist(songID);
+                        loggedInProfile.getPlaylist(playlistTitle).addToPlaylist(songID);
                     }
 
                     System.out.println();
@@ -360,7 +360,7 @@ public class mp3Player extends JFrame {
             }
             //endregion
 
-            usersPLs = userProfile.playlists;       // Get the users playlists as a HashMap
+            usersPLs = loggedInProfile.playlists;       // Get the users playlists as a HashMap
             System.out.println(usersPLs.keySet());  // get the playlists titles
             Object[] titles = usersPLs.keySet().toArray();  // Turn keyset to an Array[]
 

@@ -14,7 +14,7 @@ public class Main {
 //        if (loggedInUser != null) {
 //
 //            // Authentic user -> grab their Playlists
-//            Profile userProfile = new Profile();
+//            Profile loggedInProfile = new Profile();
 //            HashMap<String, Playlist> usersPLs;
 //
 //            try {
@@ -40,14 +40,14 @@ public class Main {
 //                    jr.beginObject();   // parse '{'
 //                    playlistTitle = jr.nextName();
 //
-//                    userProfile.addPlaylist(playlistTitle, new Playlist(playlistTitle));
+//                    loggedInProfile.addPlaylist(playlistTitle, new Playlist(playlistTitle));
 //
 //                    System.out.println(playlistTitle);
 //
 //                    jr.beginArray();    // parse '['
 //                    while (jr.hasNext()) {
 //                        songID = jr.nextString();    // each song ID in the playlist array
-//                        userProfile.getPlaylist(playlistTitle).addToPlaylist(songID);
+//                        loggedInProfile.getPlaylist(playlistTitle).addToPlaylist(songID);
 //                    }
 //
 //                    System.out.println();
@@ -64,7 +64,7 @@ public class Main {
 //            }
 //
 //            // TODO: Show titles of playlists in `playlistsPane`
-//            usersPLs = userProfile.playlists;       // Get the users playlists
+//            usersPLs = loggedInProfile.playlists;       // Get the users playlists
 //            System.out.println(usersPLs.keySet());  // get the playlists titles
 //            Object[] titles = usersPLs.keySet().toArray();  // Turn to an array
 //
