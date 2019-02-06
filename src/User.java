@@ -1,9 +1,11 @@
-public class User {
-    private String username,
-            email,
-            password;
+import com.google.gson.annotations.SerializedName;
 
-    public Profile userProfile; // user's profile containing their playlists
+public class User {
+    @SerializedName("username") private String username;
+    @SerializedName("email") private String email;
+    @SerializedName("password") private String password;
+
+    transient public Profile userProfile; // user's profile containing their playlists
 
     public User() {}
 
