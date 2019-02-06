@@ -14,11 +14,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.File;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 
 // mp3Player is a Singleton because we only want 1 song to play at a time.
 public class mp3Player extends JFrame {
@@ -129,7 +131,7 @@ public class mp3Player extends JFrame {
                 playerVolume = volumeSlider.getValue();                         // Get volumeSlider's value
                 playerVolume = (playerVolume / 100);                            // BasicPlayer's setGain() accepts input from 0.0 - 1.0
                 System.out.println("Volume slider value:\t" + playerVolume);
-
+              
                 if (isPlaying) {                                                // If a song is playing
                     try {
                         myPlayer.setGain(playerVolume);                         // Set the volume
@@ -255,6 +257,7 @@ public class mp3Player extends JFrame {
      */
     public void showPlaylists(Object[] playlistTitles) {
         playlistList.setListData(playlistTitles);
+
     }
 
     /**
