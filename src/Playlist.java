@@ -4,7 +4,7 @@ public class Playlist {
 
     private String id;
     private String name;
-    private ArrayList<String> songList;
+    private ArrayList<Song> songList;
 
     /**
      * Default constructor for creating a new playlist. Instantiates a new ArrayList for songList.
@@ -40,18 +40,18 @@ public class Playlist {
         this.name = name;
     }
 
-    public ArrayList<String> getSongList() {
-        return songList;
+    public ArrayList<Song> getSongList() {
+        return this.songList;
     }
 
-    public boolean addToPlaylist(String song) {    // TODO: Change to a Song POJO
+    public boolean addToPlaylist(Song song) {    // TODO: Change to a Song POJO
         boolean added = false;
 
         if (song != null) {
             this.songList.add(song);
             added = true;
 
-            System.out.printf("%s added to playlist\n", song);
+            System.out.printf("%s added to playlist\n", song.getTitle());
         }
 
         return added;
