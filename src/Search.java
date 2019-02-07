@@ -56,4 +56,19 @@ public class Search {
 
         return new SearchResult(searchSongList, searchArtistList);
     }
+
+    // Be sure to check for null when using the value returned from this method.
+    // Just doing linear search for now, TODO: sort the collection by id in app initialization
+    // TODO: Then change this to binary search.
+    public static Collection searchByID(long id, List<Collection> collection)
+    {
+        for(Collection c : collection)
+        {
+            if(c.getId() == id)
+            {
+                return c;
+            }
+        }
+        return null;
+    }
 }

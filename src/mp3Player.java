@@ -25,6 +25,9 @@ import java.util.List;
 // mp3Player is a Singleton because we only want 1 song to play at a time.
 public class mp3Player extends JFrame {
 
+    private JScrollPane playlistsPane;
+    private JScrollPane songsPane;
+
     private static mp3Player instance;
     private static User loggedInUser;  // TODO: Reference from Sign-In
     private static Profile loggedInProfile;
@@ -41,7 +44,9 @@ public class mp3Player extends JFrame {
     // Playlist controls
     private JList<Object> playlistList;
     private ListSelectionListener selectedSong;
+    private ListSelectionListener playSongFromPlaylistListener;
     private JButton addPlaylistBtn;
+    ArrayList<Collection> songs;
 
     // Right-click Playlist pane controls
     private JPopupMenu playlistOptions = new JPopupMenu();                                     // Set up playlist list rightclick pop-up menu
@@ -155,7 +160,7 @@ public class mp3Player extends JFrame {
                     if (selection != null) {
                         String plTitle = selection.toString();  // Title of selected playlist
                         Playlist playlist = loggedInProfile.getPlaylist(plTitle);   // Playlist object
-                        ArrayList<Collection> songs = playlist.getSongList();   // Song list
+                        songs = playlist.getSongList();   // Song list
 
                         ArrayList<String> songTitles = new ArrayList<>();
                         for (Collection s : songs) {
@@ -168,8 +173,28 @@ public class mp3Player extends JFrame {
             }
         };
 
+        playSongFromPlaylistListener = new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+
+                    int inx = songsList.getSelectedIndex();
+
+                    // If viewing a group of artist songs then retrieve song from artistsSongs, otherwise retrieve from songResultList
+                    String mp3File = "musicFiles/" + songs.get(inx).getId() + ".mp3";
+
+                    // Play selected song if not already
+                    if (!getCurrentSong().equals(mp3File))
+                        changeSong(mp3File);
+
+                    System.out.println("Play: " + mp3File);
+                    System.out.println(songsList.getSelectedValue());
+                }
+            }
+        };
+
         playlistList.addListSelectionListener(selectedSong);
-        songsList.addListSelectionListener(selectedSong);
+        songsList.addListSelectionListener(playSongFromPlaylistListener);
 
         playlistOptions.add(deletePlaylistButton);  // Add delete playlist button to pop-up menu
 
