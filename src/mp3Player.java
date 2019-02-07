@@ -26,9 +26,8 @@ import java.util.List;
 public class mp3Player extends JFrame {
 
     private static mp3Player instance;
-    private static MusicPlayer musicPlayer;
-    static User loggedInUser;  // TODO: Reference later
-    static Profile loggedInProfile;
+    private static User loggedInUser;  // TODO: Reference from Sign-In
+    private static Profile loggedInProfile;
 
     //region Swing components
     private JPanel contentPane;
@@ -40,7 +39,6 @@ public class mp3Player extends JFrame {
     private JSlider volumeSlider;
 
     // Playlist controls
-    private JScrollPane playlistsPane;
     private JList<Object> playlistList;
     private ListSelectionListener selectedSong;
     private JButton addPlaylistBtn;
@@ -51,7 +49,6 @@ public class mp3Player extends JFrame {
     private String delete = "";                                                               // Holds playlist title to delete
 
     // TODO: For future placement of songs, i.e., SearchView
-    private JScrollPane songsPane;
     private JList<Object> songsList;
     //endregion
 
@@ -71,7 +68,6 @@ public class mp3Player extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (mp3File == null) {           // Check to see if there is a song to be played, if not prompt user to play one
-                    //getFileLocation();
 
                     JFileChooser myFileChooser = new JFileChooser();            // Create new JFileChooser object
                     int choice = myFileChooser.showOpenDialog(null);    // Show file chooser window with open option selected
@@ -129,7 +125,7 @@ public class mp3Player extends JFrame {
                 playerVolume = volumeSlider.getValue();                         // Get volumeSlider's value
                 playerVolume = (playerVolume / 100);                            // BasicPlayer's setGain() accepts input from 0.0 - 1.0
                 System.out.println("Volume slider value:\t" + playerVolume);
-              
+
                 if (isPlaying) {                                                // If a song is playing
                     try {
                         myPlayer.setGain(playerVolume);                         // Set the volume
@@ -140,13 +136,9 @@ public class mp3Player extends JFrame {
             }
         });
 
-        // TODO: Make deleting playlist an option that appears when you right-click an item
-
         addPlaylistBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                // TODO: Create pop-up for creating a playlist
                 CreatePlaylist cp = new CreatePlaylist(loggedInUser, mp3Player.instance);
                 cp.pack();
                 cp.setVisible(true);
@@ -158,16 +150,20 @@ public class mp3Player extends JFrame {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 if (!e.getValueIsAdjusting()) {
-                    String plTitle = playlistList.getSelectedValue().toString();  // Title of selected playlist
-                    Playlist playlist = loggedInProfile.getPlaylist(plTitle);     // Playlist object
-                    ArrayList<Song> songs = playlist.getSongList();               // Song list
-                    ArrayList<String> songTitles = new ArrayList<>();
+                    Object selection = playlistList.getSelectedValue();
 
-                    for (Song s : songs) {
-                        songTitles.add(s.getId());
+                    if (selection != null) {
+                        String plTitle = selection.toString();  // Title of selected playlist
+                        Playlist playlist = loggedInProfile.getPlaylist(plTitle);   // Playlist object
+                        ArrayList<Collection> songs = playlist.getSongList();   // Song list
+
+                        ArrayList<String> songTitles = new ArrayList<>();
+                        for (Collection s : songs) {
+                            songTitles.add(s.getSongTitle());
+                        }
+
+                        songsList.setListData(songTitles.toArray());
                     }
-
-                    songsList.setListData(songTitles.toArray());
                 }
             }
         };
@@ -175,30 +171,27 @@ public class mp3Player extends JFrame {
         playlistList.addListSelectionListener(selectedSong);
         songsList.addListSelectionListener(selectedSong);
 
-        playlistOptions.add(deletePlaylistButton);                                  // Add delete playlist button to pop-up menu
+        playlistOptions.add(deletePlaylistButton);  // Add delete playlist button to pop-up menu
 
-        playlistList.addMouseListener( new MouseAdapter()                           // Add right-click action listener to playlist list
+        playlistList.addMouseListener(new MouseAdapter()    // Add right-click action listener to playlist list
         {
-            public void mousePressed(MouseEvent e)
-            {
-                if ( SwingUtilities.isRightMouseButton(e) )
-                {
-                    JList list = (JList)e.getSource();
+            public void mousePressed(MouseEvent e) {
+                if (SwingUtilities.isRightMouseButton(e)) {
+                    JList list = (JList) e.getSource();
                     int row = list.locationToIndex(e.getPoint());
                     list.setSelectedIndex(row);
                     delete = list.getModel().getElementAt(row).toString();          // Set delete strign as selected playlist title
                     playlistOptions.show(e.getComponent(), e.getX(), e.getY());     // Show pop-up menu
                 }
             }
-
         });
 
-        deletePlaylistButton.addActionListener(new ActionListener() {           // Add action listener to delete button
-
+        deletePlaylistButton.addActionListener(new ActionListener() {   // Add action listener to delete button
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Deleting: "+ delete);
+                System.out.println("Deleting: " + delete);
                 loggedInProfile.removePlaylist(delete);
-                showPlaylists(loggedInProfile.playlists.keySet().toArray());
+                Object[] updated = loggedInProfile.playlists.keySet().toArray();
+                showPlaylists(updated);
             }
         });
     }
@@ -212,13 +205,11 @@ public class mp3Player extends JFrame {
     }
 
 
-    public JButton getSkipButton()
-    {
+    public JButton getSkipButton() {
         return skipButton;
     }
 
-    public JButton getBackButton()
-    {
+    public JButton getBackButton() {
         return backButton;
     }
 
@@ -252,7 +243,6 @@ public class mp3Player extends JFrame {
      */
     public void showPlaylists(Object[] playlistTitles) {
         playlistList.setListData(playlistTitles);
-
     }
 
     /**
@@ -262,17 +252,14 @@ public class mp3Player extends JFrame {
      * @return - true if the playlist was created
      */
     private boolean createPlaylist(String pName) {
-        // TODO: FINISH
         boolean created = false;
         String pID;
-
 
         if (!pName.equals("")) {
             pID = "";   // TODO: Automate somehow
             Playlist newPlaylist = new Playlist(pID, pName);
 
             // TODO: Also add to `user.json`
-
             System.out.println("Playlist is created");
             created = true;
         }
@@ -285,12 +272,10 @@ public class mp3Player extends JFrame {
         boolean deleted = false;
 
         // TODO: right-click and choose delete
-
         if (playlist != null) {
             playlist = null;    // Let garbage collection handle it
 
             // TODO: Remove from `user.json`
-
             deleted = true;
         }
 
@@ -309,62 +294,6 @@ public class mp3Player extends JFrame {
             loggedInUser.userProfile = loggedInProfile;
 
             HashMap<String, Playlist> usersPLs;
-
-            //region Process user.JSON
-            try {
-                FileReader fr = new FileReader("user.json");
-                JsonReader jr = new JsonReader(fr);
-                String usersField, usernameField, username, passwordField, password, emailField, email,
-                        playlistsField, playlistTitle, songID;
-
-                jr.beginObject();   // parse first '{'
-                usersField = jr.nextName(); // parse key "users"
-                jr.beginArray();    // parse '[' following "users" : array of user objects
-                jr.beginObject();   // parse '{' for the first obj in the "users" array
-                usernameField = jr.nextName();  // key: "username"
-                username = jr.nextString();     // value: "user"
-                passwordField = jr.nextName();  // key: "password"
-                password = jr.nextString();     // value: "pass"
-                emailField = jr.nextName();     // key: "email"
-                email = jr.nextString();        // value: "example@email.com"
-                playlistsField = jr.nextName(); // key for the array of "playlists"
-                jr.beginArray();    // parse '[' of the "playlists" array
-
-                while (jr.hasNext()) {
-                    jr.beginObject();   // parse '{'
-                    playlistTitle = jr.nextName();
-
-                    loggedInProfile.addPlaylist(playlistTitle, new Playlist(playlistTitle));
-
-                    System.out.println(playlistTitle);
-
-                    jr.beginArray();    // parse '['
-                    while (jr.hasNext()) {
-                        songID = jr.nextString();    // each song ID in the playlist array
-                        Song adding = new Song();
-                        adding.setId(songID);
-                        adding.setTitle("Song Title");
-                        loggedInProfile.getPlaylist(playlistTitle).addToPlaylist(adding);
-                    }
-
-                    System.out.println();
-                    jr.endArray();  // parse ']' to close the playlist array
-                    jr.endObject(); // parse '}' to close the "playlist" object in "playlists"
-                }
-                jr.endArray();  // Close playlists array
-                jr.endObject(); // Close current user obj
-                jr.endArray();  // Close users array
-                jr.endObject(); // Marks the end of the JSON file
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            //endregion
-
-            usersPLs = loggedInProfile.playlists;       // Get the users playlists as a HashMap
-            System.out.println(usersPLs.keySet());  // get the playlists titles
-            Object[] titles = usersPLs.keySet().toArray();  // Turn keyset to an Array[]
-
 
             //region Process music.JSON file
             Gson gson = new Gson();
@@ -420,6 +349,66 @@ public class mp3Player extends JFrame {
             }
             //endregion JSON Processing
 
+            //region Process user.JSON
+            try {
+                FileReader fr = new FileReader("user.json");
+                JsonReader jr = new JsonReader(fr);
+                String usersField, usernameField, username, passwordField, password, emailField, email,
+                        playlistsField, playlistTitle, songID;
+
+                jr.beginObject();   // parse first '{'
+                usersField = jr.nextName(); // parse key "users"
+                jr.beginArray();    // parse '[' following "users" : array of user objects
+                jr.beginObject();   // parse '{' for the first obj in the "users" array
+                usernameField = jr.nextName();  // key: "username"
+                username = jr.nextString();     // value: "user"
+                passwordField = jr.nextName();  // key: "password"
+                password = jr.nextString();     // value: "pass"
+                emailField = jr.nextName();     // key: "email"
+                email = jr.nextString();        // value: "example@email.com"
+                playlistsField = jr.nextName(); // key for the array of "playlists"
+                jr.beginArray();    // parse '[' of the "playlists" array
+
+                while (jr.hasNext()) {
+                    jr.beginObject();   // parse '{'
+                    playlistTitle = jr.nextName();
+
+                    loggedInProfile.addPlaylist(playlistTitle, new Playlist(playlistTitle));
+
+                    System.out.println(playlistTitle);
+
+                    jr.beginArray();    // parse '['
+                    while (jr.hasNext()) {
+                        songID = jr.nextString();    // each song ID in the playlist array
+                        long longID = Long.parseLong(songID);
+
+                        for (Collection c : collection) {
+                            if (c.getId() == longID) {
+                                System.out.println("c found: " + c.toString());
+                                loggedInProfile.getPlaylist(playlistTitle).addToPlaylist(c);
+                                break;
+                            }
+                        }
+                    }
+
+                    System.out.println();
+                    jr.endArray();  // parse ']' to close the playlist array
+                    jr.endObject(); // parse '}' to close the "playlist" object in "playlists"
+                }
+                jr.endArray();  // Close playlists array
+                jr.endObject(); // Close current user obj
+                jr.endArray();  // Close users array
+                jr.endObject(); // Marks the end of the JSON file
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            //endregion
+
+            usersPLs = loggedInProfile.playlists;       // Get the users playlists as a HashMap
+            System.out.println("key set: " + usersPLs.keySet());  // get the playlists titles
+            Object[] titles = usersPLs.keySet().toArray();  // Turn keyset to an Array[]
+
             searchView = new SearchView(collection);
             searchView.pack();
             searchView.setVisible(true);
@@ -440,9 +429,8 @@ public class mp3Player extends JFrame {
         }
     }
 
-    public static User testData() {
-        User testUser = new User("user", "example@email.com", "pass");
+    private static User testData() {
 
-        return testUser;
+        return new User("user", "example@email.com", "pass");
     }
 }
