@@ -1,6 +1,7 @@
 import com.google.gson.*;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 
 /** Serializes Users into JSON objects **/
 class Serializer {
@@ -44,4 +45,7 @@ class Serializer {
         return null;
     }
 
+//    public void updateUsersJson(HashMap<String,User> users, ) {
+//
+//    }
 }

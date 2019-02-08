@@ -4,7 +4,7 @@ public class Playlist {
 
     private String id;
     private String name;
-    private ArrayList<Song> songList;
+    private ArrayList<Collection> songList;
 
     /**
      * Default constructor for creating a new playlist. Instantiates a new ArrayList for songList.
@@ -40,30 +40,29 @@ public class Playlist {
         this.name = name;
     }
 
-    public ArrayList<Song> getSongList() {
+    public ArrayList<Collection> getSongList() {
         return this.songList;
     }
 
-    public boolean addToPlaylist(Song song) {    // TODO: Change to a Song POJO
+    public boolean addToPlaylist(Collection song) {    // TODO: Change to a Song POJO
         boolean added = false;
 
         if (song != null) {
             this.songList.add(song);
             added = true;
-
-            System.out.printf("%s added to playlist\n", song.getTitle());
+            System.out.printf("%s added to playlist\n", song.getSongTitle());
         }
 
         return added;
     }
 
     // TODO: Rename playlist
-    public void renamePlaylist() {
-        String newName = "";
-
-        // Grab user input
-        // verify it's of the right length
-
-        this.name = newName;
-    }
+//    public void renamePlaylist() {
+//        String newName = "";
+//
+//        // Grab user input
+//        // verify it's of the right length
+//
+//        this.name = newName;
+//    }
 }

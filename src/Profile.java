@@ -59,9 +59,8 @@ public class Profile {
     /**
      * Removes a playlist from the profile's playlist collection.
      * @param playlistName
-     * @param playlist
      */
-    void removePlaylist(String playlistName, Playlist playlist) {
+    void removePlaylist(String playlistName) {
         if (!playlists.containsKey(playlistName)) {
             System.out.println("Playlist not removed: \"" + playlistName + "\" not found.");
             return;
