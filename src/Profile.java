@@ -33,6 +33,16 @@ public class Profile {
         return playlists.get(playlistName);
     }
 
+    public void addSongToPlaylist(Collection song, String playlistName) {
+        if (!playlists.containsKey(playlistName)) {
+            System.out.println("Profile.addSongToPlaylist() - Playlist \"" + playlistName + "\" not found.");
+            return;
+        }
+
+        // No data checks performed
+        playlists.get(playlistName).addToPlaylist(song);
+    }
+
     public HashMap<String, Playlist> getPlaylists() {
         return playlists;
     }

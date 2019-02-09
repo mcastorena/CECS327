@@ -7,7 +7,20 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+/**
+ * This class deserializes both the Music and User JSON into POJOs.
+ * Contains data structures to hold:
+ *  1. the song info database (musicDatabase),
+ *  2. songs able to be played from the music folder (playableSongs),
+ *  3. a lookup of song information by release ID, and
+ *  4. the user's set of owned mp3s (from the music folder)
+ */
 public class Deserializer {
+    /**
+     * A list of ALL songs (from the Music JSON).
+     */
+    List<Collection> musicDatabase;
+
     /**
      * A container of references for PLAYABLE songs
      * (i.e. the song's mp3 file exists in the music directory).
@@ -62,6 +75,12 @@ public class Deserializer {
         return playableSongs;
     }
 
+    /**
+     * Returns a dictionary of song information.
+     * Key: song release ID
+     * Value: the song info as a Collection
+     * @return
+     */
     public HashMap<Integer, Collection> getUserLibrary() {
         return userLibrary;
     }

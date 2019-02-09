@@ -5,9 +5,8 @@ import java.util.List;
 public class TestDriverA {
     public static void main(String[] args) {
         try {
+            // 1. Deserialize Music and User JSONs into POJOs
             Deserializer d = new Deserializer();
-
-            /** Deserialize User JSON into a list of Users **/
             List<User> users = d.deserializeUsers();
 
             /**
@@ -23,6 +22,7 @@ public class TestDriverA {
                 }
                 usersInfo.put(u.getUsername()+u.getPassword(), u);
             }
+            ////////////////////////////////////////////////////////
 
             /** Makeshift login system **/
             String username = "mark",
@@ -34,6 +34,24 @@ public class TestDriverA {
                 return;
             }
             System.out.println("Login succeeded.");
+            /****************************/
+
+            Release r = new Release();
+            r.setId(555);
+            r.setName("A new song");
+
+            Artist a = new Artist();
+            a.setName("John");
+
+            Song s = new Song();
+            s.setTitle("A new songs");
+
+            Collection c = new Collection(r, a, s);
+            session.getUserProfile().addSongToPlaylist(c, "hits");
+
+            new Serializer().updateUsersJson(usersInfo);
+
+            System.out.println();
         }
         catch (IOException e) {
             e.printStackTrace();

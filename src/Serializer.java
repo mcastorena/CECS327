@@ -1,7 +1,12 @@
 import com.google.gson.*;
+import com.google.gson.stream.JsonWriter;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.HashMap;
+import java.util.Map;
 
 /** Serializes Users into JSON objects **/
 class Serializer {
@@ -45,7 +50,25 @@ class Serializer {
         return null;
     }
 
-//    public void updateUsersJson(HashMap<String,User> users, ) {
-//
-//    }
+    public void updateUsersJson(HashMap<String,User> users) throws IOException {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("user.json"))) {
+
+            Gson gson = new GsonBuilder()
+                        .setPrettyPrinting()
+                        .create();
+
+            // unnamed "users" array
+            JsonArray usersJA = new JsonArray();
+            for (User user : users.values()) {
+                JsonObject userJO = (JsonObject)serialize(user);
+                usersJA.add(userJO);
+            }
+
+            // named "users" array
+            JsonObject usersJAO = new JsonObject();
+            usersJAO.add("users", usersJA);
+
+            gson.toJson(usersJAO, bw);
+        }
+    }
 }
