@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /** Serializes Users into JSON objects **/
@@ -60,6 +61,28 @@ class Serializer {
             // unnamed "users" array
             JsonArray usersJA = new JsonArray();
             for (User user : users.values()) {
+                JsonObject userJO = (JsonObject)serialize(user);
+                usersJA.add(userJO);
+            }
+
+            // named "users" array
+            JsonObject usersJAO = new JsonObject();
+            usersJAO.add("users", usersJA);
+
+            gson.toJson(usersJAO, bw);
+        }
+    }
+
+    public void updateUsersJson(List<User> users) throws IOException {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("user.json"))) {
+
+            Gson gson = new GsonBuilder()
+                    .setPrettyPrinting()
+                    .create();
+
+            // unnamed "users" array
+            JsonArray usersJA = new JsonArray();
+            for (User user : users) {
                 JsonObject userJO = (JsonObject)serialize(user);
                 usersJA.add(userJO);
             }

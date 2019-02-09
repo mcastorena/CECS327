@@ -19,7 +19,7 @@ public class Deserializer {
     /**
      * A list of ALL songs (from the Music JSON).
      */
-    List<Collection> musicDatabase;
+    ArrayList<Collection> musicDatabase;
 
     /**
      * A container of references for PLAYABLE songs
@@ -39,6 +39,7 @@ public class Deserializer {
     HashSet<Integer> ownedIDs;
 
     public Deserializer() throws IOException {
+        musicDatabase = new ArrayList<>();
         playableSongs = new HashMap<>();
         userLibrary = new HashMap<>();
         ownedIDs = new HashSet<>();
@@ -58,7 +59,7 @@ public class Deserializer {
 
             // Trim the ".mp3" extension from file name
             String mp3Name = filename.substring(0, filename.length()-4);
-            System.out.println(mp3Name);
+//            System.out.println(mp3Name);
 
             if (mp3Name.matches("[\\d]+"))
                 ownedIDs.add(Integer.parseInt(mp3Name));
@@ -67,10 +68,28 @@ public class Deserializer {
         }
     }
 
+    /**
+     * Returns the song information in the Music JSON as an ArrayList.
+     * @return
+     */
+    public ArrayList<Collection> getMusicDatabase() { return musicDatabase; }
+
+    /**
+     * Returns a dictionary of the user's
+     * owned mp3s in the music directory.
+     * @return
+     */
     public HashSet<Integer> getOwnedIDs () {
         return ownedIDs;
     }
 
+    /**
+     * Returns a dictionary of songs that CAN be played
+     * (the mp3 files exist in the music directory).
+     * Key: song release ID
+     * Value: the mp3 file name (without '.mp3' extension)
+     * @return
+     */
     public HashMap<Integer, String> getPlayableSongs() {
         return playableSongs;
     }
@@ -100,8 +119,6 @@ public class Deserializer {
 
             Gson gson = new Gson();
 
-            List<Collection> collection = new ArrayList<>();
-
             // Clear the first "[" in the json file
             jsonReader.beginArray();
 
@@ -129,12 +146,12 @@ public class Deserializer {
                 jsonReader.endObject();
 
                 // Check if artist was previously parsed
-                for (int i = 0; i < collection.size(); i++) {
-                    Artist artistInCollection = collection.get(i).getArtist();
+                for (int i = 0; i < musicDatabase.size(); i++) {
+                    Artist artistInCollection = musicDatabase.get(i).getArtist();
 
                     if (artistInCollection.getName().equals(artist.getName())) {
                         oldArtist = true;
-                        collection.add(new Collection(release, artistInCollection, song));
+                        musicDatabase.add(new Collection(release, artistInCollection, song));
                         break;
                     }
                 }
@@ -142,7 +159,7 @@ public class Deserializer {
                     Collection newCollection = new Collection(release, artist, song);
 
                     /** Add the Collection to a list and a dictionary **/
-                    collection.add(newCollection);
+                    musicDatabase.add(newCollection);
 
                     if (ownedIDs.contains( (int)newCollection.getId() ))
                         userLibrary.put((int)newCollection.getId(), newCollection);
