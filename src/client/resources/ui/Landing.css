@@ -4,7 +4,7 @@
 }
 .background {
     -fx-background-color: white;
-    -fx-background-image: url('/img/background-img-alt.png');
+    -fx-background-image: url('/img/background-img-alt.jpeg');
     -fx-background-position: center;
     -fx-background-size: contain;
     -fx-display: flex;
