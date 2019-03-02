@@ -17,6 +17,8 @@ import model.Collection;
 import model.Playlist;
 import model.SearchResult;
 import model.User;
+import rpc.Proxy;
+import rpc.ProxyInterface;
 
 import java.io.IOException;
 
@@ -33,6 +35,8 @@ public class HomepagePresenter {
 
     private Parent view;
 
+    private ProxyInterface clientProxy;
+
 //    private PlaylistListView playlistListView;
 //    private SearchBarView searchBarView;
 //    private static musicPlayer;
@@ -42,7 +46,8 @@ public class HomepagePresenter {
     @FXML
     private GridPane gridPane;
 
-    public HomepagePresenter() {
+    public HomepagePresenter(ProxyInterface proxy) {
+        clientProxy = proxy;
         try {
 //            homepageModel = new HomepageModel();
 //            homepageModel.setUser(UserSession.getCurrentSession());
@@ -151,5 +156,10 @@ public class HomepagePresenter {
 
     public void receivePlaylistItemClick(PlaylistListPresenter sender, Playlist obj) {
         mainDisplayPresenter.receivePlaylistItemClick(this, obj);
+    }
+
+    public ProxyInterface getProxy()
+    {
+        return clientProxy;
     }
 }

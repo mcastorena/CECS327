@@ -1,4 +1,4 @@
-/**
+package rpc; /**
 * The Proxy implements ProxyInterface class. The class is incomplete 
 * 
 * @author  Oscar Morales-Ponce
@@ -8,6 +8,7 @@
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import rpc.clientCommunicationProtocol;
 
 
 public class Proxy implements ProxyInterface {

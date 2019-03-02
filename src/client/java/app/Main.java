@@ -10,6 +10,8 @@ import Gui.Landing.LandingPresenter;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import rpc.Proxy;
+import rpc.ProxyInterface;
 import utility.Deserializer;
 import utility.Serializer;
 
@@ -19,6 +21,9 @@ public class Main extends Application {
     private static Stage primaryStage;
     private static Scene primaryScene;
     private AnchorPane rootLayout;
+
+    private int portNumber = 2222;
+    private ProxyInterface clientProxy = new Proxy(portNumber);
 
    @Override
    public void start(Stage stage) throws Exception {
@@ -31,7 +36,7 @@ public class Main extends Application {
         primaryStage.setHeight(576);
         primaryStage.setResizable(true);
 
-        LandingPresenter lp = new LandingPresenter();
+        LandingPresenter lp = new LandingPresenter(clientProxy);
         lp.showLandingPage();
 
 //       HomepagePresenter hp = new HomepagePresenter();

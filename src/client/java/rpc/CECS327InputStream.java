@@ -1,4 +1,4 @@
-/**
+package rpc; /**
  * The CECS327InputStream extends InputStream class. The class implements
  * markers that are used in AudioInputStream
  *
@@ -82,6 +82,7 @@ public class CECS327InputStream extends InputStream {
         this.total = Integer.parseInt(jsonRet.get("ret").getAsString());
         getBuff(fragment);
         fragment++;
+        System.out.println("CECS327InputStream constructed");//remove
     }
 
     /**

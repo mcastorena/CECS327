@@ -14,6 +14,8 @@ import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import Gui.Homepage.HomepagePresenter;
 import model.User;
+import rpc.Proxy;
+import rpc.ProxyInterface;
 
 import java.io.IOException;
 
@@ -22,6 +24,8 @@ public class LandingPresenter {
     private LandingModel landingModel;
     private Parent view;
     private LandingService landingService;
+
+    private ProxyInterface clientProxy;
 
     // Communication between landing and homepage
     private HomepagePresenter homepagePresenter;
@@ -38,7 +42,8 @@ public class LandingPresenter {
     @FXML
     private Button registerButton;
 
-    public LandingPresenter() {
+    public LandingPresenter(ProxyInterface proxy) {
+        clientProxy = proxy;
         try {
             landingModel = new LandingModel();
             landingService = LandingService.getInstance();
@@ -82,7 +87,7 @@ public class LandingPresenter {
         if (isAuthorized) {
             User user = landingService.getCurrentSession();
             UserSession.setCurrentSession(user);
-            homepagePresenter = new HomepagePresenter();
+            homepagePresenter = new HomepagePresenter(clientProxy);
             switchToHomepage();
         }
         else {

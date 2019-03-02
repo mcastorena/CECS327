@@ -3,12 +3,11 @@ package utility;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import model.*;
+import model.Collection;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
+
 
 /**
  * This class deserializes both the Music and User JSON into POJOs.
@@ -53,7 +52,9 @@ public class Deserializer {
 
     // Loads the song IDs of OWNED music into a Set for lookup.
     private void loadOwnedMusicIDs() {
-        String name = Thread.currentThread().getContextClassLoader().getResource("music").getPath();
+        String name = null;
+        name = Thread.currentThread().getContextClassLoader().getResource("music").getPath();
+
         File dir = new File(name);
         System.out.println(dir.listFiles());
         for (File file : dir.listFiles()) {
@@ -63,14 +64,19 @@ public class Deserializer {
                 throw new ArrayIndexOutOfBoundsException("Deserializer.loadOwnedMusicIDs() - File name is too short.");
 
             // Trim the ".mp3" extension from file name
-            String mp3Name = filename.substring(0, filename.length() - 4);
-//            System.out.println(mp3Name);
+            String mp3Name;
+            if(filename.substring(filename.length()-3, filename.length()).equals("mp3"))
+                mp3Name = filename.substring(0, filename.length() - 4);
+            else
+                mp3Name = filename;
+            System.out.println(mp3Name);
 
             if (mp3Name.matches("[\\d]+"))
                 ownedIDs.add(Integer.parseInt(mp3Name));
             else
                 throw new NumberFormatException("Error: mp3 name isn't a song ID");
         }
+
     }
 
     /**

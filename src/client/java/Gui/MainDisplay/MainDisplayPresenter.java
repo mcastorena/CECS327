@@ -20,6 +20,7 @@ import Gui.Homepage.HomepagePresenter;
 import model.Collection;
 import model.Playlist;
 import model.SearchResult;
+import rpc.ProxyInterface;
 import utility.Search;
 
 
@@ -31,6 +32,8 @@ public class MainDisplayPresenter {
     HomepagePresenter homepagePresenter;
 
     SongSearchModel songSearchModel;
+
+    ProxyInterface clientProxy;
 
     @FXML
     ScrollPane displayScroller;
@@ -44,6 +47,7 @@ public class MainDisplayPresenter {
     public MainDisplayPresenter(HomepagePresenter homepagePresenter) {
         mainDisplayModel = new MainDisplayModel();
         this.homepagePresenter = homepagePresenter;
+        clientProxy = homepagePresenter.getProxy();
         songSearchModel = new SongSearchModel();
         songSearchModel.setMusicDatabase(Resources.getMusicDatabase());
 
@@ -142,5 +146,10 @@ public class MainDisplayPresenter {
     public void receivePlaylistItemClick(HomepagePresenter sender, Playlist obj) {
         mainDisplayModel.setPlaylist(obj);
         showPlaylist(obj);
+    }
+
+    public ProxyInterface getProxy()
+    {
+        return clientProxy;
     }
 }

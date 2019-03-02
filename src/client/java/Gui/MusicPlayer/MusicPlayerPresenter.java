@@ -25,8 +25,10 @@ import Gui.Homepage.HomepagePresenter;
 import Gui.MainDisplay.MainDisplayPresenter;
 import model.Playlist;
 import data.Resources;
+import rpc.CECS327InputStream;
+import rpc.ProxyInterface;
 
-import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -59,6 +61,7 @@ public class MusicPlayerPresenter {
         this.playlist = new ArrayList<>();
     }
 
+    private ProxyInterface clientProxy;
 
     @FXML
     public void initialize() {
@@ -87,7 +90,8 @@ public class MusicPlayerPresenter {
                     Collection nextSong = playlist.get( (songNum+1)%size );
                     currentSong = nextSong;
                     int nextID = (int)nextSong.getId();
-                    setSongFile(mp3FileName(nextID));
+                    //setSongFile(mp3FileName(nextID));
+                    setSongFile(Integer.toString(nextID), clientProxy);
 
                     songLabel.setText(nextSong.getSongTitle());
                     artistLabel.setText(nextSong.getArtistName());
@@ -112,7 +116,8 @@ public class MusicPlayerPresenter {
                     int prevID = (int)prevSong.getId();
                     currentSong = prevSong;
 
-                    setSongFile(mp3FileName(prevID));
+                    //setSongFile(mp3FileName(prevID));
+                    setSongFile(Integer.toString(prevID), clientProxy);
 
                     songLabel.setText(prevSong.getSongTitle());
                     artistLabel.setText(prevSong.getArtistName());
@@ -143,7 +148,7 @@ public class MusicPlayerPresenter {
     public MusicPlayerPresenter(MainDisplayPresenter mainDisplayPresenter) {
         try {
             this.mainDisplayPresenter = mainDisplayPresenter;
-
+            clientProxy = mainDisplayPresenter.getProxy();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/MusicPlayer.fxml"));
             loader.setController(this);
             view = loader.load();
@@ -177,12 +182,15 @@ public class MusicPlayerPresenter {
         }
     }
 
-    public void setSongFile(String songFile) {
+    public void setSongFile(String songFile, ProxyInterface proxy) {
         try {
             this.songFile = songFile;
-            myPlayer.open(new File(songFile));
+            myPlayer.open(new CECS327InputStream(Long.valueOf(songFile), proxy));
         } catch (BasicPlayerException e) {
             e.printStackTrace();
+        } catch (IOException e1)
+        {
+            e1.printStackTrace();
         }
     }
 
@@ -204,18 +212,20 @@ public class MusicPlayerPresenter {
             HashSet<Integer> ownedIDs = Resources.getOwnedIDs();
             if (ownedIDs.contains(songId)) {
 //                String filename = "./music/" + songId + ".mp3";
-                String filename = mp3FileName(songId);
+                //String filename = mp3FileName(songId);
+                String filename = Integer.toString(songId);
 
-                File file = new File(filename);
-                if (file.exists()) {
-                    setSongFile(filename);
+                //File file = new File(filename);
+                //if (file.exists()) {
+                    setSongFile(Integer.toString(songId), clientProxy);
+//                    setSongFile(filename);
 //                    togglePlay();
-                }
-                else
-                    displayNotPlayableError();
-            }
-            else {
-                displayNotPlayableError();
+//                }
+//                else
+//                    displayNotPlayableError();
+//            }
+//            else {
+//                displayNotPlayableError();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -228,7 +238,8 @@ public class MusicPlayerPresenter {
     }
 
     private String mp3FileName(int songId) {
-        return getClass().getResource("/music/" + songId + ".mp3").getPath();
+        //return getClass().getResource("/music/" + songId + ".mp3").getPath();
+        return getClass().getResource("/music/" + songId).getPath(); //CHANGE TO SERVER
     }
 
     private int findIndex(Collection song) {

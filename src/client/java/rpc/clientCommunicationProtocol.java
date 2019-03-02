@@ -1,3 +1,5 @@
+package rpc;
+
 import java.io.*;
 import java.net.*;
 
@@ -16,6 +18,7 @@ public class clientCommunicationProtocol {
             this.ip = InetAddress.getByName("localhost");    // Get localhost IP address
             this.mySocket = new DatagramSocket();            // Initialize Socket
             this.portNumber = portNum;                       // Initialize port number
+            //mySocket.connect(ip,portNum);//Not sure if this is needed
 
         } catch (UnknownHostException e) {
             e.printStackTrace();

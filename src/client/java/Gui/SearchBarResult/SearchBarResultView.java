@@ -1,14 +1,14 @@
-package Gui.SearchBarResult;
-
-import Gui.LoadableView;
-import javafx.fxml.FXMLLoader;
-
-public class SearchBarResultView extends LoadableView {
-//    private FXMLLoader loader;
-
-    public SearchBarResultView() {
-        loader = new FXMLLoader(getClass().getResource("../../../res/ui/SearchBarResult.fxml"));
-    }
+//package Gui.SearchBarResult;
+//
+//import Gui.LoadableView;
+//import javafx.fxml.FXMLLoader;
+//
+//public class SearchBarResultView extends LoadableView {
+////    private FXMLLoader loader;
+//
+//    public SearchBarResultView() {
+//        loader = new FXMLLoader(getClass().getResource("../../../res/ui/SearchBarResult.fxml"));
+//    }
 
 //    public Parent loadView() {
 //        try {
@@ -24,4 +24,4 @@ public class SearchBarResultView extends LoadableView {
 //    public FXMLLoader getLoader() {
 //        return loader;
 //    }
-}
+//}

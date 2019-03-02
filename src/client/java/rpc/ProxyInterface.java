@@ -1,3 +1,5 @@
+package rpc;
+
 import com.google.gson.JsonObject;
 
 public interface ProxyInterface {
