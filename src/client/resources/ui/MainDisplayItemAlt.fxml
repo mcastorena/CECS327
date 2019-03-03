@@ -23,7 +23,7 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <Label fx:id="albumNameLabel" layoutX="40.0" layoutY="57.0" maxWidth="335.0" text="The album name of the artist the red and black stripes whfdslfkals;df" textFill="WHITE">
+      <Label fx:id="albumNameLabel" layoutX="40.0" layoutY="57.0" maxWidth="335.0" text="The album name of the artistName the red and black stripes whfdslfkals;df" textFill="WHITE">
          <font>
             <Font size="14.0" />
          </font>

@@ -18,7 +18,7 @@
       </ScrollPane>
       <HBox alignment="CENTER" layoutX="12.0" layoutY="14.0" prefHeight="76.0" prefWidth="546.0" spacing="10.0" style="-fx-background-color: black;" AnchorPane.rightAnchor="108.0">
          <children>
-            <TextField fx:id="text" prefHeight="40.0" prefWidth="437.0" promptText="Enter a song..." style="-fx-background-color: #1f1f1f;">
+            <TextField fx:id="text" prefHeight="40.0" prefWidth="437.0" promptText="Enter a songName..." style="-fx-background-color: #1f1f1f;">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>

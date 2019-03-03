@@ -15,26 +15,3 @@ public class LandingView extends LoadableView {
                 .showAndWait();
     }
 }
-
-
-//public class LandingView {
-//    private FXMLLoader loader;
-//
-//    public LandingView() {
-//        loader = new FXMLLoader(getClass().getResource("Landing.fxml"));
-//    }
-//
-//    public Parent loadView() {
-//        try {
-//            return loader.load();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-//
-//    protected void displayError() {
-//        new Alert(Alert.AlertType.ERROR, "Invalid username/password.", ButtonType.OK)
-//                .showAndWait();
-//    }
-//}

@@ -41,7 +41,7 @@
 //        Collection c = searchBarResultModel.getSongResult();
 //        song.setText(c.getSongTitle());
 //        artist.setText(c.getArtistName());
-//        String d = Float.toString(c.getSong().getDuration());
+//        String d = Float.toString(c.getSongTitle().getDuration());
 //        duration.setText(d);
 //
 //    }

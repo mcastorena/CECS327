@@ -16,6 +16,7 @@ import Gui.Homepage.HomepagePresenter;
 import model.User;
 import rpc.Proxy;
 import rpc.ProxyInterface;
+import utility.Deserializer;
 
 import java.io.IOException;
 

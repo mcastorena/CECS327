@@ -11,6 +11,7 @@ public class Collection implements Serializable {
     private Song song;
     private long id;
 
+    public Collection(){};
     public Collection(Release release, Artist artist, Song song) {
         this.release = release;
         this.artist = artist;

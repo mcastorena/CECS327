@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import model.Collection;
+import model.CollectionLightWeight;
 
 import java.io.IOException;
 
@@ -40,7 +41,13 @@ public class MainDisplayItem {
     public void initialize() {
         songTitleLabel.setText(song.getSongTitle());
         artistNameLabel.setText(song.getArtistName());
-        albumNameLabel.setText(song.getRelease().getName());
+        //albumNameLabel.setText(song.getRelease().getName());
+        if(song instanceof CollectionLightWeight)
+        {
+            albumNameLabel.setText(((CollectionLightWeight) song).getReleaseName());
+        }
+        else
+            albumNameLabel.setText(song.getRelease().getName());
 
         songPane.setOnMouseEntered(e -> {
             Main.getPrimaryStage()

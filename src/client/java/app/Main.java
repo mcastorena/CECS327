@@ -22,14 +22,14 @@ public class Main extends Application {
     private static Scene primaryScene;
     private AnchorPane rootLayout;
 
-    private int portNumber = 2222;
+    private int portNumber = 2223;
     private ProxyInterface clientProxy = new Proxy(portNumber);
 
    @Override
    public void start(Stage stage) throws Exception {
         Deserializer d = new Deserializer();
-        Resources.setOwnedIDs(d.getOwnedIDs());
-        Resources.setMusicDatabase(d.deserializeMusicLibrary());
+        //Resources.setOwnedIDs(d.getOwnedIDs());
+        //Resources.setMusicDatabase(d.deserializeMusicLibrary());
 
         primaryStage = stage; // does nothing atm
         primaryStage.setWidth(1024);

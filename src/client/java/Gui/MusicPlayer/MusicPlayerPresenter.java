@@ -3,7 +3,6 @@ package Gui.MusicPlayer;
 import app.Main;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
@@ -13,24 +12,19 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.text.Text;
 import javazoom.jlgui.basicplayer.BasicPlayer;
 import javazoom.jlgui.basicplayer.BasicPlayerException;
 
-import model.Collection;
 import Gui.Homepage.HomepagePresenter;
 import Gui.MainDisplay.MainDisplayPresenter;
+import model.Collection;
 import model.Playlist;
-import data.Resources;
 import rpc.CECS327InputStream;
 import rpc.ProxyInterface;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 
 
 public class MusicPlayerPresenter {
@@ -208,16 +202,16 @@ public class MusicPlayerPresenter {
         albumLabel.setText(song.getRelease().getName());
         try {
             int songId = (int)song.getId();
+            String filename = Integer.toString(songId);
+            setSongFile(Integer.toString(songId), clientProxy);
 //            HashMap<Integer,String> playableSongs = Resources.getPlayableSongs();
-            HashSet<Integer> ownedIDs = Resources.getOwnedIDs();
-            if (ownedIDs.contains(songId)) {
+            //HashSet<Integer> ownedIDs = Resources.getOwnedIDs();
+            //if (ownedIDs.contains(songId)) {
 //                String filename = "./music/" + songId + ".mp3";
                 //String filename = mp3FileName(songId);
-                String filename = Integer.toString(songId);
-
                 //File file = new File(filename);
                 //if (file.exists()) {
-                    setSongFile(Integer.toString(songId), clientProxy);
+
 //                    setSongFile(filename);
 //                    togglePlay();
 //                }
@@ -226,7 +220,7 @@ public class MusicPlayerPresenter {
 //            }
 //            else {
 //                displayNotPlayableError();
-            }
+            //}
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -237,10 +231,10 @@ public class MusicPlayerPresenter {
                 .showAndWait();
     }
 
-    private String mp3FileName(int songId) {
-        //return getClass().getResource("/music/" + songId + ".mp3").getPath();
-        return getClass().getResource("/music/" + songId).getPath(); //CHANGE TO SERVER
-    }
+//    private String mp3FileName(int songId) {
+//        //return getClass().getResource("/music/" + songId + ".mp3").getPath();
+//        return getClass().getResource("/music/" + songId).getPath(); //CHANGE TO SERVER
+//    }
 
     private int findIndex(Collection song) {
         if (playlist == null || playlist.size() < 1) {

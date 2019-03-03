@@ -15,13 +15,14 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.util.List;
 
 import Gui.Homepage.HomepagePresenter;
 import model.Collection;
+import model.CollectionLightWeight;
 import model.Playlist;
-import model.SearchResult;
+import rpc.CECS327InputStream;
 import rpc.ProxyInterface;
-import utility.Search;
 
 
 public class MainDisplayPresenter {
@@ -70,10 +71,10 @@ public class MainDisplayPresenter {
         return view;
     }
 
-    public void receiveSearchText(SearchBarPresenter sender, String searchText) {
-        SearchResult searchResult = Search.search(searchText, songSearchModel.getMusicDatabase());
-        songSearchModel.setResults(searchResult);
-        showResults(songSearchModel.getResults());
+    public void receiveSearchText(SearchBarPresenter sender, String searchText) throws IOException {
+        //SearchResult searchResult = Search.search(searchText, songSearchModel.getMusicDatabase());
+        //songSearchModel.setResults(searchResult);
+        showResults(songSearchModel.getResults(new CECS327InputStream(searchText, clientProxy)));
     }
 
     public void receiveSearchResults(HomepagePresenter sender, ObservableList<Collection> results) {
@@ -96,9 +97,12 @@ public class MainDisplayPresenter {
 //        display.getChildren().add(mainDisplayList);
     }
 
-    public void showResults(SearchResult searchResult) {
+    // CHANGED THIS FOR SERVER/CLIENT
+    //public void showResults(SearchResult searchResult) {
+    public void showResults(List<CollectionLightWeight> searchResult) {
         displayVBox.getChildren().clear();
-        for (Collection song : searchResult.getSongResultList()) {
+//        for (Collection song : searchResult.getSongResultList()) {
+        for (CollectionLightWeight song : searchResult) {
             SearchResultSongItem displayItem =
                     new SearchResultSongItem(this, song);
 

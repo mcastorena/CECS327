@@ -29,21 +29,37 @@ public class Proxy implements ProxyInterface {
     {
         JsonObject jsonRequest = new JsonObject();
         JsonObject jsonParam = new JsonObject();
-        
+
         jsonRequest.addProperty("remoteMethod", remoteMethod);
-        jsonRequest.addProperty("objectName", "SongServices");
-        // It is hardcoded. Instead it should be dynamic using  RemoteRef
-        if (remoteMethod.equals("getSongChunk"))
-        {
-            
-            jsonParam.addProperty("song", param[0]);
-            jsonParam.addProperty("fragment", param[1]);       
-        
+
+
+        if(remoteMethod.equals("getSongChunk") || remoteMethod.equals("getFileSize")) {
+            jsonRequest.addProperty("objectName", "SongServices");
+            // It is hardcoded. Instead it should be dynamic using  RemoteRef
+            if (remoteMethod.equals("getSongChunk")) {
+
+                jsonParam.addProperty("song", param[0]);
+                jsonParam.addProperty("fragment", param[1]);
+
+            }
+            if (remoteMethod.equals("getFileSize")) {
+                jsonParam.addProperty("song", param[0]);
+            }
         }
-        if (remoteMethod.equals("getFileSize"))
+
+        // Search result dispatcher
+        else if(remoteMethod.equals("getSize") || remoteMethod.equals("getSearchResultChunk"))
         {
-            jsonParam.addProperty("song", param[0]);        
+            jsonRequest.addProperty("objectName", "SearchResultServices");
+            if (remoteMethod.equals("getSearchResultChunk")) {
+                jsonParam.addProperty("fragment", param[0]);
+            }
+            else
+            {
+                jsonParam.addProperty("query", param[0]);
+            }
         }
+
         jsonRequest.add("param", jsonParam);
         
         JsonParser parser = new JsonParser();

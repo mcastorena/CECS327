@@ -67,7 +67,11 @@ public class SearchBarPresenter {
     }
 
     private void sendResultsToMainDisplay(String searchText) {
-        this.mainDisplayPresenter.receiveSearchText(this, searchField.getText());
+        try {
+            this.mainDisplayPresenter.receiveSearchText(this, searchField.getText());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 //    public void renderResults(SearchResult results) {

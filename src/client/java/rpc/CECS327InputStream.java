@@ -108,6 +108,44 @@ public class CECS327InputStream extends InputStream {
 
     }
 
+    // For Search Result
+    public CECS327InputStream(String query, ProxyInterface proxy) throws IOException {
+        sem = new Semaphore(1);
+        try
+        {
+            sem.acquire();
+        } catch (InterruptedException exc) {
+            System.out.println(exc);
+        }
+        this.proxy = proxy;
+        //this.fileName = fileName;
+        this.buf  = new byte[FRAGMENT_SIZE];
+        this.nextBuf  = new byte[FRAGMENT_SIZE];
+        String[] param = new String[1];
+        param[0] =  query;
+        JsonObject jsonRet = proxy.synchExecution("getSize", param);
+        this.total = Integer.parseInt(jsonRet.get("ret").getAsString());
+        getSearchBuff(fragment);
+        fragment++;
+    }
+
+    protected void getSearchBuff(int fragment)
+    {
+        new Thread()
+        {
+            public void run() {
+                String[] param = new String[1];
+                param[0] = String.valueOf(fragment);
+
+                JsonObject jsonRet = proxy.synchExecution("getSearchResultChunk", param);
+                String s = jsonRet.get("ret").getAsString();
+                nextBuf = Base64.getDecoder().decode(s);
+                sem.release();
+                System.out.println("Read search buffer");
+            }
+        }.start();
+    }
+
     /**
      * Reads the next byte of data from the input stream.
      */

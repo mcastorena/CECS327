@@ -4,17 +4,15 @@ import app.Main;
 import data.CollectionFormat;
 import javafx.scene.Cursor;
 import javafx.scene.SnapshotParameters;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import model.Collection;
-import utility.Serializer;
+import model.CollectionLightWeight;
 
 public class SearchResultSongItem extends MainDisplayItem {
 
-    public SearchResultSongItem(MainDisplayPresenter parent, Collection song) {
+    public SearchResultSongItem(MainDisplayPresenter parent, CollectionLightWeight song) {
         super(parent, song);
 
         AnchorPane p = super.songPane;
