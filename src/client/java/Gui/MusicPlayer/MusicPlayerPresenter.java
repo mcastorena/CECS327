@@ -18,7 +18,6 @@ import javazoom.jlgui.basicplayer.BasicPlayerException;
 
 import Gui.Homepage.HomepagePresenter;
 import Gui.MainDisplay.MainDisplayPresenter;
-import model.Collection;
 import model.CollectionLightWeight;
 import model.Playlist;
 import rpc.CECS327InputStream;
@@ -86,12 +85,11 @@ public class MusicPlayerPresenter {
                     CollectionLightWeight nextSong = playlist.get( (songNum+1)%size );
                     currentSong = nextSong;
                     int nextID = (int)nextSong.getId();
-                    //setSongFile(mp3FileName(nextID));
                     setSongFile(Integer.toString(nextID), clientProxy);
 
                     songLabel.setText(nextSong.getSongTitle());
                     artistLabel.setText(nextSong.getArtistName());
-                    albumLabel.setText(nextSong.getRelease().getName());
+                    albumLabel.setText(nextSong.getReleaseName());
                 }
 
              });
@@ -112,12 +110,11 @@ public class MusicPlayerPresenter {
                     int prevID = (int)prevSong.getId();
                     currentSong = prevSong;
 
-                    //setSongFile(mp3FileName(prevID));
                     setSongFile(Integer.toString(prevID), clientProxy);
 
                     songLabel.setText(prevSong.getSongTitle());
                     artistLabel.setText(prevSong.getArtistName());
-                    albumLabel.setText(prevSong.getRelease().getName());
+                    albumLabel.setText(prevSong.getReleaseName());
                 }
 
             });
@@ -201,13 +198,8 @@ public class MusicPlayerPresenter {
 
         songLabel.setText(song.getSongTitle());
         artistLabel.setText(song.getArtistName());
+        albumLabel.setText(song.getReleaseName());
 
-        // Solves Null pointer exception for playing song from search list
-        // Can change this if we Decide to remove the Collection class from client
-        if(song instanceof CollectionLightWeight)
-            albumLabel.setText(((CollectionLightWeight) song).getReleaseName());
-        else
-            albumLabel.setText(song.getRelease().getName());
         try {
             int songId = (int)song.getId();
             String filename = Integer.toString(songId);
@@ -239,18 +231,13 @@ public class MusicPlayerPresenter {
                 .showAndWait();
     }
 
-//    private String mp3FileName(int songId) {
-//        //return getClass().getResource("/music/" + songId + ".mp3").getPath();
-//        return getClass().getResource("/music/" + songId).getPath(); //CHANGE TO SERVER
-//    }
-
-    private int findIndex(Collection song) {
+    private int findIndex(CollectionLightWeight song) {
         if (playlist == null || playlist.size() < 1) {
             return -1;
         }
 
         int index = 0;
-        for (Collection c : playlist) {
+        for (CollectionLightWeight c : playlist) {
             if (c.getId() == song.getId())
                 return index;
             index++;

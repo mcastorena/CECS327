@@ -2,7 +2,7 @@ package app;
 
 import Gui.Homepage.HomepagePresenter;
 import Gui.Landing.LandingService;
-import data.Resources;
+//import data.Resources;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
 import javafx.scene.layout.AnchorPane;
@@ -27,7 +27,7 @@ public class Main extends Application {
 
    @Override
    public void start(Stage stage) throws Exception {
-        Deserializer d = new Deserializer();
+        //Deserializer d = new Deserializer();
         //Resources.setOwnedIDs(d.getOwnedIDs());
         //Resources.setMusicDatabase(d.deserializeMusicLibrary());
 

@@ -2,7 +2,7 @@ package Gui.MainDisplay;
 
 import Gui.PlaylistList.PlaylistListPresenter;
 import Gui.SearchBar.SearchBarPresenter;
-import data.Resources;
+//import data.Resources;
 import data.UserSession;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -50,7 +50,7 @@ public class MainDisplayPresenter {
         this.homepagePresenter = homepagePresenter;
         clientProxy = homepagePresenter.getProxy();
         songSearchModel = new SongSearchModel();
-        songSearchModel.setMusicDatabase(Resources.getMusicDatabase());
+        //songSearchModel.setMusicDatabase(Resources.getMusicDatabase());
 
         try {
             FXMLLoader loader = new FXMLLoader();
@@ -77,31 +77,30 @@ public class MainDisplayPresenter {
         showResults(songSearchModel.getResults(new CECS327InputStream(searchText, clientProxy)));
     }
 
-    public void receiveSearchResults(HomepagePresenter sender, ObservableList<Collection> results) {
-
-        ListView mainDisplayList = new ListView(results);
-
-//        m_listView.prefWidth(100);
-//        m_listView.setMaxWidth(100);
-        mainDisplayList.getSelectionModel().selectedItemProperty()
-                .addListener(new ChangeListener<Collection>() {
-                    public void changed(
-                            ObservableValue<? extends Collection> observable,
-                            Collection c, Collection ca) {
-
-                        // play music
-                    }
-                });
-
-//        display = new VBox(mainDisplayList);
-//        display.getChildren().add(mainDisplayList);
-    }
+//    public void receiveSearchResults(HomepagePresenter sender, ObservableList<Collection> results) {
+//
+//        ListView mainDisplayList = new ListView(results);
+//
+////        m_listView.prefWidth(100);
+////        m_listView.setMaxWidth(100);
+//        mainDisplayList.getSelectionModel().selectedItemProperty()
+//                .addListener(new ChangeListener<Collection>() {
+//                    public void changed(
+//                            ObservableValue<? extends Collection> observable,
+//                            Collection c, Collection ca) {
+//
+//                        // play music
+//                    }
+//                });
+//
+////        display = new VBox(mainDisplayList);
+////        display.getChildren().add(mainDisplayList);
+//    }
 
     // CHANGED THIS FOR SERVER/CLIENT
-    //public void showResults(SearchResult searchResult) {
     public void showResults(List<CollectionLightWeight> searchResult) {
         displayVBox.getChildren().clear();
-//        for (Collection song : searchResult.getSongResultList()) {
+
         for (CollectionLightWeight song : searchResult) {
             SearchResultSongItem displayItem =
                     new SearchResultSongItem(this, song);
