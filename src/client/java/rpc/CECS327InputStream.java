@@ -57,7 +57,7 @@ public class CECS327InputStream extends InputStream {
     protected ProxyInterface proxy;
 
     Semaphore sem;
-
+    String streamType;
 
     /**
      * Constructor of the class. Initialize the variables and reads the first
@@ -72,6 +72,7 @@ public class CECS327InputStream extends InputStream {
         } catch (InterruptedException exc) {
             System.out.println(exc);
         }
+        streamType = "song";
         this.proxy = proxy;
         this.fileName = fileName;
         this.buf  = new byte[FRAGMENT_SIZE];
@@ -85,29 +86,6 @@ public class CECS327InputStream extends InputStream {
         System.out.println("CECS327InputStream constructed");//remove
     }
 
-    /**
-     * getNextBuff reads the buffer. It gets the data using
-     * the remote method getSongChunk
-     */
-    protected void getBuff(int fragment) throws IOException
-    {
-        new Thread()
-        {
-            public void run() {
-                String[] param = new String[2];
-                param[0] = String.valueOf(fileName);
-                param[1] = String.valueOf(fragment);
-
-                JsonObject jsonRet = proxy.synchExecution("getSongChunk", param);
-                String s = jsonRet.get("ret").getAsString();
-                nextBuf = Base64.getDecoder().decode(s);
-                sem.release();
-                System.out.println("Read buffer");
-            }
-        }.start();
-
-    }
-
     // For Search Result
     public CECS327InputStream(String query, ProxyInterface proxy) throws IOException {
         sem = new Semaphore(1);
@@ -117,34 +95,56 @@ public class CECS327InputStream extends InputStream {
         } catch (InterruptedException exc) {
             System.out.println(exc);
         }
+        streamType = "search";
         this.proxy = proxy;
-        //this.fileName = fileName;
         this.buf  = new byte[FRAGMENT_SIZE];
         this.nextBuf  = new byte[FRAGMENT_SIZE];
         String[] param = new String[1];
         param[0] =  query;
         JsonObject jsonRet = proxy.synchExecution("getSize", param);
         this.total = Integer.parseInt(jsonRet.get("ret").getAsString());
-        getSearchBuff(fragment);
+        getBuff(fragment);
         fragment++;
     }
 
-    protected void getSearchBuff(int fragment)
+    /**
+     * getNextBuff reads the buffer. It gets the data using
+     * the remote method getSongChunk
+     */
+    protected void getBuff(int fragment) throws IOException
     {
-        new Thread()
-        {
-            public void run() {
-                String[] param = new String[1];
-                param[0] = String.valueOf(fragment);
+        if(streamType.equals("song")) {
+            new Thread() {
+                public void run() {
+                    String[] param = new String[2];
+                    param[0] = String.valueOf(fileName);
+                    param[1] = String.valueOf(fragment);
 
-                JsonObject jsonRet = proxy.synchExecution("getSearchResultChunk", param);
-                String s = jsonRet.get("ret").getAsString();
-                nextBuf = Base64.getDecoder().decode(s);
-                sem.release();
-                System.out.println("Read search buffer");
-            }
-        }.start();
+                    JsonObject jsonRet = proxy.synchExecution("getSongChunk", param);
+                    String s = jsonRet.get("ret").getAsString();
+                    nextBuf = Base64.getDecoder().decode(s);
+                    sem.release();
+                    System.out.println("Read buffer");
+                }
+            }.start();
+        }
+        else if(streamType.equals("search")) {
+            new Thread() {
+                public void run() {
+                    String[] param = new String[1];
+                    param[0] = String.valueOf(fragment);
+
+                    JsonObject jsonRet = proxy.synchExecution("getSearchResultChunk", param);
+                    String s = jsonRet.get("ret").getAsString();
+                    nextBuf = Base64.getDecoder().decode(s);
+                    sem.release();
+                    System.out.println("Read search buffer");
+                }
+            }.start();
+        }
+
     }
+
 
     /**
      * Reads the next byte of data from the input stream.

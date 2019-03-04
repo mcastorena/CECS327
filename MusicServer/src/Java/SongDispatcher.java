@@ -27,8 +27,7 @@ import java.util.Base64;
     public String getSongChunk(Long key, Long fragment) throws FileNotFoundException, IOException
     {
         byte buf[] = new byte[FRAGMENT_SIZE];
-        //File file = new File(System.getProperty("user.dir") + "\\src\\music\\" +key);
-        File file = new File(Thread.currentThread().getContextClassLoader().getResource("music/").getPath() + key + ".mp3");
+        File file = new File(Thread.currentThread().getContextClassLoader().getResource("music").getPath() + "\\" + key + ".mp3");
         System.out.println("SongDispatcher has found file: "+key+"\tStatus: "+file.exists());
         FileInputStream inputStream = new FileInputStream(file);
         inputStream.skip(fragment * FRAGMENT_SIZE);
@@ -44,9 +43,9 @@ import java.util.Base64;
      */
     public Integer getFileSize(Long key) throws FileNotFoundException, IOException
     {
-        File file = new File(System.getProperty("user.dir") + "\\src\\" +key);
+        File file = new File(Thread.currentThread().getContextClassLoader().getResource("music").getPath() + "\\" + key + ".mp3");
         Integer total =  (int)file.length();
-        
+
         return total;
     }
     

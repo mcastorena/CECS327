@@ -23,6 +23,7 @@ import model.Playlist;
 import rpc.CECS327InputStream;
 import rpc.ProxyInterface;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -179,7 +180,7 @@ public class MusicPlayerPresenter {
     public void setSongFile(String songFile, ProxyInterface proxy) {
         try {
             this.songFile = songFile;
-            myPlayer.open(new CECS327InputStream(Long.valueOf(songFile), proxy));
+            myPlayer.open(new BufferedInputStream( new CECS327InputStream(Long.valueOf(songFile), proxy)));
         } catch (BasicPlayerException e) {
             e.printStackTrace();
         } catch (IOException e1)

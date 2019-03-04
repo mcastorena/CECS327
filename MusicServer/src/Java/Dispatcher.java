@@ -40,7 +40,7 @@ public class Dispatcher implements DispatcherInterface {
           }
     }
     */
-    public String dispatch(String request)
+    public synchronized String dispatch(String request)
     {
         JsonObject jsonReturn = new JsonObject();
         JsonParser parser = new JsonParser();
@@ -100,9 +100,6 @@ public class Dispatcher implements DispatcherInterface {
                          ret = method.invoke(object, parameter).toString();
                         break;
                     case "java.lang.String":
-                        System.out.println(object);
-                        for(Object a : parameter)
-                            System.out.println(a.toString());
                         ret = (String)method.invoke(object, parameter);
                         break;
                 }

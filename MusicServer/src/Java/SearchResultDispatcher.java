@@ -64,15 +64,6 @@ public class SearchResultDispatcher {
         }
         System.out.println(sResult.toString());
 
-//        try {
-//            ByteArrayOutputStream os = new ByteArrayOutputStream();
-//            ObjectOutputStream oos = new ObjectOutputStream(os);
-//            oos.writeObject(sResult.toString());
-//            oos.flush();
-//            server.byteSearchResult = os.toByteArray();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
         server.byteSearchResult = sResult.toString().getBytes();
         return  server.byteSearchResult.length;
     }

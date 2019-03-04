@@ -20,20 +20,19 @@ public class server {
         }
     }
 
-    public static List<Collection> songList;
+    public static List<Collection> songList = d.getMusicDatabase();;
 
-    static {
-        try {
-            songList = d.deserializeMusicLibrary();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    static {
+//        try {
+//            //songList = d.deserializeMusicLibrary();
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     public static void main(String [] args)
     {
-        int a = new SearchResultDispatcher().getSize("friend");
-        System.out.println(a);
         serverCommunicationProtocol myServer = new serverCommunicationProtocol(portNumber);
         myServer.start();
     }
