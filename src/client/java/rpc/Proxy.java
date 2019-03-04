@@ -54,7 +54,7 @@ public class Proxy implements ProxyInterface {
             if (remoteMethod.equals("getSearchResultChunk")) {
                 jsonParam.addProperty("fragment", param[0]);
             }
-            else
+            if(remoteMethod.equals("getSize"))
             {
                 jsonParam.addProperty("query", param[0]);
             }
@@ -64,7 +64,7 @@ public class Proxy implements ProxyInterface {
         
         JsonParser parser = new JsonParser();
         System.out.println("Sending request: "+ jsonRequest.toString());
-        String strRet =  communicate.sendRequest(jsonRequest.toString());
+        String strRet =  communicate.sendRequest(jsonRequest.toString().trim());
         System.out.println("Returning response from server to inputstream: "+strRet);
         String myReturn = strRet.trim();
         return parser.parse(myReturn).getAsJsonObject();

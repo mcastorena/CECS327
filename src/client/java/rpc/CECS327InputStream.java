@@ -269,6 +269,8 @@ public class CECS327InputStream extends InputStream {
      */
     @Override
     public void close() throws IOException {
+        fragment = 0;
+        System.out.print("Steam of type " + streamType + " closed.");
     }
 
 }
