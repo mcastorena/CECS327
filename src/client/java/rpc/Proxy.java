@@ -25,7 +25,7 @@ public class Proxy implements ProxyInterface {
     * Executes the  remote method "remoteMethod". The method blocks until
     * it receives the reply of the message. 
     */
-    public JsonObject synchExecution(String remoteMethod, String[] param)
+    public synchronized JsonObject synchExecution(String remoteMethod, String[] param)
     {
         JsonObject jsonRequest = new JsonObject();
         JsonObject jsonParam = new JsonObject();

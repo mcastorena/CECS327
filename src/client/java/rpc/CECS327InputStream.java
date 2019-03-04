@@ -46,7 +46,7 @@ public class CECS327InputStream extends InputStream {
      * It is used to read the buffer
      */
     protected int fragment = 0;
-    protected static final int FRAGMENT_SIZE = 8192;
+    protected static final int FRAGMENT_SIZE =8192;
     /**
      * File name to stream
      */
