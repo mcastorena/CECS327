@@ -19,6 +19,7 @@ import javazoom.jlgui.basicplayer.BasicPlayerException;
 import Gui.Homepage.HomepagePresenter;
 import Gui.MainDisplay.MainDisplayPresenter;
 import model.Collection;
+import model.CollectionLightWeight;
 import model.Playlist;
 import rpc.CECS327InputStream;
 import rpc.ProxyInterface;
@@ -29,8 +30,8 @@ import java.util.ArrayList;
 
 
 public class MusicPlayerPresenter {
-    ArrayList<Collection> playlist;
-    Collection currentSong;
+    ArrayList<CollectionLightWeight> playlist;
+    CollectionLightWeight currentSong;
 
     private MainDisplayPresenter mainDisplayPresenter;
     private Node view;
@@ -82,7 +83,7 @@ public class MusicPlayerPresenter {
                 if (playlist != null && playlist.size() > 0 && currentSong != null) {
                     int songNum = findIndex(currentSong);
                     int size = playlist.size();
-                    Collection nextSong = playlist.get( (songNum+1)%size );
+                    CollectionLightWeight nextSong = playlist.get( (songNum+1)%size );
                     currentSong = nextSong;
                     int nextID = (int)nextSong.getId();
                     //setSongFile(mp3FileName(nextID));
@@ -107,7 +108,7 @@ public class MusicPlayerPresenter {
                 if (playlist != null && playlist.size() > 0 && currentSong != null) {
                     int songNum = findIndex(currentSong);
                     int size = playlist.size();
-                    Collection prevSong = playlist.get( ((songNum-1)+size)%size);
+                    CollectionLightWeight prevSong = playlist.get( ((songNum-1)+size)%size);
                     int prevID = (int)prevSong.getId();
                     currentSong = prevSong;
 
@@ -194,13 +195,19 @@ public class MusicPlayerPresenter {
     }
 
     // play song
-    public void receivePlaylistItemPlayRequest(HomepagePresenter sender, Collection song, Playlist playlist) {
+    public void receivePlaylistItemPlayRequest(HomepagePresenter sender, CollectionLightWeight song, Playlist playlist) {
         this.playlist = playlist.getSongList();
         this.currentSong = song;
 
         songLabel.setText(song.getSongTitle());
         artistLabel.setText(song.getArtistName());
-        albumLabel.setText(song.getRelease().getName());
+
+        // Solves Null pointer exception for playing song from search list
+        // Can change this if we Decide to remove the Collection class from client
+        if(song instanceof CollectionLightWeight)
+            albumLabel.setText(((CollectionLightWeight) song).getReleaseName());
+        else
+            albumLabel.setText(song.getRelease().getName());
         try {
             int songId = (int)song.getId();
             String filename = Integer.toString(songId);

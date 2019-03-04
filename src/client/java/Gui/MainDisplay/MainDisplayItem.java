@@ -17,7 +17,7 @@ public class MainDisplayItem {
 
     protected Parent view;
     
-    protected Collection song;
+    protected CollectionLightWeight song;
 
     protected @FXML AnchorPane songPane;
     protected @FXML Label songTitleLabel;
@@ -25,7 +25,7 @@ public class MainDisplayItem {
     protected @FXML Label albumNameLabel;
 
 
-    public MainDisplayItem(MainDisplayPresenter mainDisplayPresenter, Collection song) {
+    public MainDisplayItem(MainDisplayPresenter mainDisplayPresenter, CollectionLightWeight song) {
         try {
             this.mainDisplayPresenter = mainDisplayPresenter;
             this.song = song;

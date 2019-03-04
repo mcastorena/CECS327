@@ -6,7 +6,7 @@ public class Playlist {
 
     private String id;
     private String name;
-    private ArrayList<Collection> songList;
+    private ArrayList<CollectionLightWeight> songList;
 
     /**
      * Default constructor for creating a new playlist. Instantiates a new ArrayList for songList.
@@ -42,11 +42,11 @@ public class Playlist {
         this.name = name;
     }
 
-    public ArrayList<Collection> getSongList() {
+    public ArrayList<CollectionLightWeight> getSongList() {
         return this.songList;
     }
 
-    public boolean addToPlaylist(Collection song) {    // TODO: Change to a Song POJO
+    public boolean addToPlaylist(CollectionLightWeight song) {    // TODO: Change to a Song POJO
         boolean added = false;
 
         if (song != null) {

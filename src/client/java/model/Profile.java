@@ -44,7 +44,7 @@ public class Profile {
         return playlists.get(playlistName);
     }
 
-    public void addSongToPlaylist(Collection song, String playlistName) {
+    public void addSongToPlaylist(CollectionLightWeight song, String playlistName) {
         if (!playlists.containsKey(playlistName)) {
             System.out.println("Profile.addSongToPlaylist() - Playlist \"" + playlistName + "\" not found.");
             return;

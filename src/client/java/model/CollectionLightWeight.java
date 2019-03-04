@@ -19,6 +19,13 @@ public class CollectionLightWeight extends Collection {
         this.idNum = id;
     }
 
+    public CollectionLightWeight(Collection c)
+    {
+        this.releaseName = c.getRelease().getName();
+        this.artistName = c.getArtistName();
+        this.songName = c.getSongTitle();
+        this.idNum = c.getId();
+    }
     public String getReleaseName() {
         return releaseName;
     }

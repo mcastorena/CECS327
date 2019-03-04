@@ -132,7 +132,7 @@ public class MainDisplayPresenter {
 
     private void showPlaylist(Playlist playlist) {
         displayVBox.getChildren().clear();
-        for (Collection song : playlist.getSongList()) {
+        for (CollectionLightWeight song : playlist.getSongList()) {
             MainDisplayItem displayItem =
                     new MainDisplayItem(this, song);
 
@@ -143,7 +143,7 @@ public class MainDisplayPresenter {
         }
     }
 
-    public void receivePlayRequest(MainDisplayItem sender, Collection song) {
+    public void receivePlayRequest(MainDisplayItem sender, CollectionLightWeight song) {
         homepagePresenter.receivePlaylistItemClick(this, song, mainDisplayModel.getPlaylist());
     }
 

@@ -282,7 +282,7 @@ public class Deserializer {
             Collection c = userLibrary.get(id);
 
             if (c != null)
-                playlist.addToPlaylist(c);
+                playlist.addToPlaylist(new CollectionLightWeight(c));
             else
                 System.out.println("Deserializer.deserializePlaylist() - Failed to add Collection ID: " + id + " to Playlist");
         }

@@ -77,7 +77,7 @@ public class HomepagePresenter {
     }
 
 
-    public void receivePlaylistItemClick(MainDisplayPresenter sender, Collection song, Playlist playlist) {
+    public void receivePlaylistItemClick(MainDisplayPresenter sender, CollectionLightWeight song, Playlist playlist) {
         musicPlayerPresenter.receivePlaylistItemPlayRequest(this, song, playlist);
     }
 

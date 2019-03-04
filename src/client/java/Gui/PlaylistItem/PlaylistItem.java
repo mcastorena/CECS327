@@ -20,6 +20,7 @@ import java.io.IOException;
 
 import app.Main;
 import model.Collection;
+import model.CollectionLightWeight;
 import model.Playlist;
 import Gui.PlaylistList.PlaylistListPresenter;
 
@@ -85,7 +86,7 @@ public class PlaylistItem {
             Dragboard dragboard = e.getDragboard();
 
             if (dragboard.hasContent(CollectionFormat.FORMAT)) {
-                Collection song = (Collection)dragboard.getContent(CollectionFormat.FORMAT);
+                CollectionLightWeight song = (CollectionLightWeight) dragboard.getContent(CollectionFormat.FORMAT);
                 playlist.addToPlaylist(song);
                 dragCompleted = true;
                 sendDragComplete();
