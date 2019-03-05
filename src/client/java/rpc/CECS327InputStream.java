@@ -17,8 +17,6 @@ import java.util.concurrent.Semaphore;
 
 
 
-
-
 public class CECS327InputStream extends InputStream {
     /**
      * Total number of bytes in the file
@@ -107,6 +105,51 @@ public class CECS327InputStream extends InputStream {
         fragment++;
     }
 
+    // For login
+    public CECS327InputStream(String username, String password, ProxyInterface proxy) throws IOException {
+        sem = new Semaphore(1);
+        try
+        {
+            sem.acquire();
+        } catch (InterruptedException exc) {
+            System.out.println(exc);
+        }
+        streamType = "login";
+        this.proxy = proxy;
+        this.buf  = new byte[FRAGMENT_SIZE];
+        this.nextBuf  = new byte[FRAGMENT_SIZE];
+        String[] param = new String[2];
+        param[0] =  username;
+        param[1] = password;
+        JsonObject jsonRet = proxy.synchExecution("login", param);
+        this.total = FRAGMENT_SIZE;
+        String s = jsonRet.get("ret").getAsString();
+        nextBuf = Base64.getDecoder().decode(s);
+        sem.release();
+        System.out.println("Read Buffer");
+    }
+
+    // For retrieving playlists
+    public CECS327InputStream(Integer userToken, ProxyInterface proxy) throws IOException {
+        sem = new Semaphore(1);
+        try
+        {
+            sem.acquire();
+        } catch (InterruptedException exc) {
+            System.out.println(exc);
+        }
+        streamType = "retrievePlaylists";
+        this.proxy = proxy;
+        this.buf  = new byte[FRAGMENT_SIZE];
+        this.nextBuf  = new byte[FRAGMENT_SIZE];
+        String[] param = new String[1];
+        param[0] =  Integer.toString(userToken);
+        JsonObject jsonRet = proxy.synchExecution("getPlaylistsSize", param);
+        this.total = Integer.parseInt(jsonRet.get("ret").getAsString());
+        getBuff(fragment);
+        fragment++;
+    }
+
     /**
      * getNextBuff reads the buffer. It gets the data using
      * the remote method getSongChunk
@@ -139,6 +182,21 @@ public class CECS327InputStream extends InputStream {
                     nextBuf = Base64.getDecoder().decode(s);
                     sem.release();
                     System.out.println("Read search buffer");
+                }
+            }.start();
+        }
+        else if(streamType.equals("retrievePlaylists"))
+        {
+            new Thread() {
+                public void run() {
+                    String[] param = new String[1];
+                    param[0] = String.valueOf(fragment);
+
+                    JsonObject jsonRet = proxy.synchExecution("getPlaylistsChunk", param);
+                    String s = jsonRet.get("ret").getAsString();
+                    nextBuf = Base64.getDecoder().decode(s);
+                    sem.release();
+                    System.out.println("Read getplaylists buffer");
                 }
             }.start();
         }

@@ -21,7 +21,7 @@ public class Serializer {
      * @param p - A Playlist object.
      * @return A JSON array of integers.
      */
-    public JsonElement serialize(final Playlist p) {
+    public static JsonElement serialize(final Playlist p) {
         JsonArray ids = new JsonArray();
         for (Collection c : p.getSongList())
             ids.add((int) c.getId());

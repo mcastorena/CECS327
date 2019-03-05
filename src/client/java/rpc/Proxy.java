@@ -60,6 +60,27 @@ public class Proxy implements ProxyInterface {
             }
         }
 
+        // Login Dispatcher
+        else if(remoteMethod.equals("login"))
+        {
+            jsonRequest.addProperty("objectName", "LoginServices");
+            jsonParam.addProperty("username", param[0]);
+            jsonParam.addProperty("password", param[1]);
+        }
+
+        // Playlists Dispatcher
+        else if(remoteMethod.equals("getPlaylistsChunk") || remoteMethod.equals("getPlaylistsSize"))
+        {
+            jsonRequest.addProperty("objectName", "PlaylistServices");
+            if (remoteMethod.equals("getPlaylistsChunk")) {
+                jsonParam.addProperty("fragment", param[0]);
+            }
+            if(remoteMethod.equals("getPlaylistsSize"))
+            {
+                jsonParam.addProperty("userToken", param[0]);
+            }
+        }
+
         jsonRequest.add("param", jsonParam);
         
         JsonParser parser = new JsonParser();

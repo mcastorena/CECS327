@@ -1,10 +1,10 @@
 package model;
 
-public class CollectionLightWeight extends Collection {
+public class CollectionLightWeight{// extends Collection {
 
 // A container to hold all json objects related to the same releaseName id
 
-    private static long serialVersionUID = 1L;
+    //private static long serialVersionUID = 1L;
 
     private String artistName;
     private String songName;
@@ -19,13 +19,13 @@ public class CollectionLightWeight extends Collection {
         this.idNum = id;
     }
 
-    public CollectionLightWeight(Collection c)
-    {
-        this.releaseName = c.getRelease().getName();
-        this.artistName = c.getArtistName();
-        this.songName = c.getSongTitle();
-        this.idNum = c.getId();
-    }
+//    public CollectionLightWeight(Collection c)
+//    {
+//        this.releaseName = c.getRelease().getName();
+//        this.artistName = c.getArtistName();
+//        this.songName = c.getSongTitle();
+//        this.idNum = c.getId();
+//    }
     public String getReleaseName() {
         return releaseName;
     }

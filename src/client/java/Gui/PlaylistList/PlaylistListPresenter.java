@@ -16,6 +16,7 @@ import Gui.MainDisplay.MainDisplayPresenter;
 import javafx.stage.Stage;
 import model.Playlist;
 import model.User;
+import rpc.CECS327InputStream;
 
 import java.io.IOException;
 
@@ -47,10 +48,11 @@ public class PlaylistListPresenter {
             this.homepagePresenter = homepagePresenter;
 
             playlistListModel = new PlaylistListModel();
-            playlistListModel.setPlaylists(
-                    UserSession.getCurrentSession()
-                            .getUserProfile()
-                            .getPlaylists());
+//            playlistListModel.setPlaylists(
+//                    UserSession.getCurrentSession()
+//                            .getUserProfile()
+//                            .getPlaylists());
+            playlistListModel.setPlaylists(new CECS327InputStream(Main.userToken, homepagePresenter.getProxy()));
 
 //            FXMLLoader loader = new FXMLLoader(MainDisplayPresenter.class.getResource("ui/PlaylistListAlt.fxml"));
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/PlaylistListAlt.fxml"));

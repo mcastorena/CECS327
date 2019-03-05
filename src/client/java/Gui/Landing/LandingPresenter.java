@@ -1,7 +1,6 @@
 package Gui.Landing;
 
 import app.Main;
-import data.UserSession;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,10 +12,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import Gui.Homepage.HomepagePresenter;
-import model.User;
-import rpc.Proxy;
 import rpc.ProxyInterface;
-import utility.Deserializer;
+
 
 import java.io.IOException;
 
@@ -47,7 +44,7 @@ public class LandingPresenter {
         clientProxy = proxy;
         try {
             landingModel = new LandingModel();
-            landingService = LandingService.getInstance();
+            landingService = LandingService.getInstance(proxy);
 
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/ui/Landing.fxml"));
@@ -83,11 +80,16 @@ public class LandingPresenter {
         landingModel.setPasswordInput("pass");
 
         boolean isAuthorized =
-                landingService.authorizeUser(landingModel.getUsernameInput(), landingModel.getPasswordInput());
+                false;
+        try {
+            isAuthorized = landingService.authorizeUser(landingModel.getUsernameInput(), landingModel.getPasswordInput());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         if (isAuthorized) {
-            User user = landingService.getCurrentSession();
-            UserSession.setCurrentSession(user);
+            //User user = landingService.getCurrentSession();
+            //UserSession.setCurrentSession(user);
             homepagePresenter = new HomepagePresenter(clientProxy);
             switchToHomepage();
         }
@@ -99,7 +101,7 @@ public class LandingPresenter {
     public void register() {
         Stage registerWindow = new Stage();
 
-        register r = new register(registerWindow);
+        register r = new register(registerWindow, clientProxy);
         Scene s = new Scene(r.getView());
         registerWindow.setScene(s);
         registerWindow.show();

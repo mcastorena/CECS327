@@ -16,6 +16,12 @@ public class Profile {
         playlists = new HashMap<>();
     }
 
+    public Profile(HashMap<String, Playlist> playlists)
+    {
+        avatar = null;
+        setPlaylists(playlists);
+    }
+
     public BufferedImage getAvatar() {
         return avatar;
     }

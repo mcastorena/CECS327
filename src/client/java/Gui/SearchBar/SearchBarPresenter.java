@@ -11,7 +11,6 @@ import Gui.MainDisplay.MainDisplayPresenter;
 import java.io.IOException;
 
 public class SearchBarPresenter {
-    private SearchBarModel searchBarModel;
 //    private SearchBarView searchBarView;
     private Parent view;
     private MainDisplayPresenter mainDisplayPresenter;

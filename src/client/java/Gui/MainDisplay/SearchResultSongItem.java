@@ -7,7 +7,7 @@ import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
-import model.Collection;
+//import model.Collection;
 import model.CollectionLightWeight;
 
 public class SearchResultSongItem extends MainDisplayItem {

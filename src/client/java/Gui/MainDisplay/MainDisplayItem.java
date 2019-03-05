@@ -7,7 +7,6 @@ import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-import model.Collection;
 import model.CollectionLightWeight;
 
 import java.io.IOException;

@@ -16,6 +16,8 @@ public class clientRequestPacketHandler extends Thread {
         this.myDispatcher = new Dispatcher();                       // Create a dispatcher object to process request
         myDispatcher.registerObject(new SongDispatcher(), "SongServices");  // Add dispatcher modules
         myDispatcher.registerObject(new SearchResultDispatcher(), "SearchResultServices");
+        myDispatcher.registerObject(new LoginDispatcher(), "LoginServices");
+        myDispatcher.registerObject(new PlaylistDispatcher(), "PlaylistServices");
         System.out.println("New client packet handler created");
     }
 
