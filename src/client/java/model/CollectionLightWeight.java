@@ -4,7 +4,7 @@ public class CollectionLightWeight extends Collection {
 
 // A container to hold all json objects related to the same releaseName id
 
-    private static long serialVersionUID = 1L;
+    //private static long serialVersionUID = 1L;
 
     private String artistName;
     private String songName;

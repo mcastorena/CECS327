@@ -62,9 +62,10 @@ public class HomepagePresenter {
      *  after calling FXMLLoader.load(). This is invoked when calling any of the xView constructors.
      */
     public void initialize() {
-        Text profileText = new Text(UserSession.getCurrentSession().getUsername());
-        profileText.requestFocus(); // doesn't work
-        gridPane.add(profileText, 0, 0);
+        // TODO: Fix this with login dispatcher
+        //Text profileText = new Text(UserSession.getCurrentSession().getUsername());
+        //profileText.requestFocus(); // doesn't work
+        //gridPane.add(profileText, 0, 0);
         gridPane.add(searchBarPresenter.getView(), 3, 0, 3, 1);
         gridPane.add(playlistListPresenter.getView(), 0, 2, 2, 4);
         gridPane.add(mainDisplayPresenter.getView(), 3,2, 3, 3);

@@ -24,35 +24,39 @@ public class Main extends Application {
 
     private int portNumber = 2223;
     private ProxyInterface clientProxy = new Proxy(portNumber);
+    public static int userToken;
 
    @Override
    public void start(Stage stage) throws Exception {
-        //Deserializer d = new Deserializer();
-        //Resources.setOwnedIDs(d.getOwnedIDs());
-        //Resources.setMusicDatabase(d.deserializeMusicLibrary());
+       //Deserializer d = new Deserializer();
+       //Resources.setOwnedIDs(d.getOwnedIDs());
+       //Resources.setMusicDatabase(d.deserializeMusicLibrary());
 
-        primaryStage = stage; // does nothing atm
-        primaryStage.setWidth(1024);
-        primaryStage.setHeight(576);
-        primaryStage.setResizable(true);
+       primaryStage = stage; // does nothing atm
+       primaryStage.setWidth(1024);
+       primaryStage.setHeight(576);
+       primaryStage.setResizable(true);
 
-        LandingPresenter lp = new LandingPresenter(clientProxy);
-        lp.showLandingPage();
+       LandingPresenter lp = new LandingPresenter(clientProxy);
+       lp.showLandingPage();
 
 //       HomepagePresenter hp = new HomepagePresenter();
 //       primaryStage.setScene(hp.g);
 
-        primaryStage.show();
+       primaryStage.show();
 
-        primaryStage.setOnCloseRequest(e -> {
-            try {
-                new Serializer().updateUsersJson(LandingService.getInstance().userList());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            } finally {
-                System.exit(1);
-            }
-        });
+       primaryStage.setOnCloseRequest(e -> {
+//            try {
+//                new Serializer().updateUsersJson(LandingService.getInstance(clientProxy).userList());
+//            } catch (IOException e1) {
+//                e1.printStackTrace();
+//            } finally {
+//                System.exit(1);
+//            }
+//        });
+           // TODO: Update user json with dispatcher
+           System.exit(0);
+       });
    }
 
     public static Stage getPrimaryStage() {
