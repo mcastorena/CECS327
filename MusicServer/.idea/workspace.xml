@@ -3,23 +3,22 @@
   <component name="ChangeListManager">
     <list default="true" id="84f3f860-88d3-499a-ac67-fc5ac3d6ef2d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Java/ServerMain/clientRequestPacketHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Java/ServerMain/clientRequestPacketHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Java/ServerMain/server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Java/ServerMain/server.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Java/utility/Serializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Java/utility/Serializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/client/java/Gui/Homepage/HomepagePresenter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/client/java/Gui/Homepage/HomepagePresenter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/client/java/Gui/Landing/LandingPresenter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/client/java/Gui/Landing/LandingPresenter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/client/java/Gui/Landing/LandingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/client/java/Gui/Landing/LandingService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/client/java/Gui/Landing/register.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/client/java/Gui/Landing/register.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/client/java/Gui/MainDisplay/MainDisplayItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/client/java/Gui/MainDisplay/MainDisplayItem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/client/java/Gui/MusicPlayer/MusicPlayerPresenter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/client/java/Gui/MusicPlayer/MusicPlayerPresenter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/client/java/Gui/PlaylistList/PlaylistListModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/client/java/Gui/PlaylistList/PlaylistListModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/client/java/Gui/PlaylistList/PlaylistListPresenter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/client/java/Gui/PlaylistList/PlaylistListPresenter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/client/java/Gui/MainDisplay/MainDisplayPresenter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/client/java/Gui/MainDisplay/MainDisplayPresenter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/client/java/Gui/MainDisplay/PlaylistSongItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/client/java/Gui/MainDisplay/PlaylistSongItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/client/java/Gui/MainDisplay/SearchResultSongItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/client/java/Gui/MainDisplay/SearchResultSongItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/client/java/Gui/MainDisplayItem/MainDisplayItemPresenter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/client/java/Gui/MainDisplayItem/MainDisplayItemPresenter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/client/java/Gui/PlaylistItem/PlaylistItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/client/java/Gui/PlaylistItem/PlaylistItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/client/java/Gui/SearchBar/SearchBarModel.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/client/java/Gui/SearchBar/SearchBarPresenter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/client/java/Gui/SearchBar/SearchBarPresenter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../src/client/java/app/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/client/java/app/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/client/java/controller/LoginManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/client/java/controller/LoginManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/client/java/model/Artist.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/client/java/model/Collection.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../src/client/java/model/CollectionLightWeight.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/client/java/model/CollectionLightWeight.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/client/java/model/Profile.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/client/java/model/Profile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/client/java/rpc/CECS327InputStream.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/client/java/rpc/CECS327InputStream.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/client/java/rpc/Proxy.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/client/java/rpc/Proxy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/client/java/model/Release.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/client/java/model/SearchResult.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/client/java/model/Song.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/client/java/utility/Deserializer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/client/java/utility/Serializer.java" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -254,7 +253,7 @@
     <property name="Repository.Attach.Sources" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1551769398473" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1551770261775" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="project.structure.last.edited" value="Libraries" />
@@ -308,7 +307,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="16141000" />
+    <option name="totallyTimeSpent" value="17069000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1912" y="-8" width="1936" height="1056" extended-state="6" />

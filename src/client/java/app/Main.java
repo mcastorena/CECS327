@@ -12,8 +12,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import rpc.Proxy;
 import rpc.ProxyInterface;
-import utility.Deserializer;
-import utility.Serializer;
+//import utility.Deserializer;
+//import utility.Serializer;
 
 import java.io.IOException;
 

@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.List;
 
 import Gui.Homepage.HomepagePresenter;
-import model.Collection;
+//import model.Collection;
 import model.CollectionLightWeight;
 import model.Playlist;
 import rpc.CECS327InputStream;

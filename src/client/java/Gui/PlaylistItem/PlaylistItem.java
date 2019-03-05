@@ -19,7 +19,7 @@ import javafx.scene.text.Text;
 import java.io.IOException;
 
 import app.Main;
-import model.Collection;
+//import model.Collection;
 import model.CollectionLightWeight;
 import model.Playlist;
 import Gui.PlaylistList.PlaylistListPresenter;
