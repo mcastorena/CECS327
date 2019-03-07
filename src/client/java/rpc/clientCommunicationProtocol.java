@@ -1,7 +1,9 @@
 package rpc;
 
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 
 public class clientCommunicationProtocol {
     static final int FRAGMENT_SIZE = 15000;                      // Packet size
@@ -10,24 +12,20 @@ public class clientCommunicationProtocol {
     private DatagramSocket mySocket = null;
     private InetAddress ip = null;
     private int portNumber;
-    //private DataInputStream is = null;
-    //private DataOutputStream os = null;
 
-    public void connect(int portNum){
+    public void connect(int portNum) {
         try {
             this.ip = InetAddress.getByName("localhost");    // Get localhost IP address
             this.mySocket = new DatagramSocket();            // Initialize Socket
             this.portNumber = portNum;                       // Initialize port number
             //mySocket.connect(ip,portNum);//Not sure if this is needed
 
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public String sendRequest(String request){
+    public String sendRequest(String request) {
         String response = "";
         try {
 

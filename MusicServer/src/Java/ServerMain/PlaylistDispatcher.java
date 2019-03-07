@@ -17,8 +17,7 @@ import java.util.List;
 public class PlaylistDispatcher {
     static final int FRAGMENT_SIZE = 8192;
 
-    public PlaylistDispatcher()
-    {
+    public PlaylistDispatcher() {
 
     }
 
@@ -27,8 +26,7 @@ public class PlaylistDispatcher {
      * @param fragment: The chunk corresponds to
      * [fragment * FRAGMENT_SIZE, FRAGMENT_SIZE]
      */
-    public String getPlaylistsChunk(Long fragment) throws IOException
-    {
+    public String getPlaylistsChunk(Long fragment) throws IOException {
         byte buf[] = new byte[FRAGMENT_SIZE];
 
         System.out.println("PlaylistDispatcher is getting chunk");
@@ -45,18 +43,15 @@ public class PlaylistDispatcher {
      * getSize: Gets a size of the byte array
      * @param query: the search query from user
      */
-    public Integer getPlaylistsSize(Integer userToken)
-    {
+    public Integer getPlaylistsSize(Integer userToken) {
         User currentSession = server.currentSessions.get(userToken);
         Profile userProfile = currentSession.getUserProfile();
 
-
         JsonArray playlistListJA = new JsonArray();
-        for(Playlist p : userProfile.getIterablePlaylists()) {
+        for (Playlist p : userProfile.getIterablePlaylists()) {
             JsonObject playlistJO = new JsonObject();
             JsonArray singlePlaylist = new JsonArray();
-            for(Collection c : p.getSongList())
-            {
+            for (Collection c : p.getSongList()) {
                 JsonObject songJO = new JsonObject();
                 JsonObject singleSongElement = new JsonObject();
                 songJO.addProperty("idNum", c.getId());
@@ -70,11 +65,10 @@ public class PlaylistDispatcher {
             playlistListJA.add(playlistJO);
         }
 
-
         System.out.println(playlistListJA.toString());
 
         server.bytePlaylists = playlistListJA.toString().getBytes();
-        return  server.bytePlaylists.length;
+        return server.bytePlaylists.length;
     }
 }
 //[

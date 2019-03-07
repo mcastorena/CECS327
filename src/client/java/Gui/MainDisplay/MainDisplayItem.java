@@ -13,15 +13,17 @@ import java.io.IOException;
 
 public class MainDisplayItem {
     protected MainDisplayPresenter mainDisplayPresenter;
-
     protected Parent view;
-    
     protected CollectionLightWeight song;
 
-    protected @FXML AnchorPane songPane;
-    protected @FXML Label songTitleLabel;
-    protected @FXML Label artistNameLabel;
-    protected @FXML Label albumNameLabel;
+    protected @FXML
+    AnchorPane songPane;
+    protected @FXML
+    Label songTitleLabel;
+    protected @FXML
+    Label artistNameLabel;
+    protected @FXML
+    Label albumNameLabel;
 
 
     public MainDisplayItem(MainDisplayPresenter mainDisplayPresenter, CollectionLightWeight song) {
@@ -66,5 +68,5 @@ public class MainDisplayItem {
     private void sendPlayRequest() {
         mainDisplayPresenter.receivePlayRequest(this, song);
     }
-    
+
 }

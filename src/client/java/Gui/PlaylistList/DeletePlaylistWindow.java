@@ -1,7 +1,6 @@
 package Gui.PlaylistList;
 
 import Gui.PlaylistItem.PlaylistItem;
-import data.UserSession;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
@@ -17,17 +16,20 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class DeletePlaylistWindow {
-    private PlaylistItem parent;
-
-    private Stage stage;
-    private Scene scene;
 
     private Parent view;
+    private PlaylistItem parent;
+    private Scene scene;
+    private Stage stage;
 
-    @FXML private AnchorPane deletePlaylistBox;
-    @FXML private TextField textField;
-    @FXML private Button deleteButton;
-    @FXML private Button cancelButton;
+    @FXML
+    private AnchorPane deletePlaylistBox;
+    @FXML
+    private TextField textField;
+    @FXML
+    private Button deleteButton;
+    @FXML
+    private Button cancelButton;
 
     public DeletePlaylistWindow(PlaylistItem parent) {
         try {
@@ -37,10 +39,12 @@ public class DeletePlaylistWindow {
             loader.setController(this);
             view = loader.load();
             stage = new Stage();
+
             // Prevent user from interacting with anything other than current window.
             stage.initModality(Modality.APPLICATION_MODAL);
             scene = new Scene(view);
             stage.setScene(scene);
+
         } catch (IOException e1) {
             e1.printStackTrace();
         }
@@ -57,8 +61,8 @@ public class DeletePlaylistWindow {
         deleteButton.setOnMouseEntered(e -> stage.getScene().setCursor(Cursor.HAND));
         deleteButton.setOnMouseExited(e -> stage.getScene().setCursor(Cursor.DEFAULT));
         deleteButton.setOnMouseClicked(e -> {
-                    sendClick();
-                    stage.close();
+            sendClick();
+            stage.close();
         });
 
         cancelButton.setOnMouseEntered(e -> stage.getScene().setCursor(Cursor.HAND));
@@ -78,6 +82,9 @@ public class DeletePlaylistWindow {
         stage.close();
     }
 
+    /**
+     * Informs the parent, a PlaylistItem object, to delete the playlist
+     */
     private void sendClick() {
         parent.receivePlaylistDeleteClick(this);
     }

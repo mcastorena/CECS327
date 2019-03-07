@@ -4,7 +4,7 @@ package data;
 import model.User;
 
 public class UserSession {
-    public static User currentSession;
+    private static User currentSession;
 
     public static User getCurrentSession() {
         return currentSession;

@@ -1,5 +1,7 @@
 package Gui.MusicPlayer;
 
+import Gui.Homepage.HomepagePresenter;
+import Gui.MainDisplay.MainDisplayPresenter;
 import app.Main;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -15,9 +17,6 @@ import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javazoom.jlgui.basicplayer.BasicPlayer;
 import javazoom.jlgui.basicplayer.BasicPlayerException;
-
-import Gui.Homepage.HomepagePresenter;
-import Gui.MainDisplay.MainDisplayPresenter;
 import model.CollectionLightWeight;
 import model.Playlist;
 import rpc.CECS327InputStream;
@@ -37,20 +36,22 @@ public class MusicPlayerPresenter {
     private boolean isPlaying;
     private BasicPlayer myPlayer = new BasicPlayer();
     private String songFile;
-//    private Image pause;
-//    private Image play;
 
-    @FXML private Slider slider;
-    @FXML private Group playButton;
-    @FXML private Group previousButton;
-    @FXML private Group nextButton;
+    @FXML
+    private Slider slider;
+    @FXML
+    private Group playButton;
+    @FXML
+    private Group previousButton;
+    @FXML
+    private Group nextButton;
 
-//    @FXML
-//    private ImageView playImage;
-
-    @FXML private Label songLabel;
-    @FXML private Label artistLabel;
-    @FXML private Label albumLabel;
+    @FXML
+    private Label songLabel;
+    @FXML
+    private Label artistLabel;
+    @FXML
+    private Label albumLabel;
 
     public MusicPlayerPresenter() {
         this.playlist = new ArrayList<>();
@@ -66,8 +67,11 @@ public class MusicPlayerPresenter {
             playButton.setOnMouseEntered(e -> Main.getPrimaryStage().getScene().setCursor(Cursor.HAND));
             playButton.setOnMouseExited(e -> Main.getPrimaryStage().getScene().setCursor(Cursor.DEFAULT));
             playButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-                try { togglePlay(); }
-                catch (Exception e) { e.printStackTrace(); }
+                try {
+                    togglePlay();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             });
 
             nextButton.setOnMouseEntered(e -> Main.getPrimaryStage().getScene().setCursor(Cursor.HAND));
@@ -82,9 +86,9 @@ public class MusicPlayerPresenter {
                 if (playlist != null && playlist.size() > 0 && currentSong != null) {
                     int songNum = findIndex(currentSong);
                     int size = playlist.size();
-                    CollectionLightWeight nextSong = playlist.get( (songNum+1)%size );
+                    CollectionLightWeight nextSong = playlist.get((songNum + 1) % size);
                     currentSong = nextSong;
-                    int nextID = (int)nextSong.getId();
+                    int nextID = (int) nextSong.getId();
                     setSongFile(Integer.toString(nextID), clientProxy);
 
                     songLabel.setText(nextSong.getSongTitle());
@@ -92,7 +96,7 @@ public class MusicPlayerPresenter {
                     albumLabel.setText(nextSong.getReleaseName());
                 }
 
-             });
+            });
 
             previousButton.setOnMouseEntered(e -> Main.getPrimaryStage().getScene().setCursor(Cursor.HAND));
             previousButton.setOnMouseExited(e -> Main.getPrimaryStage().getScene().setCursor(Cursor.DEFAULT));
@@ -106,8 +110,8 @@ public class MusicPlayerPresenter {
                 if (playlist != null && playlist.size() > 0 && currentSong != null) {
                     int songNum = findIndex(currentSong);
                     int size = playlist.size();
-                    CollectionLightWeight prevSong = playlist.get( ((songNum-1)+size)%size);
-                    int prevID = (int)prevSong.getId();
+                    CollectionLightWeight prevSong = playlist.get(((songNum - 1) + size) % size);
+                    int prevID = (int) prevSong.getId();
                     currentSong = prevSong;
 
                     setSongFile(Integer.toString(prevID), clientProxy);
@@ -162,11 +166,9 @@ public class MusicPlayerPresenter {
                 }
             }
             isPlaying = true;
-//            playImage.setImage(pause);
         } else {
             try {
                 myPlayer.pause();
-//                playImage.setImage(play);
                 isPlaying = false;
                 return;
             } catch (BasicPlayerException e) {
@@ -178,11 +180,10 @@ public class MusicPlayerPresenter {
     public void setSongFile(String songFile, ProxyInterface proxy) {
         try {
             this.songFile = songFile;
-            myPlayer.open(new BufferedInputStream( new CECS327InputStream(Long.valueOf(songFile), proxy)));
+            myPlayer.open(new BufferedInputStream(new CECS327InputStream(Long.valueOf(songFile), proxy)));
         } catch (BasicPlayerException e) {
             e.printStackTrace();
-        } catch (IOException e1)
-        {
+        } catch (IOException e1) {
             e1.printStackTrace();
         }
     }
@@ -201,26 +202,9 @@ public class MusicPlayerPresenter {
         albumLabel.setText(song.getReleaseName());
 
         try {
-            int songId = (int)song.getId();
+            int songId = (int) song.getId();
             String filename = Integer.toString(songId);
             setSongFile(Integer.toString(songId), clientProxy);
-//            HashMap<Integer,String> playableSongs = Resources.getPlayableSongs();
-            //HashSet<Integer> ownedIDs = Resources.getOwnedIDs();
-            //if (ownedIDs.contains(songId)) {
-//                String filename = "./music/" + songId + ".mp3";
-                //String filename = mp3FileName(songId);
-                //File file = new File(filename);
-                //if (file.exists()) {
-
-//                    setSongFile(filename);
-//                    togglePlay();
-//                }
-//                else
-//                    displayNotPlayableError();
-//            }
-//            else {
-//                displayNotPlayableError();
-            //}
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,7 +1,7 @@
 package Gui.MainDisplay;
 
-import javafx.fxml.FXMLLoader;
 import Gui.LoadableView;
+import javafx.fxml.FXMLLoader;
 
 public class MainDisplayView extends LoadableView {
     public MainDisplayView() {

@@ -1,5 +1,6 @@
 package Gui.Landing;
 
+import Gui.Homepage.HomepagePresenter;
 import app.Main;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,9 +12,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
-import Gui.Homepage.HomepagePresenter;
 import rpc.ProxyInterface;
-
 
 import java.io.IOException;
 
@@ -74,13 +73,10 @@ public class LandingPresenter {
     }
 
     private void submitLogin() {
-//        landingModel.setUsernameInput(usernameField.getText());
-//        landingModel.setPasswordInput(passwordField.getText());
-        landingModel.setUsernameInput("user");
-        landingModel.setPasswordInput("pass");
+        landingModel.setUsernameInput(usernameField.getText());
+        landingModel.setPasswordInput(passwordField.getText());
 
-        boolean isAuthorized =
-                false;
+        boolean isAuthorized = false;
         try {
             isAuthorized = landingService.authorizeUser(landingModel.getUsernameInput(), landingModel.getPasswordInput());
         } catch (IOException e) {
@@ -92,8 +88,7 @@ public class LandingPresenter {
             //UserSession.setCurrentSession(user);
             homepagePresenter = new HomepagePresenter(clientProxy);
             switchToHomepage();
-        }
-        else {
+        } else {
             displayError();
         }
     }
@@ -107,11 +102,6 @@ public class LandingPresenter {
         registerWindow.show();
     }
 
-//    private boolean validateSubmission(User user) {
-//        // to-do: actual validation
-//        return user != null;
-//    }
-
     // TODO: Abstract away into some sort of Stage/Screen manager.
     // TODO: Need to handle null userList? User should technically be authed already though.
     private void switchToHomepage() {
@@ -119,7 +109,6 @@ public class LandingPresenter {
     }
 
     public Parent getView() {
-//        return landingView.getView();
         return view;
     }
 

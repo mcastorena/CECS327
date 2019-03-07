@@ -1,9 +1,9 @@
 package Gui.Landing;
 
+import Gui.LoadableView;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import Gui.LoadableView;
 
 public class LandingView extends LoadableView {
     public LandingView() {

@@ -1,8 +1,9 @@
 package model;
 
+
 import java.io.Serializable;
 
-public class CollectionLightWeight implements Serializable {// extends Collection {
+public class CollectionLightWeight implements Serializable {
 
 // A container to hold all json objects related to the same releaseName id
 
@@ -13,7 +14,9 @@ public class CollectionLightWeight implements Serializable {// extends Collectio
     private String releaseName;
     private long idNum;
 
-    public CollectionLightWeight(){}
+    public CollectionLightWeight() {
+    }
+
     public CollectionLightWeight(long id, String songName, String artistName, String releaseName) {
         this.releaseName = releaseName;
         this.artistName = artistName;
@@ -21,13 +24,6 @@ public class CollectionLightWeight implements Serializable {// extends Collectio
         this.idNum = id;
     }
 
-//    public CollectionLightWeight(Collection c)
-//    {
-//        this.releaseName = c.getRelease().getName();
-//        this.artistName = c.getArtistName();
-//        this.songName = c.getSongTitle();
-//        this.idNum = c.getId();
-//    }
     public String getReleaseName() {
         return releaseName;
     }
@@ -59,6 +55,7 @@ public class CollectionLightWeight implements Serializable {// extends Collectio
     public void setId(long id) {
         this.idNum = id;
     }
+
 
     public void serialize() {
 
