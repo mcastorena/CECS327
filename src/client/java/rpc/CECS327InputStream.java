@@ -2,19 +2,18 @@ package rpc; /**
  * The CECS327InputStream extends InputStream class. The class implements
  * markers that are used in AudioInputStream
  *
- * @author  Oscar Morales-Ponce
+ * @author Oscar Morales-Ponce
  * @version 0.15
- * @since   2019-01-24
+ * @since 2019-01-24
  */
 
 
-import java.io.EOFException;
+import com.google.gson.JsonObject;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Base64;
-import com.google.gson.JsonObject;
 import java.util.concurrent.Semaphore;
-
 
 
 public class CECS327InputStream extends InputStream {
@@ -44,7 +43,7 @@ public class CECS327InputStream extends InputStream {
      * It is used to read the buffer
      */
     protected int fragment = 0;
-    protected static final int FRAGMENT_SIZE =8192;
+    protected static final int FRAGMENT_SIZE = 8192;
     /**
      * File name to stream
      */
@@ -60,12 +59,12 @@ public class CECS327InputStream extends InputStream {
     /**
      * Constructor of the class. Initialize the variables and reads the first
      * frament in nextBuf
+     *
      * @param fileName The name of the file
      */
     public CECS327InputStream(Long fileName, ProxyInterface proxy) throws IOException {
         sem = new Semaphore(1);
-        try
-        {
+        try {
             sem.acquire();
         } catch (InterruptedException exc) {
             System.out.println(exc);
@@ -73,10 +72,10 @@ public class CECS327InputStream extends InputStream {
         streamType = "song";
         this.proxy = proxy;
         this.fileName = fileName;
-        this.buf  = new byte[FRAGMENT_SIZE];
-        this.nextBuf  = new byte[FRAGMENT_SIZE];
+        this.buf = new byte[FRAGMENT_SIZE];
+        this.nextBuf = new byte[FRAGMENT_SIZE];
         String[] param = new String[1];
-        param[0] =  String.valueOf(this.fileName);
+        param[0] = String.valueOf(this.fileName);
         JsonObject jsonRet = proxy.synchExecution("getFileSize", param);
         this.total = Integer.parseInt(jsonRet.get("ret").getAsString());
         getBuff(fragment);
@@ -87,18 +86,17 @@ public class CECS327InputStream extends InputStream {
     // For Search Result
     public CECS327InputStream(String query, ProxyInterface proxy) throws IOException {
         sem = new Semaphore(1);
-        try
-        {
+        try {
             sem.acquire();
         } catch (InterruptedException exc) {
-            System.out.println(exc);
+            System.out.println(exc.getMessage());
         }
         streamType = "search";
         this.proxy = proxy;
-        this.buf  = new byte[FRAGMENT_SIZE];
-        this.nextBuf  = new byte[FRAGMENT_SIZE];
+        this.buf = new byte[FRAGMENT_SIZE];
+        this.nextBuf = new byte[FRAGMENT_SIZE];
         String[] param = new String[1];
-        param[0] =  query;
+        param[0] = query;
         JsonObject jsonRet = proxy.synchExecution("getSize", param);
         this.total = Integer.parseInt(jsonRet.get("ret").getAsString());
         getBuff(fragment);
@@ -108,18 +106,17 @@ public class CECS327InputStream extends InputStream {
     // For login
     public CECS327InputStream(String username, String password, ProxyInterface proxy) throws IOException {
         sem = new Semaphore(1);
-        try
-        {
+        try {
             sem.acquire();
         } catch (InterruptedException exc) {
-            System.out.println(exc);
+            System.out.println(exc.getMessage());
         }
         streamType = "login";
         this.proxy = proxy;
-        this.buf  = new byte[FRAGMENT_SIZE];
-        this.nextBuf  = new byte[FRAGMENT_SIZE];
+        this.buf = new byte[FRAGMENT_SIZE];
+        this.nextBuf = new byte[FRAGMENT_SIZE];
         String[] param = new String[2];
-        param[0] =  username;
+        param[0] = username;
         param[1] = password;
         JsonObject jsonRet = proxy.synchExecution("login", param);
         this.total = FRAGMENT_SIZE;
@@ -132,18 +129,17 @@ public class CECS327InputStream extends InputStream {
     // For retrieving playlists
     public CECS327InputStream(Integer userToken, ProxyInterface proxy) throws IOException {
         sem = new Semaphore(1);
-        try
-        {
+        try {
             sem.acquire();
         } catch (InterruptedException exc) {
             System.out.println(exc);
         }
         streamType = "retrievePlaylists";
         this.proxy = proxy;
-        this.buf  = new byte[FRAGMENT_SIZE];
-        this.nextBuf  = new byte[FRAGMENT_SIZE];
+        this.buf = new byte[FRAGMENT_SIZE];
+        this.nextBuf = new byte[FRAGMENT_SIZE];
         String[] param = new String[1];
-        param[0] =  Integer.toString(userToken);
+        param[0] = Integer.toString(userToken);
         JsonObject jsonRet = proxy.synchExecution("getPlaylistsSize", param);
         this.total = Integer.parseInt(jsonRet.get("ret").getAsString());
         getBuff(fragment);
@@ -154,9 +150,8 @@ public class CECS327InputStream extends InputStream {
      * getNextBuff reads the buffer. It gets the data using
      * the remote method getSongChunk
      */
-    protected void getBuff(int fragment) throws IOException
-    {
-        if(streamType.equals("song")) {
+    protected void getBuff(int fragment) throws IOException {
+        if (streamType.equals("song")) {
             new Thread() {
                 public void run() {
                     String[] param = new String[2];
@@ -170,8 +165,7 @@ public class CECS327InputStream extends InputStream {
                     System.out.println("Read buffer");
                 }
             }.start();
-        }
-        else if(streamType.equals("search")) {
+        } else if (streamType.equals("search")) {
             new Thread() {
                 public void run() {
                     String[] param = new String[1];
@@ -184,9 +178,7 @@ public class CECS327InputStream extends InputStream {
                     System.out.println("Read search buffer");
                 }
             }.start();
-        }
-        else if(streamType.equals("retrievePlaylists"))
-        {
+        } else if (streamType.equals("retrievePlaylists")) {
             new Thread() {
                 public void run() {
                     String[] param = new String[1];
@@ -200,7 +192,6 @@ public class CECS327InputStream extends InputStream {
                 }
             }.start();
         }
-
     }
 
 
@@ -211,29 +202,25 @@ public class CECS327InputStream extends InputStream {
     public synchronized int read() throws IOException {
 
 
-        if (pos >= total)
-        {
+        if (pos >= total) {
             pos = 0;
             return -1;
         }
         int posmod = pos % FRAGMENT_SIZE;
-        if (posmod == 0)
-        {
-            try
-            {
+        if (posmod == 0) {
+            try {
                 sem.acquire();
-            }catch (InterruptedException exc)
-            {
+            } catch (InterruptedException exc) {
                 System.out.println(exc);
             }
-            for (int i=0; i< FRAGMENT_SIZE; i++)
+            for (int i = 0; i < FRAGMENT_SIZE; i++)
                 buf[i] = nextBuf[i];
 
             getBuff(fragment);
             fragment++;
         }
         int p = pos % FRAGMENT_SIZE;
-        pos ++;
+        pos++;
         return buf[p] & 0xff;
     }
 
@@ -242,7 +229,7 @@ public class CECS327InputStream extends InputStream {
      * into the buffer array b.
      */
     @Override
-    public synchronized int read(byte b[], int off, int len)  throws IOException{
+    public synchronized int read(byte b[], int off, int len) throws IOException {
         if (b == null) {
             throw new NullPointerException();
         } else if (off < 0 || len < 0 || len > b.length - off) {
@@ -259,8 +246,8 @@ public class CECS327InputStream extends InputStream {
         if (len <= 0) {
             return 0;
         }
-        for (int i = off; i< off+len;  i++)
-            b[i] = (byte)read();
+        for (int i = off; i < off + len; i++)
+            b[i] = (byte) read();
         return len;
     }
 
@@ -275,7 +262,7 @@ public class CECS327InputStream extends InputStream {
         }
 
         pos += k;
-        fragment = (int)Math.floor(pos / FRAGMENT_SIZE);
+        fragment = (int) Math.floor(pos / FRAGMENT_SIZE);
         getBuff(fragment);
         fragment++;
         getBuff(fragment);
@@ -283,8 +270,8 @@ public class CECS327InputStream extends InputStream {
     }
 
     /**
-     * Returns an estimate of the number of bytes that can be read 
-     * (or skipped over) from this input stream without blocking by 
+     * Returns an estimate of the number of bytes that can be read
+     * (or skipped over) from this input stream without blocking by
      * the next invocation of a method for this input stream.
      */
     @Override
@@ -309,20 +296,20 @@ public class CECS327InputStream extends InputStream {
     }
 
     /**
-     * Repositions this stream to the position at the time the 
+     * Repositions this stream to the position at the time the
      * mark method was last called on this input stream.
      */
     @Override
     public synchronized void reset() throws IOException {
         pos = mark;
-        fragment = (int)Math.floor(pos / FRAGMENT_SIZE);
+        fragment = (int) Math.floor(pos / FRAGMENT_SIZE);
         getBuff(fragment);
         fragment++;
         getBuff(fragment);
     }
 
     /**
-     * Closes this input stream and releases any system resources 
+     * Closes this input stream and releases any system resources
      * associated with the stream.
      */
     @Override

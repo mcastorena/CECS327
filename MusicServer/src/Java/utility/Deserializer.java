@@ -65,7 +65,7 @@ public class Deserializer {
 
             // Trim the ".mp3" extension from file name
             String mp3Name;
-            if(filename.substring(filename.length()-3, filename.length()).equals("mp3"))
+            if (filename.substring(filename.length() - 3, filename.length()).equals("mp3"))
                 mp3Name = filename.substring(0, filename.length() - 4);
             else
                 mp3Name = filename;
