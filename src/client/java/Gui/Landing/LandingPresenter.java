@@ -92,8 +92,7 @@ public class LandingPresenter {
             //UserSession.setCurrentSession(user);
             homepagePresenter = new HomepagePresenter(clientProxy);
             switchToHomepage();
-        }
-        else {
+        } else {
             displayError();
         }
     }

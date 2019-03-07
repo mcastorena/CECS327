@@ -6,6 +6,7 @@ import model.Playlist;
 
 public class PlaylistPagePresenter {
     private PlaylistPageModel playlistPageModel;
+
     @FXML
     public void initialize() {
         playlistPageModel.setPlaylist(null);

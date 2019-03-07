@@ -22,8 +22,7 @@ public class SongSearchModel {
         JsonReader reader = new JsonReader(new InputStreamReader(is, "UTF-8"));
 
         reader.beginArray();
-        while(reader.hasNext())
-        {
+        while (reader.hasNext()) {
             songList.add(gson.fromJson(reader, CollectionLightWeight.class));
         }
         reader.endArray();

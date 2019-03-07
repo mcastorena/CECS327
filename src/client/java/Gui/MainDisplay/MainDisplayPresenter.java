@@ -115,8 +115,8 @@ public class MainDisplayPresenter {
         try {
             Playlist playlist =
                     UserSession.getCurrentSession()
-                    .getUserProfile()
-                    .getPlaylist(selection);
+                            .getUserProfile()
+                            .getPlaylist(selection);
 
             if (playlist == null)
                 throw new NullPointerException("Playlist " + selection + " not found.");
@@ -151,8 +151,7 @@ public class MainDisplayPresenter {
         showPlaylist(obj);
     }
 
-    public ProxyInterface getProxy()
-    {
+    public ProxyInterface getProxy() {
         return clientProxy;
     }
 }

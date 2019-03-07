@@ -13,7 +13,7 @@ public class clientCommunicationProtocol {
     //private DataInputStream is = null;
     //private DataOutputStream os = null;
 
-    public void connect(int portNum){
+    public void connect(int portNum) {
         try {
             this.ip = InetAddress.getByName("localhost");    // Get localhost IP address
             this.mySocket = new DatagramSocket();            // Initialize Socket
@@ -22,12 +22,12 @@ public class clientCommunicationProtocol {
 
         } catch (UnknownHostException e) {
             e.printStackTrace();
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public String sendRequest(String request){
+    public String sendRequest(String request) {
         String response = "";
         try {
 

@@ -1,6 +1,6 @@
 package model;
 
-public class CollectionLightWeight{// extends Collection {
+public class CollectionLightWeight {// extends Collection {
 
 // A container to hold all json objects related to the same releaseName id
 
@@ -11,7 +11,9 @@ public class CollectionLightWeight{// extends Collection {
     private String releaseName;
     private long idNum;
 
-    public CollectionLightWeight(){}
+    public CollectionLightWeight() {
+    }
+
     public CollectionLightWeight(long id, String songName, String artistName, String releaseName) {
         this.releaseName = releaseName;
         this.artistName = artistName;
@@ -19,7 +21,7 @@ public class CollectionLightWeight{// extends Collection {
         this.idNum = id;
     }
 
-//    public CollectionLightWeight(Collection c)
+    //    public CollectionLightWeight(Collection c)
 //    {
 //        this.releaseName = c.getRelease().getName();
 //        this.artistName = c.getArtistName();

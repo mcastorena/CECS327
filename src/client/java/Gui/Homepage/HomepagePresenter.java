@@ -1,20 +1,17 @@
 package Gui.Homepage;
 
+import Gui.MainDisplay.MainDisplayPresenter;
+import Gui.MusicPlayer.MusicPlayerPresenter;
 import Gui.PlaylistList.PlaylistListPresenter;
+import Gui.SearchBar.SearchBarPresenter;
 import app.Main;
-import data.UserSession;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
-import javafx.scene.text.Text;
-
-import Gui.MusicPlayer.MusicPlayerPresenter;
-import Gui.SearchBar.SearchBarPresenter;
-import Gui.MainDisplay.MainDisplayPresenter;
-import model.*;
-
+import model.CollectionLightWeight;
+import model.Playlist;
 import rpc.ProxyInterface;
 
 import java.io.IOException;
@@ -58,8 +55,8 @@ public class HomepagePresenter {
     }
 
     /**
-     *  Note: you can only modify javafx objects loaded from FXML (i.e. adding elements)
-     *  after calling FXMLLoader.load(). This is invoked when calling any of the xView constructors.
+     * Note: you can only modify javafx objects loaded from FXML (i.e. adding elements)
+     * after calling FXMLLoader.load(). This is invoked when calling any of the xView constructors.
      */
     public void initialize() {
         // TODO: Fix this with login dispatcher
@@ -68,8 +65,8 @@ public class HomepagePresenter {
         //gridPane.add(profileText, 0, 0);
         gridPane.add(searchBarPresenter.getView(), 3, 0, 3, 1);
         gridPane.add(playlistListPresenter.getView(), 0, 2, 2, 4);
-        gridPane.add(mainDisplayPresenter.getView(), 3,2, 3, 3);
-        gridPane.add(musicPlayerPresenter.getView(), 2,6);
+        gridPane.add(mainDisplayPresenter.getView(), 3, 2, 3, 3);
+        gridPane.add(musicPlayerPresenter.getView(), 2, 6);
     }
 
     public void showDefaultPage() {
@@ -87,8 +84,7 @@ public class HomepagePresenter {
         mainDisplayPresenter.receivePlaylistItemClick(this, obj);
     }
 
-    public ProxyInterface getProxy()
-    {
+    public ProxyInterface getProxy() {
         return clientProxy;
     }
 }

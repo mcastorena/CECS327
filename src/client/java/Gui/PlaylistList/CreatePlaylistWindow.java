@@ -25,10 +25,14 @@ public class CreatePlaylistWindow {
 
     private Parent view;
 
-    @FXML private AnchorPane createPlaylistBox;
-    @FXML private TextField textField;
-    @FXML private Button createButton;
-    @FXML private Button cancelButton;
+    @FXML
+    private AnchorPane createPlaylistBox;
+    @FXML
+    private TextField textField;
+    @FXML
+    private Button createButton;
+    @FXML
+    private Button cancelButton;
 
     public CreatePlaylistWindow(PlaylistListPresenter parent) {
         try {
@@ -70,8 +74,7 @@ public class CreatePlaylistWindow {
                         .getPlaylist(textField.getText()) != null) {
                     new Alert(Alert.AlertType.ERROR, "Playlist name already exists.", ButtonType.OK)
                             .showAndWait();
-                }
-                else {
+                } else {
                     sendText();
                     stage.close();
                 }

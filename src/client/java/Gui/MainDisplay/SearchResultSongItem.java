@@ -29,10 +29,10 @@ public class SearchResultSongItem extends MainDisplayItem {
             // Create a "ghost" image of the pane on drag
             dragboard.setDragView(
                     view.snapshot(
-                        new SnapshotParameters(),
-                        new WritableImage(
-                                p.widthProperty().intValue(),
-                                p.heightProperty().intValue())));
+                            new SnapshotParameters(),
+                            new WritableImage(
+                                    p.widthProperty().intValue(),
+                                    p.heightProperty().intValue())));
         });
 
 //        AnchorPane s = super.songPane;

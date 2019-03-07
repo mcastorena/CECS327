@@ -36,11 +36,11 @@ public interface ProxyInterface {
     public JsonObject synchExecution(String remoteMethod, String[] param);
 
     /*
-    * Executes the  remote method remoteMethod and returns without waiting
-    * for the reply. It does similar to synchExecution but does not 
-    * return any value
-    * 
-    */
+     * Executes the  remote method remoteMethod and returns without waiting
+     * for the reply. It does similar to synchExecution but does not
+     * return any value
+     *
+     */
     public void asynchExecution(String remoteMethod, String[] param);
 }
 

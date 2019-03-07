@@ -45,8 +45,14 @@ public class PlaylistListModel {
         UserSession.getCurrentSession().setUserProfile(new Profile(playlists));
     }
 
-    void addPlaylist(Playlist p) {
-        if (p != null) playlists.put(p.getName(), p);
+    /**
+     * Adds the Playlist to the HashMap of all Playlists
+     *
+     * @param playlist - Playlist object to be added
+     */
+    void addPlaylist(Playlist playlist) {
+        if (playlist != null) playlists.put(playlist.getName(), playlist);
+        // TODO: Tell server to add a new playlist
     }
 
     /**
@@ -56,5 +62,6 @@ public class PlaylistListModel {
      */
     void deletePlaylist(Playlist playlist) {
         playlists.remove(playlist.getName());
+        // TODO: Tell server to delete the Playlist
     }
 }

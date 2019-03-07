@@ -17,9 +17,12 @@ public class register {
     private Parent view;
 
     private ProxyInterface proxy;
-    @FXML private TextField user;
-    @FXML private TextField pass;
-    @FXML private Button signupButton;
+    @FXML
+    private TextField user;
+    @FXML
+    private TextField pass;
+    @FXML
+    private Button signupButton;
 
     public register(Stage stage, ProxyInterface proxy) {
         try {

@@ -22,10 +22,10 @@ public class LandingService {
     //public HashMap<String,User> usersInfo = new HashMap<>();
     ProxyInterface proxy;
 
-    private LandingService () {
+    private LandingService() {
 //       try {
-           //deserializer = new Deserializer();
-           //userList = deserializer.deserializeUsers();
+        //deserializer = new Deserializer();
+        //userList = deserializer.deserializeUsers();
 
 //           for (User u : userList) {
 //               if (usersInfo.containsValue(u)) {
@@ -41,8 +41,8 @@ public class LandingService {
 
     public static LandingService getInstance(ProxyInterface proxy) {
         if (instance == null) {
-                instance = new LandingService();
-                instance.setProxy(proxy);
+            instance = new LandingService();
+            instance.setProxy(proxy);
         }
         return instance;
     }
@@ -57,7 +57,7 @@ public class LandingService {
         reader.endObject();
 
         // TODO: Add this info to loginDispatcher
-        currentSession = new User("default", "default","default");
+        currentSession = new User("default", "default", "default");
         UserSession.setCurrentSession(currentSession);
         //return currentSession != null;
         return Main.userToken != 0;
@@ -71,8 +71,7 @@ public class LandingService {
 //        return userList;
 //    }
 
-    public void setProxy(ProxyInterface proxy)
-    {
+    public void setProxy(ProxyInterface proxy) {
         this.proxy = proxy;
     }
 }
