@@ -1,9 +1,8 @@
 package Gui.PlaylistItem;
 
-import Gui.MainDisplay.MainDisplayItem;
-import Gui.MainDisplay.SearchResultSongItem;
-import Gui.PlaylistList.CreatePlaylistWindow;
 import Gui.PlaylistList.DeletePlaylistWindow;
+import Gui.PlaylistList.PlaylistListPresenter;
+import app.Main;
 import data.CollectionFormat;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,24 +14,25 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
+import model.CollectionLightWeight;
+import model.Playlist;
 
 import java.io.IOException;
 
-import app.Main;
-//import model.Collection;
-import model.CollectionLightWeight;
-import model.Playlist;
-import Gui.PlaylistList.PlaylistListPresenter;
-
 public class PlaylistItem {
-    private PlaylistListPresenter parent;
-    private Playlist playlist;
 
     private Parent view;
-    @FXML Pane playlistItemPane;
-    @FXML Text playlistNameText;
+    private Playlist playlist;
+    private PlaylistListPresenter parent;
 
-    @FXML StackPane deletePane;
+    @FXML
+    Pane playlistItemPane;
+
+    @FXML
+    Text playlistNameText;
+
+    @FXML
+    StackPane deletePane;
 
     public PlaylistItem(PlaylistListPresenter parent, Playlist playlist) {
         try {
@@ -113,15 +113,23 @@ public class PlaylistItem {
         parent.receivePlaylistItemClick(this, playlist);
     }
 
+    /**
+     * Informs the parent, a PlaylistListPresenter object, to delete the playlist associated with this PlaylistItem
+     */
     private void sendDeleteClick() {
         parent.receivePlaylistItemDeleteClick(this, playlist);
     }
 
+    /**
+     * @param sender - Object sending the message to delete the playlist
+     */
     public void receivePlaylistDeleteClick(DeletePlaylistWindow sender) {
         sendDeleteClick();
     }
 
-    public Parent getView() { return view; }
+    public Parent getView() {
+        return view;
+    }
 
     private void showDeletePlaylistWindow() {
         DeletePlaylistWindow dpw = new DeletePlaylistWindow(this);

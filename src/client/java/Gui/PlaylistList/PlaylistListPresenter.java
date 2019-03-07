@@ -1,21 +1,17 @@
 package Gui.PlaylistList;
 
-import Gui.PlaylistItem.PlaylistItem;
-import app.Main;
-import data.UserSession;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.*;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
-
 import Gui.Homepage.HomepagePresenter;
 import Gui.MainDisplay.MainDisplayPresenter;
-import javafx.stage.Stage;
+import Gui.PlaylistItem.PlaylistItem;
+import app.Main;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.layout.VBox;
 import model.Playlist;
-import model.User;
 import rpc.CECS327InputStream;
 
 import java.io.IOException;
@@ -24,7 +20,7 @@ public class PlaylistListPresenter {
     private MainDisplayPresenter mainDisplayPresenter;
 
     private PlaylistListModel playlistListModel;
-//    private PlaylistListView playlistListView;
+    //    private PlaylistListView playlistListView;
     private Parent view;
 
     private HomepagePresenter homepagePresenter;
@@ -39,8 +35,10 @@ public class PlaylistListPresenter {
 
 //    @FXML private Button createButton;
 
-    @FXML VBox playlistPanel;
-    @FXML Group addButton;
+    @FXML
+    VBox playlistPanel;
+    @FXML
+    Group addButton;
 
     public PlaylistListPresenter(MainDisplayPresenter mainDisplayPresenter, HomepagePresenter homepagePresenter) {
         try {
@@ -90,13 +88,7 @@ public class PlaylistListPresenter {
 //        user = HomepagePresenter.getUser();
 //        playlists = HomepagePresenter.getPlaylists();
 
-
-
 //        initData();
-
-
-
-
     }
 
     public void initData() {
@@ -167,8 +159,14 @@ public class PlaylistListPresenter {
         renderPlaylists();
     }
 
+    /**
+     * Receives a message from a PlaylistItem to delete the associated Playlist object
+     *
+     * @param sender - PlaylistItem sending the message
+     * @param obj - Playlist to be delete
+     */
     public void receivePlaylistItemDeleteClick(PlaylistItem sender, Playlist obj) {
-        playlistListModel.removePlaylist(obj);
+        playlistListModel.deletePlaylist(obj);
         renderPlaylists();
     }
 
