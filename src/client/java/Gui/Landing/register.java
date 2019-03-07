@@ -7,7 +7,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.User;
-import rpc.Proxy;
 import rpc.ProxyInterface;
 
 import java.io.IOException;
@@ -25,7 +24,7 @@ public class register {
         try {
             this.proxy = proxy;
             this.stage = stage;
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("ui/Registration.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/Registration.fxml"));
             loader.setController(this);
             view = loader.load();
         } catch (IOException e) {

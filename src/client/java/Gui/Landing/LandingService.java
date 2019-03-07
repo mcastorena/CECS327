@@ -73,6 +73,6 @@ public class LandingService {
 
     public void setProxy(ProxyInterface proxy)
     {
-        this.proxy = proxy;
+        if(this.proxy == null)this.proxy = proxy;
     }
 }

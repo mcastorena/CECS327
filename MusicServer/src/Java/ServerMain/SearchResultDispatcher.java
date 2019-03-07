@@ -14,7 +14,6 @@ import java.util.List;
 
 public class SearchResultDispatcher {
     static final int FRAGMENT_SIZE = 8192;
-//    private String query;
 
     public SearchResultDispatcher()
     {
