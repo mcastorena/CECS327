@@ -62,11 +62,13 @@ public class MainDisplayPresenter {
         showResults(songSearchModel.getResults(new CECS327InputStream(searchText, clientProxy)));
     }
 
-    // CHANGED THIS FOR SERVER/CLIENT
+    // Show search results and create temporary playlist for playing from search.
     public void showResults(List<CollectionLightWeight> searchResult) {
         displayVBox.getChildren().clear();
 
+        Playlist tempSearchPlaylist = new Playlist("Temp Playlist");
         for (CollectionLightWeight song : searchResult) {
+            tempSearchPlaylist.addToPlaylist(song);
             SearchResultSongItem displayItem =
                     new SearchResultSongItem(this, song);
 
@@ -74,6 +76,7 @@ public class MainDisplayPresenter {
                     .add(displayItem
                             .getView());
         }
+        mainDisplayModel.setPlaylist(tempSearchPlaylist);
     }
 
     public void receivePlaylistSelection(PlaylistListPresenter sender, String selection) {

@@ -36,7 +36,7 @@ public class LandingService {
         reader.endObject();
 
         // TODO: Add this info to loginDispatcher
-        currentSession = new User("default", "default", "default");
+        currentSession = new User(username, "default", "default");
         UserSession.setCurrentSession(currentSession);
         return Main.userToken != 0;
     }
