@@ -13,9 +13,7 @@ import java.io.IOException;
 
 public class MainDisplayItem {
     protected MainDisplayPresenter mainDisplayPresenter;
-
     protected Parent view;
-
     protected CollectionLightWeight song;
 
     protected @FXML

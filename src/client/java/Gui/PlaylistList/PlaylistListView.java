@@ -1,7 +1,7 @@
 package Gui.PlaylistList;
 
-import javafx.fxml.FXMLLoader;
 import Gui.LoadableView;
+import javafx.fxml.FXMLLoader;
 
 public class PlaylistListView extends LoadableView {
     public PlaylistListView() {

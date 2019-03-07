@@ -57,14 +57,4 @@ public class Playlist {
 
         return added;
     }
-
-    // TODO: Rename playlist
-//    public void renamePlaylist() {
-//        String newName = "";
-//
-//        // Grab user input
-//        // verify it's of the right length
-//
-//        this.name = newName;
-//    }
 }

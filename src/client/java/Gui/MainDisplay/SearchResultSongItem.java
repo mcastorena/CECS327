@@ -5,9 +5,10 @@ import data.CollectionFormat;
 import javafx.scene.Cursor;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
-import javafx.scene.input.*;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
-//import model.Collection;
 import model.CollectionLightWeight;
 
 public class SearchResultSongItem extends MainDisplayItem {
@@ -34,23 +35,5 @@ public class SearchResultSongItem extends MainDisplayItem {
                                     p.widthProperty().intValue(),
                                     p.heightProperty().intValue())));
         });
-
-//        AnchorPane s = super.songPane;
-//
-//        ContextMenu contextMenu = new ContextMenu();
-//        MenuItem addToPlaylistOption = new MenuItem("Add to playlist");
-//        addToPlaylistOption.setOnAction(e -> {
-//
-//        });
-//        contextMenu.getItems().add(addToPlaylistOption);
-//
-//        s.setOnContextMenuRequested(e -> {
-//            contextMenu.show(s, e.getScreenX(), e.getScreenY());
-//        });
     }
-
-//    private void showSongAddWindow() {
-//        SongAddWindow saw = new SongAddWindow();
-//        saw.show();
-//    }
 }

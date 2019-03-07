@@ -2,7 +2,6 @@ package Gui.MainDisplay;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
-
 import model.CollectionLightWeight;
 import rpc.CECS327InputStream;
 

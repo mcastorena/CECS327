@@ -1,5 +1,7 @@
 package Gui.MusicPlayer;
 
+import Gui.Homepage.HomepagePresenter;
+import Gui.MainDisplay.MainDisplayPresenter;
 import app.Main;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -15,9 +17,6 @@ import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javazoom.jlgui.basicplayer.BasicPlayer;
 import javazoom.jlgui.basicplayer.BasicPlayerException;
-
-import Gui.Homepage.HomepagePresenter;
-import Gui.MainDisplay.MainDisplayPresenter;
 import model.CollectionLightWeight;
 import model.Playlist;
 import rpc.CECS327InputStream;
@@ -37,8 +36,6 @@ public class MusicPlayerPresenter {
     private boolean isPlaying;
     private BasicPlayer myPlayer = new BasicPlayer();
     private String songFile;
-//    private Image pause;
-//    private Image play;
 
     @FXML
     private Slider slider;
@@ -48,9 +45,6 @@ public class MusicPlayerPresenter {
     private Group previousButton;
     @FXML
     private Group nextButton;
-
-//    @FXML
-//    private ImageView playImage;
 
     @FXML
     private Label songLabel;
@@ -172,11 +166,9 @@ public class MusicPlayerPresenter {
                 }
             }
             isPlaying = true;
-//            playImage.setImage(pause);
         } else {
             try {
                 myPlayer.pause();
-//                playImage.setImage(play);
                 isPlaying = false;
                 return;
             } catch (BasicPlayerException e) {
@@ -213,23 +205,6 @@ public class MusicPlayerPresenter {
             int songId = (int) song.getId();
             String filename = Integer.toString(songId);
             setSongFile(Integer.toString(songId), clientProxy);
-//            HashMap<Integer,String> playableSongs = Resources.getPlayableSongs();
-            //HashSet<Integer> ownedIDs = Resources.getOwnedIDs();
-            //if (ownedIDs.contains(songId)) {
-//                String filename = "./music/" + songId + ".mp3";
-            //String filename = mp3FileName(songId);
-            //File file = new File(filename);
-            //if (file.exists()) {
-
-//                    setSongFile(filename);
-//                    togglePlay();
-//                }
-//                else
-//                    displayNotPlayableError();
-//            }
-//            else {
-//                displayNotPlayableError();
-            //}
         } catch (Exception e) {
             e.printStackTrace();
         }

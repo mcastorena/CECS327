@@ -18,27 +18,22 @@ import java.io.IOException;
 
 public class HomepagePresenter {
 
+    private Parent view;
+    private ProxyInterface clientProxy;
+
+    // Presenters
     private MainDisplayPresenter mainDisplayPresenter;
     private PlaylistListPresenter playlistListPresenter;
     private SearchBarPresenter searchBarPresenter;
-
     private MusicPlayerPresenter musicPlayerPresenter;
-
-
-    private Parent view;
-
-    private ProxyInterface clientProxy;
-
 
     @FXML
     private GridPane gridPane;
 
     public HomepagePresenter(ProxyInterface proxy) {
         clientProxy = proxy;
-        try {
-//            homepageModel = new HomepageModel();
-//            homepageModel.setUser(UserSession.getCurrentSession());
 
+        try {
             mainDisplayPresenter = new MainDisplayPresenter(this);
             playlistListPresenter = new PlaylistListPresenter(this.mainDisplayPresenter, this);
             searchBarPresenter = new SearchBarPresenter(mainDisplayPresenter);
@@ -74,11 +69,9 @@ public class HomepagePresenter {
         Main.getPrimaryStage().setScene(scene);
     }
 
-
     public void receivePlaylistItemClick(MainDisplayPresenter sender, CollectionLightWeight song, Playlist playlist) {
         musicPlayerPresenter.receivePlaylistItemPlayRequest(this, song, playlist);
     }
-
 
     public void receivePlaylistItemClick(PlaylistListPresenter sender, Playlist obj) {
         mainDisplayPresenter.receivePlaylistItemClick(this, obj);

@@ -18,12 +18,11 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class CreatePlaylistWindow {
-    private PlaylistListPresenter parent;
 
     private Stage stage;
     private Scene scene;
-
     private Parent view;
+    private PlaylistListPresenter parent;
 
     @FXML
     private AnchorPane createPlaylistBox;
