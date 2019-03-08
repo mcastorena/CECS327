@@ -18,7 +18,6 @@ public class clientCommunicationProtocol {
             this.ip = InetAddress.getByName("localhost");    // Get localhost IP address
             this.mySocket = new DatagramSocket();            // Initialize Socket
             this.portNumber = portNum;                       // Initialize port number
-            //mySocket.connect(ip,portNum);//Not sure if this is needed
 
         } catch (IOException e) {
             e.printStackTrace();

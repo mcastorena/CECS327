@@ -6,8 +6,16 @@ package rpc; /**
  * @since 2019-01-24
  */
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.stream.JsonReader;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Map;
 
 
 public class Proxy implements ProxyInterface {
@@ -23,63 +31,62 @@ public class Proxy implements ProxyInterface {
      * Executes the  remote method "remoteMethod". The method blocks until
      * it receives the reply of the message.
      */
-    public synchronized JsonObject synchExecution(String remoteMethod, String[] param) {
-        JsonObject jsonRequest = new JsonObject();
-        JsonObject jsonParam = new JsonObject();
-
-        jsonRequest.addProperty("remoteMethod", remoteMethod);
-
-
-        if (remoteMethod.equals("getSongChunk") || remoteMethod.equals("getFileSize")) {
-            jsonRequest.addProperty("objectName", "SongServices");
-            // It is hardcoded. Instead it should be dynamic using  RemoteRef
-            if (remoteMethod.equals("getSongChunk")) {
-
-                jsonParam.addProperty("song", param[0]);
-                jsonParam.addProperty("fragment", param[1]);
-
-            }
-            if (remoteMethod.equals("getFileSize")) {
-                jsonParam.addProperty("song", param[0]);
-            }
-        }
-
-        // Search result dispatcher
-        else if (remoteMethod.equals("getSize") || remoteMethod.equals("getSearchResultChunk")) {
-            jsonRequest.addProperty("objectName", "SearchResultServices");
-            if (remoteMethod.equals("getSearchResultChunk")) {
-                jsonParam.addProperty("fragment", param[0]);
-            }
-            if (remoteMethod.equals("getSize")) {
-                jsonParam.addProperty("query", param[0]);
-            }
-        }
-
-        // Login Dispatcher
-        else if (remoteMethod.equals("login")) {
-            jsonRequest.addProperty("objectName", "LoginServices");
-            jsonParam.addProperty("username", param[0]);
-            jsonParam.addProperty("password", param[1]);
-        }
-
-        // Playlists Dispatcher
-        else if (remoteMethod.equals("getPlaylistsChunk") || remoteMethod.equals("getPlaylistsSize")) {
-            jsonRequest.addProperty("objectName", "PlaylistServices");
-            if (remoteMethod.equals("getPlaylistsChunk")) {
-                jsonParam.addProperty("fragment", param[0]);
-            }
-            if (remoteMethod.equals("getPlaylistsSize")) {
-                jsonParam.addProperty("userToken", param[0]);
-            }
-        }
-
-        jsonRequest.add("param", jsonParam);
-
+    public synchronized JsonObject synchExecution(String remoteMethod, String[] param) throws IOException {
+        JsonObject nextObject = null;
         JsonParser parser = new JsonParser();
-        System.out.println("Sending request: " + jsonRequest.toString());
-        String strRet = communicate.sendRequest(jsonRequest.toString().trim());
-        System.out.println("Returning response from server to inputstream: " + strRet);
-        String myReturn = strRet.trim();
+
+        // Read json from methods.json
+        try (BufferedReader br = new BufferedReader(
+                new InputStreamReader(
+                        getClass().getResourceAsStream("/appdata/methods.json")));
+             JsonReader jsonReader = new JsonReader(br)){
+
+                 jsonReader.beginArray();
+
+                 boolean methodNotFound = true;
+                 while(jsonReader.hasNext() && methodNotFound)
+                 {
+                     // Get each remote method
+                     nextObject = parser.parse(jsonReader).getAsJsonObject();
+                     JsonPrimitive method = nextObject.get("remoteMethod").getAsJsonPrimitive();
+
+                     // If the remote method is the one we are trying to execute
+                     // extract call semantics from json and add the params.
+                    if(method.getAsString().equals(remoteMethod))
+                    {
+                         methodNotFound = false;
+
+                         // TODO: implement call semantics
+                         JsonPrimitive semantics = nextObject.get("callSemantic").getAsJsonPrimitive();
+
+                         nextObject.remove("callSemantic");
+
+                         JsonObject jsonParams = nextObject.get("params").getAsJsonObject();
+                         JsonObject jsonParamsToWrite = new JsonObject();
+
+                         // Get each param key, so we can add the value
+                         int i = 0;
+                         for (Map.Entry<String, JsonElement> entry : jsonParams.entrySet()) {
+                             String key = entry.getKey();
+                             jsonParamsToWrite.addProperty(key, param[i]);
+                             i++;
+                         }
+
+                         // Remove empty params
+                         nextObject.remove("params");
+
+                         // Add new params
+                         nextObject.add("param", jsonParamsToWrite);
+                     }
+
+
+                 }
+             }
+
+                     System.out.println("Sending request: " + nextObject.toString());
+                     String strRet = communicate.sendRequest(nextObject.toString().trim());
+                     System.out.println("Returning response from server to inputstream: " + strRet);
+                     String myReturn = strRet.trim();
         return parser.parse(myReturn).getAsJsonObject();
     }
 

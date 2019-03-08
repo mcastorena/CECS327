@@ -80,7 +80,6 @@ public class CECS327InputStream extends InputStream {
         this.total = Integer.parseInt(jsonRet.get("ret").getAsString());
         getBuff(fragment);
         fragment++;
-        System.out.println("CECS327InputStream constructed");//remove
     }
 
     // For Search Result
@@ -158,7 +157,12 @@ public class CECS327InputStream extends InputStream {
                     param[0] = String.valueOf(fileName);
                     param[1] = String.valueOf(fragment);
 
-                    JsonObject jsonRet = proxy.synchExecution("getSongChunk", param);
+                    JsonObject jsonRet = null;
+                    try {
+                        jsonRet = proxy.synchExecution("getSongChunk", param);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     String s = jsonRet.get("ret").getAsString();
                     nextBuf = Base64.getDecoder().decode(s);
                     sem.release();
@@ -171,7 +175,12 @@ public class CECS327InputStream extends InputStream {
                     String[] param = new String[1];
                     param[0] = String.valueOf(fragment);
 
-                    JsonObject jsonRet = proxy.synchExecution("getSearchResultChunk", param);
+                    JsonObject jsonRet = null;
+                    try {
+                        jsonRet = proxy.synchExecution("getSearchResultChunk", param);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     String s = jsonRet.get("ret").getAsString();
                     nextBuf = Base64.getDecoder().decode(s);
                     sem.release();
@@ -184,7 +193,12 @@ public class CECS327InputStream extends InputStream {
                     String[] param = new String[1];
                     param[0] = String.valueOf(fragment);
 
-                    JsonObject jsonRet = proxy.synchExecution("getPlaylistsChunk", param);
+                    JsonObject jsonRet = null;
+                    try {
+                        jsonRet = proxy.synchExecution("getPlaylistsChunk", param);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     String s = jsonRet.get("ret").getAsString();
                     nextBuf = Base64.getDecoder().decode(s);
                     sem.release();

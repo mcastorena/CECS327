@@ -2,7 +2,6 @@ package app;
 
 import Gui.Homepage.HomepagePresenter;
 import Gui.Landing.LandingService;
-//import data.Resources;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
 import javafx.scene.layout.AnchorPane;
@@ -12,8 +11,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import rpc.Proxy;
 import rpc.ProxyInterface;
-//import utility.Deserializer;
-//import utility.Serializer;
+
 
 import java.io.IOException;
 
@@ -28,9 +26,6 @@ public class Main extends Application {
 
    @Override
    public void start(Stage stage) throws Exception {
-       //Deserializer d = new Deserializer();
-       //Resources.setOwnedIDs(d.getOwnedIDs());
-       //Resources.setMusicDatabase(d.deserializeMusicLibrary());
 
        primaryStage = stage; // does nothing atm
        primaryStage.setWidth(1024);
@@ -79,7 +74,6 @@ public class Main extends Application {
        try {
            // Load root layout from FXML file.
            FXMLLoader loader = new FXMLLoader();
-//           loader.setLocation(Main.class.getResource("gui/Landing/Landing.fxml"));
            rootLayout = (AnchorPane) loader.load();
 
            // Show the scene containing the root layout.
@@ -88,7 +82,6 @@ public class Main extends Application {
            primaryStage.show();
        } catch (IOException e) {
            e.printStackTrace();
-       } finally {
        }
    }
 }

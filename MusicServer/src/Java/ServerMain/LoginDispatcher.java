@@ -33,7 +33,7 @@ public class LoginDispatcher {
         {
             server.currentSessions.add(currentSession);
 
-            loginToken.addProperty("loginToken", Integer.toString(server.currentSessions.indexOf(currentSession)));
+            loginToken.addProperty("loginToken", server.currentSessions.indexOf(currentSession));
             System.out.println(loginToken);
         }
 
