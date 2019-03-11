@@ -6,8 +6,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/client/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/client/resources" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/server/java/rpc" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/server/resources" type="java-resource" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

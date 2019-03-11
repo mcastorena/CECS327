@@ -45,6 +45,9 @@ public class LoginDispatcher {
         InputStream inputStream = new ByteArrayInputStream(loginBytes);
         inputStream.read(buf);
         inputStream.close();
+        System.out.println(Base64.getEncoder().encodeToString(buf));
+
+
 
         return Base64.getEncoder().encodeToString(buf);
     }

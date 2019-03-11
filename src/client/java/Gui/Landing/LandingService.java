@@ -32,8 +32,10 @@ public class LandingService {
 
         reader.beginObject();
         reader.nextName();
+
         Main.userToken = reader.nextInt();
         reader.endObject();
+        System.out.println("In authorize user" + Main.userToken + reader);
 
         // Can get email from loginDispatcher, if needed in the future.
         currentSession = new User(username, "default", password);
