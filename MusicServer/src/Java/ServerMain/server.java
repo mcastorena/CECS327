@@ -37,6 +37,7 @@ public class server {
     public static void main(String [] args)
     {
         currentSessions.add(new User("dummy", "dummy", "dummy"));
+        System.out.println("User Added");
         for (User u : userList) {
             if (usersInfo.containsValue(u)) {
                 throw new IllegalStateException("Duplicate user found in usersInfo");

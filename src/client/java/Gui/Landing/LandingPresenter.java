@@ -74,10 +74,10 @@ public class LandingPresenter {
     }
 
     private void submitLogin() {
-//        landingModel.setUsernameInput(usernameField.getText());
-//        landingModel.setPasswordInput(passwordField.getText());
-        landingModel.setUsernameInput("user");
-        landingModel.setPasswordInput("pass");
+        landingModel.setUsernameInput(usernameField.getText());
+        landingModel.setPasswordInput(passwordField.getText());
+        //landingModel.setUsernameInput("user");
+        //landingModel.setPasswordInput("pass");
 
         boolean isAuthorized =
                 false;
@@ -85,6 +85,9 @@ public class LandingPresenter {
             isAuthorized = landingService.authorizeUser(landingModel.getUsernameInput(), landingModel.getPasswordInput());
         } catch (IOException e) {
             e.printStackTrace();
+
+        }catch (IllegalStateException e){
+                displayError();
         }
 
         if (isAuthorized) {
@@ -123,7 +126,7 @@ public class LandingPresenter {
         return view;
     }
 
-    private void displayError() {
+    public void displayError() {
         new Alert(Alert.AlertType.ERROR, "Invalid usernameField/passwordField.", ButtonType.OK)
                 .showAndWait();
     }

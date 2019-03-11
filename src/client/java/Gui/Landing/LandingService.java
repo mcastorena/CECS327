@@ -53,8 +53,10 @@ public class LandingService {
 
         reader.beginObject();
         reader.nextName();
+
         Main.userToken = reader.nextInt();
         reader.endObject();
+        System.out.println("In authorize user" + Main.userToken + reader);
 
         // TODO: Add this info to loginDispatcher
         currentSession = new User("default", "default","default");

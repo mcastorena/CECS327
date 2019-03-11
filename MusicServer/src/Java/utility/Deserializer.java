@@ -317,6 +317,8 @@ public class Deserializer {
                 jr.nextName(); // key: "password"
                 String password = jr.nextString(); // value: "pass"
 
+                System.out.println("This line ran" + username + password);
+
                 jr.nextName(); // key: "email"
                 String email = jr.nextString(); // value: "example@email.com"
 

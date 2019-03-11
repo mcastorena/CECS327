@@ -30,6 +30,7 @@ public class clientRequestPacketHandler extends Thread {
         byte[] payload = response.getBytes();                       // Initialize payload with response bytes
         DatagramPacket responsePacket = new DatagramPacket(payload, payload.length, packet.getAddress(), packet.getPort());     // Prepare response packet
         try {
+            System.out.println("Response packet is " + responsePacket);
             socket.send(responsePacket);                            // Send response packet
             System.out.println("Server has sent response packet, thread terminating");
             this.interrupt();                                       // Kill thread after execution
