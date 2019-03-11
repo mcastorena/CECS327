@@ -88,7 +88,9 @@ public class PlaylistDispatcher {
 
         // Add playlist to profile if not already added
         currentSession.getUserProfile().addPlaylist(playlistName, new Playlist(playlistName));
-        currentSession.getUserProfile().getPlaylist(playlistName).addToPlaylist(new Collection(songID));
+
+        // Add the song to the playlist as a Collection
+        currentSession.getUserProfile().getPlaylist(playlistName).addToPlaylist(server.d.getUserLibrary().get(Math.toIntExact(songID)));
         s.updateUsersJson(server.userList);
 
         JsonObject ackMessage = new JsonObject();

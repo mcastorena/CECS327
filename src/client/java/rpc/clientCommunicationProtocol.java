@@ -59,6 +59,22 @@ public class clientCommunicationProtocol {
             mySocket.send(requestPacket);                                                                               // Send request packet
             System.out.print("Client request packet sent.");
 
+            new Thread (){
+                public void run() {
+                    byte[] responseData = new byte[FRAGMENT_SIZE];                                                              // Prepare response packet
+                    DatagramPacket responsePacket = new DatagramPacket(responseData, responseData.length);                      // Initialize reponse packet
+                    System.out.println("Client attempting to receive response packet.");
+                    try {
+                        mySocket.receive(responsePacket);                                                                           // Retrieve reponse packet
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println("Client has received response packet from server.");
+                    String response = new String(responsePacket.getData());                                                           // Get reponse packet's payload
+                    System.out.println(response);
+                }
+            }.start();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
