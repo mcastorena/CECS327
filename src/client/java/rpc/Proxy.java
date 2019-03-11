@@ -32,61 +32,15 @@ public class Proxy implements ProxyInterface {
      * it receives the reply of the message.
      */
     public synchronized JsonObject synchExecution(String remoteMethod, String[] param) throws IOException {
-        JsonObject nextObject = null;
+        JsonObject remoteMethodJO = getRemoteMethod(remoteMethod, param);
         JsonParser parser = new JsonParser();
 
-        // Read json from methods.json
-        try (BufferedReader br = new BufferedReader(
-                new InputStreamReader(
-                        getClass().getResourceAsStream("/appdata/methods.json")));
-             JsonReader jsonReader = new JsonReader(br)){
+        System.out.println("Sending request: " + remoteMethodJO.toString());
+        String strRet = communicate.sendRequest(remoteMethodJO.toString().trim());
 
-                 jsonReader.beginArray();
+        System.out.println("Returning response from server to inputstream: " + strRet);
+        String myReturn = strRet.trim();
 
-                 boolean methodNotFound = true;
-                 while(jsonReader.hasNext() && methodNotFound)
-                 {
-                     // Get each remote method
-                     nextObject = parser.parse(jsonReader).getAsJsonObject();
-                     JsonPrimitive method = nextObject.get("remoteMethod").getAsJsonPrimitive();
-
-                     // If the remote method is the one we are trying to execute
-                     // extract call semantics from json and add the params.
-                    if(method.getAsString().equals(remoteMethod))
-                    {
-                         methodNotFound = false;
-
-                         // TODO: implement call semantics
-                         JsonPrimitive semantics = nextObject.get("callSemantic").getAsJsonPrimitive();
-
-                         nextObject.remove("callSemantic");
-
-                         JsonObject jsonParams = nextObject.get("params").getAsJsonObject();
-                         JsonObject jsonParamsToWrite = new JsonObject();
-
-                         // Get each param key, so we can add the value
-                         int i = 0;
-                         for (Map.Entry<String, JsonElement> entry : jsonParams.entrySet()) {
-                             String key = entry.getKey();
-                             jsonParamsToWrite.addProperty(key, param[i]);
-                             i++;
-                         }
-
-                         // Remove empty params
-                         nextObject.remove("params");
-
-                         // Add new params
-                         nextObject.add("param", jsonParamsToWrite);
-                     }
-
-
-                 }
-             }
-
-                     System.out.println("Sending request: " + nextObject.toString());
-                     String strRet = communicate.sendRequest(nextObject.toString().trim());
-                     System.out.println("Returning response from server to inputstream: " + strRet);
-                     String myReturn = strRet.trim();
         return parser.parse(myReturn).getAsJsonObject();
     }
 
@@ -97,8 +51,66 @@ public class Proxy implements ProxyInterface {
      *
      */
     public void asynchExecution(String remoteMethod, String[] param) {
-        return;
+        JsonObject remoteMethodJO = getRemoteMethod(remoteMethod, param);
+
+        System.out.println("Sending request: " + remoteMethodJO.toString());
+        communicate.sendAsynchRequest(remoteMethodJO.toString().trim());
     }
+
+    public JsonObject getRemoteMethod(String remoteMethod, String[] param) {
+        JsonObject nextObject = null;
+        JsonParser parser = new JsonParser();
+
+        // Read json from methods.json
+        try (BufferedReader br = new BufferedReader(
+                new InputStreamReader(
+                        getClass().getResourceAsStream("/appdata/methods.json")));
+             JsonReader jsonReader = new JsonReader(br)) {
+
+            jsonReader.beginArray();
+
+            boolean methodNotFound = true;
+            while (jsonReader.hasNext() && methodNotFound) {
+                // Get each remote method
+                nextObject = parser.parse(jsonReader).getAsJsonObject();
+                JsonPrimitive method = nextObject.get("remoteMethod").getAsJsonPrimitive();
+
+                // If the remote method is the one we are trying to execute
+                // extract call semantics from json and add the params.
+                if (method.getAsString().equals(remoteMethod)) {
+                    methodNotFound = false;
+
+                    // TODO: implement call semantics
+                    JsonPrimitive semantics = nextObject.get("callSemantic").getAsJsonPrimitive();
+
+                    nextObject.remove("callSemantic");
+
+                    JsonObject jsonParams = nextObject.get("params").getAsJsonObject();
+                    JsonObject jsonParamsToWrite = new JsonObject();
+
+                    // Get each param key, so we can add the value
+                    int i = 0;
+                    for (Map.Entry<String, JsonElement> entry : jsonParams.entrySet()) {
+                        String key = entry.getKey();
+                        jsonParamsToWrite.addProperty(key, param[i]);
+                        i++;
+                    }
+
+                    // Remove empty params
+                    nextObject.remove("params");
+
+                    // Add new params
+                    nextObject.add("param", jsonParamsToWrite);
+                }
+
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return nextObject;
+    }
+
 }
 
 

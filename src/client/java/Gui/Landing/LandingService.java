@@ -35,8 +35,8 @@ public class LandingService {
         Main.userToken = reader.nextInt();
         reader.endObject();
 
-        // TODO: Add this info to loginDispatcher
-        currentSession = new User(username, "default", "default");
+        // Can get email from loginDispatcher, if needed in the future.
+        currentSession = new User(username, "default", password);
         UserSession.setCurrentSession(currentSession);
         return Main.userToken != 0;
     }

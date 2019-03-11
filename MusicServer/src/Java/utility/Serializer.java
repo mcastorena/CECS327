@@ -107,6 +107,7 @@ public class Serializer {
 
             gson.toJson(usersJAO, writer);
         }
+
     }
 
     public static byte[] serialize(Collection collection) throws IOException {
@@ -117,4 +118,5 @@ public class Serializer {
             return bos.toByteArray();
         }
     }
+
 }

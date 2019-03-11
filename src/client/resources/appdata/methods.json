@@ -56,5 +56,24 @@
     "params": {
       "query": ""
     }
+  },
+  {
+    "remoteMethod": "deletePlaylist",
+    "objectName": "PlaylistServices",
+    "callSemantic": "AT_LEAST_ONCE",
+    "params": {
+      "userToken": "",
+      "playlistName": ""
+    }
+  },
+  {
+    "remoteMethod": "addSongToPlaylist",
+    "objectName": "PlaylistServices",
+    "callSemantic": "AT_LEAST_ONCE",
+    "params": {
+      "userToken": "",
+      "playlistName": "",
+      "songID": ""
+    }
   }
 ]

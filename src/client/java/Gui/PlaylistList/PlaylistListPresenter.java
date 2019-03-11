@@ -4,6 +4,7 @@ import Gui.Homepage.HomepagePresenter;
 import Gui.MainDisplay.MainDisplayPresenter;
 import Gui.PlaylistItem.PlaylistItem;
 import app.Main;
+import data.UserSession;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
@@ -13,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.layout.VBox;
 import model.Playlist;
 import rpc.CECS327InputStream;
+import rpc.ProxyInterface;
 
 import java.io.IOException;
 
@@ -105,6 +107,12 @@ public class PlaylistListPresenter {
     public void receivePlaylistItemDeleteClick(PlaylistItem sender, Playlist obj) {
         playlistListModel.deletePlaylist(obj);
         renderPlaylists();
+
+        // Delete playlist on server
+        String[] params = new String[2];
+        params[0] = Integer.toString(Main.userToken);
+        params[1] = obj.getName();
+        homepagePresenter.getProxy().asynchExecution("deletePlaylist", params);
     }
 
     public void receiveSongAdd(PlaylistItem sender) {
@@ -114,5 +122,10 @@ public class PlaylistListPresenter {
     private void showCreatePlaylistWindow() {
         CreatePlaylistWindow cpw = new CreatePlaylistWindow(this);
         cpw.show();
+    }
+
+    public ProxyInterface getProxy()
+    {
+        return homepagePresenter.getProxy();
     }
 }

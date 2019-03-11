@@ -4,6 +4,7 @@ import Gui.PlaylistList.DeletePlaylistWindow;
 import Gui.PlaylistList.PlaylistListPresenter;
 import app.Main;
 import data.CollectionFormat;
+import data.UserSession;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
@@ -88,6 +89,15 @@ public class PlaylistItem {
             if (dragboard.hasContent(CollectionFormat.FORMAT)) {
                 CollectionLightWeight song = (CollectionLightWeight) dragboard.getContent(CollectionFormat.FORMAT);
                 playlist.addToPlaylist(song);
+                //UserSession.getCurrentSession().getUserProfile().addSongToPlaylist(song, playlist.getName());
+
+                // Update on server
+                String[] params = new String[3];
+                params[0] = Integer.toString(Main.userToken);
+                params[1] = playlist.getName();
+                params[2] = Long.toString(song.getId());
+                parent.getProxy().asynchExecution("addSongToPlaylist", params);
+
                 dragCompleted = true;
                 sendDragComplete();
             }

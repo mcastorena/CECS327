@@ -6,6 +6,7 @@ import javafx.scene.Cursor;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
@@ -35,5 +36,6 @@ public class SearchResultSongItem extends MainDisplayItem {
                                     p.widthProperty().intValue(),
                                     p.heightProperty().intValue())));
         });
+
     }
 }

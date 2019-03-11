@@ -4,7 +4,7 @@ import model.Collection;
 import model.User;
 import utility.Deserializer;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +19,7 @@ public class server {
 
     public static Deserializer d;
 
-    public static List<User> currentSessions = new ArrayList<>();
+    public static List<User> currentSessions = new ArrayList<>(); // Need a better way to store sessions
     public static List<User> userList;
     public static HashMap<String,User> usersInfo = new HashMap<>();
 

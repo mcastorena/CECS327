@@ -18,6 +18,11 @@ public class Collection implements Serializable {
         this.id = release.getId();
     }
 
+    public Collection(long id)
+    {
+        this.id = id;
+    }
+
     public long getId() {
         return id;
     }

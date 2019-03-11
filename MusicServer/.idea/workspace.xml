@@ -2,17 +2,27 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="84f3f860-88d3-499a-ac67-fc5ac3d6ef2d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MusicServer.iml" beforeDir="false" afterPath="$PROJECT_DIR$/MusicServer.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Java/ServerMain/Dispatcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Java/ServerMain/Dispatcher.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Java/ServerMain/PlaylistDispatcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Java/ServerMain/PlaylistDispatcher.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Java/ServerMain/SongDispatcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Java/ServerMain/SongDispatcher.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Java/utility/Deserializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Java/utility/Deserializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/client/java/Gui/Landing/LandingPresenter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/client/java/Gui/Landing/LandingPresenter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/client/java/app/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/client/java/app/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/client/java/rpc/CECS327InputStream.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/client/java/rpc/CECS327InputStream.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Java/ServerMain/server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Java/ServerMain/server.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Java/model/Collection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Java/model/Collection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Java/model/Playlist.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Java/model/Playlist.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Java/utility/Serializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Java/utility/Serializer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/client/java/Gui/Landing/LandingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/client/java/Gui/Landing/LandingService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/client/java/Gui/MainDisplay/MainDisplayView.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/client/java/Gui/MainDisplay/MainDisplayView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/client/java/Gui/MainDisplay/PlaylistSongItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/client/java/Gui/MainDisplay/PlaylistSongItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/client/java/Gui/MainDisplay/SearchResultSongItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/client/java/Gui/MainDisplay/SearchResultSongItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/client/java/Gui/PlaylistItem/PlaylistItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/client/java/Gui/PlaylistItem/PlaylistItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/client/java/Gui/PlaylistItem/PlaylistItemView.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/client/java/Gui/PlaylistItem/PlaylistItemView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/client/java/Gui/PlaylistList/PlaylistListModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/client/java/Gui/PlaylistList/PlaylistListModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/client/java/Gui/PlaylistList/PlaylistListPresenter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/client/java/Gui/PlaylistList/PlaylistListPresenter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/client/java/Gui/PlaylistList/PlaylistListView.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/client/java/Gui/PlaylistList/PlaylistListView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/client/java/Gui/SearchBarResult/SearchBarResultModel.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/client/java/Gui/SearchBarResult/SearchBarResultPresenter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/client/java/Gui/SearchBarResult/SearchBarResultView.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../src/client/java/rpc/Proxy.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/client/java/rpc/Proxy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/client/java/rpc/clientCommunicationProtocol.java" beforeDir="false" afterPath="$PROJECT_DIR$/../src/client/java/rpc/clientCommunicationProtocol.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/client/resources/appdata/methods.json" beforeDir="false" afterPath="$PROJECT_DIR$/../src/client/resources/appdata/methods.json" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -23,11 +33,75 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Java/ServerMain/server.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="238">
+              <caret line="23" column="41" lean-forward="true" selection-start-line="23" selection-start-column="41" selection-end-line="23" selection-end-column="41" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Java/model/Profile.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-663">
+              <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Java/utility/Serializer.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="180">
+              <caret line="23" column="39" selection-start-line="23" selection-start-column="30" selection-end-line="23" selection-end-column="39" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Java/model/Collection.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="340">
+              <caret line="20" column="29" selection-start-line="20" selection-start-column="29" selection-end-line="20" selection-end-column="29" />
+              <folding>
+                <element signature="e#567#568#0" expanded="true" />
+                <element signature="e#595#596#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Java/ServerMain/PlaylistDispatcher.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="206">
-              <caret line="45" column="26" selection-start-line="45" selection-start-column="26" selection-end-line="45" selection-end-column="26" />
+            <state relative-caret-position="520">
+              <caret line="98" column="1" selection-start-line="98" selection-start-column="1" selection-end-line="98" selection-end-column="1" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Java/model/Playlist.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="221">
+              <caret line="53" column="25" selection-start-line="53" selection-start-column="25" selection-end-line="53" selection-end-column="25" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/resources/appdata/user.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="51">
+              <caret line="27" column="5" selection-start-line="27" selection-start-column="5" selection-end-line="27" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -35,17 +109,22 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Java/utility/Deserializer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="765">
-              <caret line="51" selection-start-line="51" selection-end-line="51" />
+            <state relative-caret-position="272">
+              <caret line="141" column="56" selection-start-line="141" selection-start-column="56" selection-end-line="141" selection-end-column="56" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Java/ServerMain/SongDispatcher.java">
+        <entry file="file://$PROJECT_DIR$/src/Java/ServerMain/Dispatcher.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="22" column="48" selection-start-line="22" selection-start-column="48" selection-end-line="22" selection-end-column="48" />
+            <state relative-caret-position="190">
+              <caret line="91" selection-start-line="91" selection-end-line="91" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#460#461#0" expanded="true" />
+                <element signature="e#521#522#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -53,8 +132,11 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Java/ServerMain/clientRequestPacketHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="405">
+            <state relative-caret-position="254">
               <caret line="27" selection-start-line="27" selection-end-line="27" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -71,6 +153,8 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>playlist</find>
+      <find>.json</find>
+      <find>serialize</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -79,13 +163,15 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/Java/utility/Serializer.java" />
         <option value="$PROJECT_DIR$/src/Java/ServerMain/clientRequestPacketHandler.java" />
-        <option value="$PROJECT_DIR$/src/Java/ServerMain/LoginDispatcher.java" />
-        <option value="$PROJECT_DIR$/src/Java/ServerMain/server.java" />
         <option value="$PROJECT_DIR$/src/Java/ServerMain/Dispatcher.java" />
-        <option value="$PROJECT_DIR$/src/Java/utility/Deserializer.java" />
         <option value="$PROJECT_DIR$/src/Java/ServerMain/SongDispatcher.java" />
+        <option value="$PROJECT_DIR$/src/Java/ServerMain/LoginDispatcher.java" />
+        <option value="$PROJECT_DIR$/src/Java/utility/Deserializer.java" />
+        <option value="$PROJECT_DIR$/src/Java/utility/Serializer.java" />
+        <option value="$PROJECT_DIR$/src/Java/ServerMain/server.java" />
+        <option value="$PROJECT_DIR$/src/Java/model/Collection.java" />
+        <option value="$PROJECT_DIR$/src/Java/model/Playlist.java" />
         <option value="$PROJECT_DIR$/src/Java/ServerMain/PlaylistDispatcher.java" />
       </list>
     </option>
@@ -102,6 +188,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -125,21 +213,7 @@
               <item name="MusicServer" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="Java" type="462c0819:PsiDirectoryNode" />
-              <item name="data" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="MusicServer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="MusicServer" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="Java" type="462c0819:PsiDirectoryNode" />
-              <item name="ServerMain" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="MusicServer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="MusicServer" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="Java" type="462c0819:PsiDirectoryNode" />
-              <item name="utility" type="462c0819:PsiDirectoryNode" />
+              <item name="model" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="MusicServer" type="b2602c69:ProjectViewProjectNode" />
@@ -156,15 +230,20 @@
             </path>
             <path>
               <item name="MusicServer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MusicServer" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="music" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MusicServer" type="b2602c69:ProjectViewProjectNode" />
               <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="Course" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -174,7 +253,7 @@
     <property name="Repository.Attach.Sources" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1551817156728" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1552287491549" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -230,22 +309,22 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="17069000" />
+    <option name="totallyTimeSpent" value="33974000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1063" y="-6" width="843" height="1048" extended-state="0" />
+    <frame x="1912" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16983524" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="Capture Tool" order="2" />
-      <window_info id="Image Layers" order="3" />
-      <window_info id="Designer" order="4" />
-      <window_info id="UI Designer" order="5" />
-      <window_info id="Favorites" order="6" side_tool="true" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2553305" />
+      <window_info id="Capture Tool" order="1" />
+      <window_info id="Image Layers" order="2" />
+      <window_info id="Designer" order="3" />
+      <window_info id="UI Designer" order="4" />
+      <window_info id="Favorites" order="5" side_tool="true" />
+      <window_info id="Structure" order="6" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32824427" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32936078" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -270,6 +349,41 @@
       <window_info anchor="right" id="Flutter Inspector" order="9" />
       <window_info anchor="right" id="Flutter Outline" order="10" />
     </layout>
+    <layout-to-restore>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2553305" />
+      <window_info id="Capture Tool" order="1" />
+      <window_info id="Image Layers" order="2" />
+      <window_info id="Designer" order="3" />
+      <window_info id="UI Designer" order="4" />
+      <window_info id="Favorites" order="5" side_tool="true" />
+      <window_info id="Structure" order="6" weight="0.25" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32936078" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" order="8" />
+      <window_info anchor="bottom" id="Terminal" order="9" />
+      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
+      <window_info anchor="bottom" id="Version Control" order="11" />
+      <window_info anchor="bottom" id="Messages" order="12" weight="0.32936078" />
+      <window_info anchor="bottom" id="Educational.CheckDetails" order="13" />
+      <window_info anchor="bottom" id="Flutter Performance" order="14" side_tool="true" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="right" id="Database" order="4" />
+      <window_info anchor="right" id="Theme Preview" order="5" />
+      <window_info anchor="right" id="Maven" order="6" />
+      <window_info anchor="right" id="Capture Analysis" order="7" />
+      <window_info anchor="right" id="Palette&#9;" order="8" />
+      <window_info anchor="right" id="Flutter Inspector" order="9" />
+      <window_info anchor="right" id="Flutter Outline" order="10" />
+    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -291,59 +405,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Java/utility/Serializer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="23" column="18" selection-start-line="23" selection-start-column="18" selection-end-line="23" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Java/ServerMain/LoginDispatcher.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="29" selection-start-line="29" selection-end-line="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///opt/jdk-11.0.2/lib/src.zip!/java.base/java/io/FileInputStream.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="188">
-          <caret line="156" selection-start-line="156" selection-end-line="156" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Java/model/Profile.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-945">
-          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Java/model/User.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="2" column="34" selection-start-line="2" selection-start-column="34" selection-end-line="2" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="jar:///opt/jdk-11.0.2/lib/src.zip!/java.base/java/io/FileInputStream.java" />
     <entry file="file://$PROJECT_DIR$/src/Java/ServerMain/SearchResultDispatcher.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="28" column="69" selection-start-line="28" selection-start-column="69" selection-end-line="28" selection-end-column="69" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Java/ServerMain/Dispatcher.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="197">
-          <caret line="91" selection-start-line="91" selection-end-line="91" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/resources/appdata/user.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="27" column="5" selection-start-line="27" selection-start-column="5" selection-end-line="27" selection-end-column="5" />
+        <state relative-caret-position="-85">
+          <caret line="27" column="69" selection-start-line="27" selection-start-column="69" selection-end-line="27" selection-end-column="69" />
         </state>
       </provider>
     </entry>
@@ -352,43 +418,120 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Java/ServerMain/serverCommunicationProtocol.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-180">
+        <state relative-caret-position="187">
           <caret line="12" column="79" selection-start-line="12" selection-start-column="79" selection-end-line="12" selection-end-column="79" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Java/ServerMain/server.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="642">
-          <caret line="45" selection-start-line="45" selection-end-line="45" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Java/ServerMain/PlaylistDispatcher.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="206">
-          <caret line="45" column="26" selection-start-line="45" selection-start-column="26" selection-end-line="45" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/Java/utility/Deserializer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="765">
-          <caret line="51" selection-start-line="51" selection-end-line="51" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Java/ServerMain/SongDispatcher.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="22" column="48" selection-start-line="22" selection-start-column="48" selection-end-line="22" selection-end-column="48" />
+        <state>
+          <caret line="16" column="5" selection-start-line="16" selection-start-column="5" selection-end-line="16" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Java/ServerMain/LoginDispatcher.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="197">
+          <caret line="35" column="49" selection-start-line="35" selection-start-column="49" selection-end-line="35" selection-end-column="49" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Java/model/User.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Java/utility/Deserializer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="141" column="56" selection-start-line="141" selection-start-column="56" selection-end-line="141" selection-end-column="56" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Java/utility/Serializer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="23" column="39" selection-start-line="23" selection-start-column="30" selection-end-line="23" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Java/ServerMain/server.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="23" column="41" lean-forward="true" selection-start-line="23" selection-start-column="41" selection-end-line="23" selection-end-column="41" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Java/ServerMain/clientRequestPacketHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
+        <state relative-caret-position="254">
           <caret line="27" selection-start-line="27" selection-end-line="27" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Java/ServerMain/Dispatcher.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="91" selection-start-line="91" selection-end-line="91" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#460#461#0" expanded="true" />
+            <element signature="e#521#522#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Java/model/Profile.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-663">
+          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/resources/appdata/user.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="27" column="5" selection-start-line="27" selection-start-column="5" selection-end-line="27" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Java/model/Collection.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="20" column="29" selection-start-line="20" selection-start-column="29" selection-end-line="20" selection-end-column="29" />
+          <folding>
+            <element signature="e#567#568#0" expanded="true" />
+            <element signature="e#595#596#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Java/model/Playlist.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="53" column="25" selection-start-line="53" selection-start-column="25" selection-end-line="53" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Java/ServerMain/PlaylistDispatcher.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="520">
+          <caret line="98" column="1" selection-start-line="98" selection-start-column="1" selection-end-line="98" selection-end-column="1" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

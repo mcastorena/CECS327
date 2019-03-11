@@ -48,5 +48,20 @@ public class clientCommunicationProtocol {
         return response;                                                                                                // Return request response
     }
 
+    public void sendAsynchRequest(String request) {
+        String response = "";
+        try {
+
+            byte[] requestPayload = new byte[FRAGMENT_SIZE];                                                            // Initialize payload
+            requestPayload = request.getBytes();                                                                        // Fill payload
+            DatagramPacket requestPacket = new DatagramPacket(requestPayload, requestPayload.length, this.ip, this.portNumber);     // Initialize request packet
+            System.out.println("Client sending request packet.");
+            mySocket.send(requestPacket);                                                                               // Send request packet
+            System.out.print("Client request packet sent.");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
 

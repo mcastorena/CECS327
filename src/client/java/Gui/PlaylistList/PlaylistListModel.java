@@ -52,7 +52,6 @@ public class PlaylistListModel {
      */
     void addPlaylist(Playlist playlist) {
         if (playlist != null) playlists.put(playlist.getName(), playlist);
-        // TODO: Tell server to add a new playlist
     }
 
     /**
@@ -62,6 +61,5 @@ public class PlaylistListModel {
      */
     void deletePlaylist(Playlist playlist) {
         playlists.remove(playlist.getName());
-        // TODO: Tell server to delete the Playlist
     }
 }

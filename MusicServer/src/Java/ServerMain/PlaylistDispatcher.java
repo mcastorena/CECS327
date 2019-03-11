@@ -12,7 +12,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Base64;
-import java.util.List;
 
 public class PlaylistDispatcher {
     static final int FRAGMENT_SIZE = 8192;
@@ -70,7 +69,36 @@ public class PlaylistDispatcher {
         server.bytePlaylists = playlistListJA.toString().getBytes();
         return server.bytePlaylists.length;
     }
+
+    public String deletePlaylist(Integer userToken, String playlistName) throws IOException {
+        Serializer s = new Serializer();
+        User currentSession = server.currentSessions.get(userToken);
+        currentSession.getUserProfile().removePlaylist(playlistName);
+        s.updateUsersJson(server.userList);
+
+        JsonObject ackMessage = new JsonObject();
+        ackMessage.addProperty("Ack:", "Playlist \"" + playlistName + "\" deleted");
+        // TODO: need encoding
+        return ackMessage.toString();
+    }
+
+    public String addSongToPlaylist(Integer userToken, String playlistName, Long songID) throws IOException {
+        Serializer s = new Serializer();
+        User currentSession = server.currentSessions.get(userToken);
+
+        // Add playlist to profile if not already added
+        currentSession.getUserProfile().addPlaylist(playlistName, new Playlist(playlistName));
+        currentSession.getUserProfile().getPlaylist(playlistName).addToPlaylist(new Collection(songID));
+        s.updateUsersJson(server.userList);
+
+        JsonObject ackMessage = new JsonObject();
+        ackMessage.addProperty("Ack:", "Song added to " + playlistName);
+        // TODO: need encoding
+        return ackMessage.toString();
+    }
 }
+
+// Format for playlistListJA in getPlaylistSize
 //[
 //        {
 //        "first": [

@@ -52,7 +52,6 @@ public class Playlist {
         if (song != null) {
             this.songList.add(song);
             added = true;
-            System.out.printf("%s added to playlist\n", song.getSongTitle());
         }
 
         return added;
