@@ -63,7 +63,7 @@ public class Deserializer {
 
     // Loads the song IDs of OWNED music into a Set for lookup.
     private void loadOwnedMusicIDs() {
-        File dir = new File(MUSIC_FOLDER);
+        File dir = new File(MUSIC_FOLDER.toString());
         File[] files = Objects.requireNonNull(dir.listFiles(), "ERROR: Attempt to listFiles() from Music folder " +
                 "directory turned up NULL. Check to see that MUSIC_FOLDER points to a directory, not a file");
         for (File file : files) {
