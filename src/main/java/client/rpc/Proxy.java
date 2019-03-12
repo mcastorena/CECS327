@@ -104,9 +104,9 @@ public class Proxy implements ProxyInterface {
      * return any value
      *
      */
-    public void asynchExecution(String remoteMethod, String[] param) {
-        return;
-    }
+//    public void asynchExecution(String remoteMethod, String[] param) {
+//        return;
+//    }
 }
 
 

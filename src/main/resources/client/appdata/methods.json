@@ -75,5 +75,14 @@
       "playlistName": "",
       "song": ""
     }
+  },
+  "deletePlaylist": {
+    "remoteMethod": "deletePlaylist",
+    "objectName": "PlaylistServices",
+    "callSemantic": "AT_LEAST_ONCE",
+    "params": {
+      "userToken": "",
+      "playlistName": ""
+    }
   }
 }
