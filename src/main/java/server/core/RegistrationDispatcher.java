@@ -1,9 +1,9 @@
-package core;
+package server.core;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import model.User;
+import server.model.User;
 
 import java.io.FileWriter;
 import java.io.IOException;
