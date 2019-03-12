@@ -35,7 +35,7 @@ public class DeletePlaylistWindow {
         try {
             this.parent = parent;
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/DeletePlaylistWindow.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/ui/DeletePlaylistWindow.fxml"));
             loader.setController(this);
             view = loader.load();
             stage = new Stage();
