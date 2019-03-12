@@ -81,6 +81,8 @@ public class LandingPresenter {
             isAuthorized = landingService.authorizeUser(landingModel.getUsernameInput(), landingModel.getPasswordInput());
         } catch (IOException e) {
             e.printStackTrace();
+        } catch(NullPointerException e){
+            displayError();
         }
 
         if (isAuthorized) {
