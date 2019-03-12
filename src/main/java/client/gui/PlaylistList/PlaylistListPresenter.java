@@ -16,6 +16,8 @@ import client.rpc.CECS327InputStream;
 import client.rpc.ProxyInterface;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PlaylistListPresenter {
 
@@ -106,6 +108,12 @@ public class PlaylistListPresenter {
     public void receivePlaylistItemDeleteClick(PlaylistItem sender, Playlist obj) {
         playlistListModel.deletePlaylist(obj);
         renderPlaylists();
+
+        // Delete playlist on server
+        Map<String, String> params = new HashMap<>();
+        params.put("userToken", Integer.toString(App.userToken));
+        params.put("playlistName", obj.getName());
+        homepagePresenter.getProxy().asyncExecution("deletePlaylist", params);
     }
 
     public void receiveSongAdd(PlaylistItem sender) {

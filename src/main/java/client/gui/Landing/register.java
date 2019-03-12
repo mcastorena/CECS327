@@ -1,4 +1,4 @@
-package Gui.Landing;
+package client.gui.Landing;
 
 import com.google.gson.JsonObject;
 import javafx.fxml.FXML;
@@ -9,7 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import rpc.ProxyInterface;
+import client.rpc.ProxyInterface;
 
 import java.io.IOException;
 import java.util.HashMap;
