@@ -16,7 +16,7 @@ import java.util.List;
 public class SearchResultDispatcher extends Dispatcher implements DispatcherService {
     static final int FRAGMENT_SIZE = 8192;
 
-    /*
+    /**
      * getSearchResultChunk: Gets a chunk of a given search result
      * @param fragment: The chunk corresponds to
      * [fragment * FRAGMENT_SIZE, FRAGMENT_SIZE]

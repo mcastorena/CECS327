@@ -9,17 +9,17 @@ import java.net.Socket;
 
 public class ServerCommunicationProtocol extends Thread {
 
-    static final int FRAGMENT_SIZE = 8192;                      // Packet size
-    byte[] packetSize = new byte[FRAGMENT_SIZE];
+    private static final int FRAGMENT_SIZE = 8192;                      // Packet size
+    private byte[] packetSize = new byte[FRAGMENT_SIZE];
 
 
-    DatagramSocket mySocket;
+    private DatagramSocket mySocket;
     DataInputStream inputStream;
     DataOutputStream mp3Out;
     Socket clientSocket;
     String input;
     Dispatcher myDispatcher;
-    int portNumber;
+    private int portNumber;
 
     ServerCommunicationProtocol(int num){
         this.portNumber = num;

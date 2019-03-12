@@ -16,7 +16,7 @@ import java.nio.file.Paths;
 public class RegistrationDispatcher extends Dispatcher implements DispatcherService {
     private static final int FRAGMENT_SIZE = 8192;
 
-    /*
+    /**
      * register: return successful registration message if info is valid
      * @param username: the username from client
      * @param password: the password from client

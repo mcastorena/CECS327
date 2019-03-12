@@ -21,7 +21,7 @@ public class PlaylistDispatcher extends Dispatcher implements DispatcherService 
 
     }
 
-    /*
+    /**
      * getSearchResultChunk: Gets a chunk of a given search result
      * @param fragment: The chunk corresponds to
      * [fragment * FRAGMENT_SIZE, FRAGMENT_SIZE]
@@ -40,9 +40,9 @@ public class PlaylistDispatcher extends Dispatcher implements DispatcherService 
         return Base64.getEncoder().encodeToString(buf);
     }
 
-    /*
-     * getSize: Gets a size of the byte array
-     * @param query: the search query from user
+    /**
+     * getPlaylistsSize: Gets a size of the byte array
+     * @param userToken: The unique token of the user
      */
     public Integer getPlaylistsSize(Integer userToken)
     {
@@ -104,24 +104,3 @@ public class PlaylistDispatcher extends Dispatcher implements DispatcherService 
         return ackMessage.toString();
     }
 }
-//[
-//        {
-//        "first": [
-//        {Song: {id:287650, songName:"name", artistName:"name", releaseName:"name"}},
-//        {Song: {id:300822, songName:"name", artistName:"name", releaseName:"name"}},
-//   Continue this format
-//        300848,
-//        41838,
-//        514953,
-//        611336
-//        ]
-//        },
-//        {
-//        "second": [
-//        300848,
-//        41838,
-//        514953,
-//        611336
-//        ]
-//        }
-//]

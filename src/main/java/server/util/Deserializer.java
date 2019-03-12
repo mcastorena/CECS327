@@ -50,6 +50,9 @@ public class Deserializer {
      */
     private HashSet<Integer> ownedIDs;
 
+    /**
+     * Initializes the Deserializer and loads the music files from the filesystem.
+     */
     public Deserializer() {
         userLibrary = new HashMap<>();
         ownedIDs = new HashSet<>();
@@ -61,7 +64,9 @@ public class Deserializer {
         // userLibrary = setUserLibrary();
     }
 
-    // Loads the song IDs of OWNED music into a Set for lookup.
+    /**
+     * Loads the music mp3 files that exist on the computer.
+     */
     private void loadOwnedMusicIDs() {
         File dir = new File(MUSIC_FOLDER.toString());
         File[] files = Objects.requireNonNull(dir.listFiles(), "ERROR: Attempt to listFiles() from Music folder " +
@@ -117,6 +122,9 @@ public class Deserializer {
         }
     }
 
+    /**
+     * Initializes the userLibrary using the IDs of the songs in ownedIDs.
+     */
     private void initUserLibrary() {
         for (Collection c : musicDatabase) {
             if (ownedIDs.contains((int) c.getId())) {
