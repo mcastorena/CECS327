@@ -25,6 +25,15 @@
       "password": ""
     }
   },
+  "register": {
+    "method": "register",
+    "dispatcher": "RegistrationDispatcher",
+    "callSemantic": "AT_LEAST_ONCE",
+    "params": {
+      "username": "",
+      "password": ""
+    }
+  },
   "getPlaylistsChunk": {
     "method": "getPlaylistsChunk",
     "dispatcher": "PlaylistDispatcher",
