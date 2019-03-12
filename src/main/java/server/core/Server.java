@@ -26,6 +26,17 @@ public class Server {
     public static List<Collection> songList;
 
     public static Map<String, String> requestCache;
+    
+        // Used to update userList and usersInfo after a new user registers
+    public static void update(){songList = d.getMusicDatabase();
+        userList = d.deserializeUsers();
+        for (User u : userList) {
+            if (usersInfo.containsValue(u)) {
+                throw new IllegalStateException("Duplicate user found in usersInfo");
+            }
+            usersInfo.put(u.getUsername()+u.getPassword(), u);
+        }
+    }
 
     public static void main(String[] args) {
         requestCache = new HashMap<>();
