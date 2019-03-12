@@ -18,6 +18,8 @@ public class ClientRequestPacketHandler extends Thread {
         dispatcher.registerDispatcher(SearchResultDispatcher.class.getSimpleName(), new SearchResultDispatcher());
         dispatcher.registerDispatcher(LoginDispatcher.class.getSimpleName(), new LoginDispatcher());
         dispatcher.registerDispatcher(PlaylistDispatcher.class.getSimpleName(), new PlaylistDispatcher());
+        dispatcher.registerDispatcher(RegistrationDispatcher.class.getSimpleName(), new RegistrationDispatcher());
+
         System.out.println("New client packet handler created");
     }
 
