@@ -56,5 +56,15 @@
     "params": {
       "query": ""
     }
+  },
+  "addSongToPlaylist": {
+    "method": "addSongToPlaylist",
+    "dispatcher": "PlaylistDispatcher",
+    "callSemantic": "AT_MOST_ONCE",
+    "params": {
+      "userToken": "",
+      "playlistName": "",
+      "song": ""
+    }
   }
 }

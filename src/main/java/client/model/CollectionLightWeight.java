@@ -1,6 +1,8 @@
 package client.model;
 
-public class CollectionLightWeight {// extends Collection
+import java.io.Serializable;
+
+public class CollectionLightWeight implements Serializable {// extends Collection
 
     // A container to hold all json objects related to the same releaseName id
 
@@ -49,6 +51,10 @@ public class CollectionLightWeight {// extends Collection
 
     public void setId(long id) {
         this.idNum = id;
+    }
+
+    public void serialize() {
+
     }
 }
 
