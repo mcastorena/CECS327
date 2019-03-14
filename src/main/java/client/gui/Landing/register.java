@@ -33,7 +33,7 @@ public class register {
         try {
             this.proxy = proxy;
             this.stage = stage;
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/Registration.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/ui/Registration.fxml"));
             loader.setController(this);
             view = loader.load();
         } catch (IOException e) {

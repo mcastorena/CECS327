@@ -28,8 +28,8 @@ public class RegistrationDispatcher extends Dispatcher implements DispatcherServ
             return "User has already been registered, please try again.";
         } else {
             // Get user.json filepath
-            URL userURL = getClass().getResource("/user.json");
-            Path path = Paths.get(URI.create(userURL.toString()));
+            URL userURL = RegistrationDispatcher.class.getResource("/server/user.json");
+            Path path = Paths.get(URI.create(userURL.getPath()));
 
             // Read in current Json file
             String userJSON =  new String(Files.readAllBytes(path), "UTF-8");

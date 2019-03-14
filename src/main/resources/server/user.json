@@ -51,6 +51,31 @@
           ]
         }
       ]
+    },
+    {
+      "username": "test",
+      "password": "test",
+      "email": "example@email.com",
+      "playlists": [
+        {
+          "playlist1": [
+            287650,
+            300822,
+            300848,
+            41838,
+            514953,
+            611336
+          ]
+        },
+        {
+          "playlist2": [
+            300848,
+            41838,
+            514953,
+            611336
+          ]
+        }
+      ]
     }
   ]
 }
