@@ -15,13 +15,26 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ *
+ */
 public class DeletePlaylistWindow {
 
+    /**
+     *
+     */
     private Parent view;
-    private PlaylistItem parent;
+
+    /**
+     *
+     */
     private Scene scene;
+
     private Stage stage;
 
+    private PlaylistItem parent;
+
+    //region FXML components
     @FXML
     private AnchorPane deletePlaylistBox;
     @FXML
@@ -30,6 +43,7 @@ public class DeletePlaylistWindow {
     private Button deleteButton;
     @FXML
     private Button cancelButton;
+    //endregion
 
     public DeletePlaylistWindow(PlaylistItem parent) {
         try {
@@ -50,6 +64,9 @@ public class DeletePlaylistWindow {
         }
     }
 
+    /**
+     * Required for this object to access @FXML components. Called post-constructor.
+     */
     @FXML
     public void initialize() {
         deletePlaylistBox.setOnKeyPressed(e -> {
@@ -58,16 +75,20 @@ public class DeletePlaylistWindow {
             }
         });
 
+        //region Delete button
         deleteButton.setOnMouseEntered(e -> stage.getScene().setCursor(Cursor.HAND));
         deleteButton.setOnMouseExited(e -> stage.getScene().setCursor(Cursor.DEFAULT));
         deleteButton.setOnMouseClicked(e -> {
             sendClick();
             stage.close();
         });
+        //endregion
 
+        //region Delete button
         cancelButton.setOnMouseEntered(e -> stage.getScene().setCursor(Cursor.HAND));
         cancelButton.setOnMouseExited(e -> stage.getScene().setCursor(Cursor.DEFAULT));
         cancelButton.setOnMouseClicked(e -> stage.close());
+        //endregion
     }
 
     public Parent getView() {

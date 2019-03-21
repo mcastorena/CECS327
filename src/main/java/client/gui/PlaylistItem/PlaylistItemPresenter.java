@@ -11,22 +11,37 @@ import client.model.Playlist;
 import java.io.IOException;
 
 
+/**
+ * Following the MVP design pattern, this class represents the Presenter for the PlaylistItem
+ */
 public class PlaylistItemPresenter {
 
-    private PlaylistItemModel playlistItemModel;
+    /**
+     * Parent container that contains this object
+     */
     private Parent view;
 
+    /**
+     * Model for this PlaylistItem
+     */
+    private PlaylistItemModel playlistItemModel;
+
+    //region FXML components
     @FXML
     Pane playlistItemPane;
     @FXML
     Text playlistNameText;
+    //endregion
 
+    /**
+     * Constructor
+     */
     public PlaylistItemPresenter() {
         try {
+
+            // Required for JavaFX
             FXMLLoader loader = new FXMLLoader();
             loader.setController(this);
-
-            // Load the playlist
             loader.setLocation(getClass().getResource("/client/ui/PlaylistItem.fxml"));
             view = loader.load();
 
@@ -37,6 +52,9 @@ public class PlaylistItemPresenter {
         }
     }
 
+    /**
+     * Called post-constructor & required by JavaFX
+     */
     @FXML
     public void initialize() {
         playlistItemPane.setOnMouseEntered(e -> {
@@ -47,6 +65,12 @@ public class PlaylistItemPresenter {
         });
     }
 
+    /**
+     * Sets the playlist within the Model
+     *
+     * @param sender - Presenter sending the Playlist
+     * @param playlist - Playlist object being set
+     */
     public void receivePlaylist(PlaylistListPresenter sender, Playlist playlist) {
         playlistItemModel.setPlaylist(playlist);
     }
