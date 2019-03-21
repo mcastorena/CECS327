@@ -9,15 +9,31 @@ import javafx.scene.input.KeyCode;
 
 import java.io.IOException;
 
+/**
+ * Per the MVP design pattern, this class represents the Presenter for the SearchBar
+ */
 public class SearchBarPresenter {
 
+    /**
+     * Parent node
+     */
     private Parent view;
+
+    /**
+     * MVP connection to the MainDisplay
+     */
     private MainDisplayPresenter mainDisplayPresenter;
 
     @FXML
     TextField searchField;
 
+    /**
+     * Constructor
+     *
+     * @param mainDisplayPresenter - MVP connection to the MainDisplay
+     */
     public SearchBarPresenter(MainDisplayPresenter mainDisplayPresenter) {
+
         try {
             this.mainDisplayPresenter = mainDisplayPresenter;
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/ui/SearchBar.fxml"));
@@ -29,6 +45,9 @@ public class SearchBarPresenter {
         }
     }
 
+    /**
+     * Required by JavaFX
+     */
     @FXML
     public void initialize() {
         searchField.setOnKeyPressed(e -> {
@@ -38,19 +57,22 @@ public class SearchBarPresenter {
         });
     }
 
-    public void onSearchSubmit() {
+    // TODO: Consolidate these two methods??
+    /**
+     * Takes the search text and submits it to the MainDisplay
+     */
+    private void onSearchSubmit() {
         sendResultsToMainDisplay(searchField.getText());
     }
-
-    public Parent getView() {
-        return view;
-    }
-
     private void sendResultsToMainDisplay(String searchText) {
         try {
             this.mainDisplayPresenter.receiveSearchText(this, searchField.getText());
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public Parent getView() {
+        return view;
     }
 }
