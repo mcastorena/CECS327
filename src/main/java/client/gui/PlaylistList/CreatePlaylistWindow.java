@@ -17,13 +17,32 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * TODO:
+ */
 public class CreatePlaylistWindow {
 
+    /**
+     * JavaFX root stage
+     */
     private Stage stage;
+
+    /**
+     * JavaFX scene shown on the stage
+     */
     private Scene scene;
+
+    /**
+     * JavaFX parent container
+     */
     private Parent view;
+
+    /**
+     * PlaylistList presenter associated with this window
+     */
     private PlaylistListPresenter parent;
 
+    //region FXML components
     @FXML
     private AnchorPane createPlaylistBox;
     @FXML
@@ -32,15 +51,23 @@ public class CreatePlaylistWindow {
     private Button createButton;
     @FXML
     private Button cancelButton;
+    //endregion
 
+    /**
+     * Constructor
+     *
+     * @param parent - Parent node to this window
+     */
     public CreatePlaylistWindow(PlaylistListPresenter parent) {
         try {
             this.parent = parent;
 
+            // JavaFX - load the GUI
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/ui/CreatePlaylistWindow.fxml"));
             loader.setController(this);
             view = loader.load();
             stage = new Stage();
+
             // Prevent user from interacting with anything other than current window.
             stage.initModality(Modality.APPLICATION_MODAL);
             scene = new Scene(view);
@@ -50,6 +77,9 @@ public class CreatePlaylistWindow {
         }
     }
 
+    /**
+     * Required by JavaFX for accessing @FXML components
+     */
     @FXML
     public void initialize() {
         createPlaylistBox.setOnKeyPressed(e -> {
@@ -64,6 +94,8 @@ public class CreatePlaylistWindow {
                 stage.close();
             }
         });
+
+        //region Create button
         createButton.setOnMouseEntered(e -> stage.getScene().setCursor(Cursor.HAND));
         createButton.setOnMouseExited(e -> stage.getScene().setCursor(Cursor.DEFAULT));
         createButton.setOnMouseClicked(e -> {
@@ -79,12 +111,23 @@ public class CreatePlaylistWindow {
                 }
             }
         });
+        //endregion
 
+        //region Cancel button
         cancelButton.setOnMouseEntered(e -> stage.getScene().setCursor(Cursor.HAND));
         cancelButton.setOnMouseExited(e -> stage.getScene().setCursor(Cursor.DEFAULT));
         cancelButton.setOnMouseClicked(e -> stage.close());
+        //endregion
     }
 
+    /**
+     * Gets the text that the user entered and sends it to the PlaylistListPresenter
+     */
+    private void sendText() {
+        parent.receivePlaylistCreateClick(this, textField.getText());
+    }
+
+    //region Getters and Setters
     public Parent getView() {
         return view;
     }
@@ -96,8 +139,5 @@ public class CreatePlaylistWindow {
     public void close() {
         stage.close();
     }
-
-    private void sendText() {
-        parent.receivePlaylistCreateClick(this, textField.getText());
-    }
+    //endregion
 }

@@ -21,17 +21,23 @@ import java.io.IOException;
 public class DeletePlaylistWindow {
 
     /**
-     *
+     * Parent node
      */
     private Parent view;
 
     /**
-     *
+     * JavaFX scene
      */
     private Scene scene;
 
+    /**
+     * JavaFX stage window
+     */
     private Stage stage;
 
+    /**
+     * Parent object
+     */
     private PlaylistItem parent;
 
     //region FXML components
@@ -45,6 +51,11 @@ public class DeletePlaylistWindow {
     private Button cancelButton;
     //endregion
 
+    /**
+     * Constructor
+     *
+     * @param parent - Parent object
+     */
     public DeletePlaylistWindow(PlaylistItem parent) {
         try {
             this.parent = parent;
