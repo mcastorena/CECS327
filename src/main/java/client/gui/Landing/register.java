@@ -15,11 +15,26 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * TODO:
+ */
 public class register {
-    private Stage stage;
-    private Parent view;
 
+    /**
+     * TODO:
+     */
+    private Stage stage;
+
+    /**
+     * The parent view that contains this register
+     */
+    private Parent view;
+    /**
+     * The proxy that the client is connected through
+     */
     private ProxyInterface proxy;
+
+    //region FXML components
     @FXML
     private TextField user;
     @FXML
@@ -28,11 +43,14 @@ public class register {
     private Button signupButton;
     @FXML
     private Text registerText;
+    //endregion
 
     public register(Stage stage, ProxyInterface proxy) {
         try {
             this.proxy = proxy;
             this.stage = stage;
+
+            // Loader required for JavaFX to set the .fxml
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/ui/Registration.fxml"));
             loader.setController(this);
             view = loader.load();
@@ -50,7 +68,7 @@ public class register {
             String password = pass.getText();
 
             // Create HashMap to hold parameters
-            Map<String, String> params = new HashMap<String, String>();
+            Map<String, String> params = new HashMap<>();
             params.put("username", username);
             params.put("password", password);
 
@@ -58,12 +76,12 @@ public class register {
             JsonObject response = this.proxy.syncExecution("register", params);
             String responsePayload = response.get("ret").getAsString();
             Font myFont = registerText.getFont();
-            registerText.setFont(new Font(myFont.getName(), myFont.getSize()/2));
+            registerText.setFont(new Font(myFont.getName(), myFont.getSize() / 2));
             registerText.setText(responsePayload);
+
+            // Clear JavaFX text fields
             user.clear();
             pass.clear();
-
-
         });
     }
 

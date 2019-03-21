@@ -17,30 +17,57 @@ import client.rpc.ProxyInterface;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * As part of the MVP-design pattern, this class represents the Presenter for the MainDisplay
+ */
 public class MainDisplayPresenter {
+
+    /**
+     * The parent view that contains this MainDisplay
+     */
     Parent view;
 
+    /**
+     * The Model for the MainDisplay
+     */
     MainDisplayModel mainDisplayModel;
 
+    /**
+     * The Presenter for the Homepage
+     */
     HomepagePresenter homepagePresenter;
 
+    /**
+     * The Model for the SongSearch
+     */
     SongSearchModel songSearchModel;
 
+    /**
+     * The proxy that the client is connected through
+     */
     ProxyInterface clientProxy;
 
+    //region FXML components
     @FXML
     ScrollPane displayScroller;
-
     @FXML
     VBox displayVBox;
+    //endregion
 
+    /**
+     * Constructor
+     *
+     * @param homepagePresenter - Presenter for the Homepage associated with this MainDisplay
+     */
     public MainDisplayPresenter(HomepagePresenter homepagePresenter) {
+
         mainDisplayModel = new MainDisplayModel();
         this.homepagePresenter = homepagePresenter;
         clientProxy = homepagePresenter.getProxy();
         songSearchModel = new SongSearchModel();
 
         try {
+            // Loader required for JavaFX to set the .fxml
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/client/ui/MainDisplay.fxml"));
             loader.setController(this);
@@ -54,18 +81,28 @@ public class MainDisplayPresenter {
     public void initialize() {
     }
 
-    public Parent getView() {
-        return view;
-    }
-
+    /**
+     * Receives a search as a String and sends it to the SongSearchModel's `getResults()`. The list returned is then
+     * passed into another method for processing.
+     *
+     * @param sender - SearchBar sending the search
+     * @param searchText - String being searched
+     * @throws IOException - Required for the created InputStream
+     */
     public void receiveSearchText(SearchBarPresenter sender, String searchText) throws IOException {
         showResults(songSearchModel.getResults(new CECS327InputStream(searchText, clientProxy)));
     }
 
-    // CHANGED THIS FOR SERVER/CLIENT
-    public void showResults(List<CollectionLightWeight> searchResult) {
+    /**
+     * Shows the search results from a list of retrieved songs
+     *
+     * @param searchResult - List of songs
+     */
+    private void showResults(List<CollectionLightWeight> searchResult) {
+        // Clear the previous state of the VBox
         displayVBox.getChildren().clear();
 
+        // Create a new item for display for each song in `searchResult`
         for (CollectionLightWeight song : searchResult) {
             SearchResultSongItem displayItem =
                     new SearchResultSongItem(this, song);
@@ -76,6 +113,12 @@ public class MainDisplayPresenter {
         }
     }
 
+    /**
+     * Receives a click-selection for a Playlist from the PlaylistList and sends it to the MainDisplay
+     *
+     * @param sender - PlaylistList sending the click-selection
+     * @param selection - Title of the playlist being selected
+     */
     public void receivePlaylistSelection(PlaylistListPresenter sender, String selection) {
         try {
             Playlist playlist =
@@ -94,29 +137,55 @@ public class MainDisplayPresenter {
         }
     }
 
+    /**
+     * Clears the previous state of the playlist's VBox and recreates it. Called after adding/removing a Playlist
+     *
+     * @param playlist - Playlist to be shown
+     */
     private void showPlaylist(Playlist playlist) {
+
+        // Clear the VBox of songs
         displayVBox.getChildren().clear();
+
+        // Create new items for each song in the playlist
         for (CollectionLightWeight song : playlist.getSongList()) {
             MainDisplayItem displayItem =
                     new MainDisplayItem(this, song);
 
-
+            // Add the song to the VBox
             displayVBox.getChildren()
-                    .add(displayItem
-                            .getView());
+                    .add(displayItem.getView());
         }
     }
 
+    /**
+     * Receives a play request from the MainDisplay and sends it to the Homepage
+     *
+     * @param sender - MainDisplay sending the request for play
+     * @param song   - Song that is being requested for play
+     */
     public void receivePlayRequest(MainDisplayItem sender, CollectionLightWeight song) {
         homepagePresenter.receivePlaylistItemClick(this, song, mainDisplayModel.getPlaylist());
     }
 
+    /**
+     * Receives a click from the Homepage and sends it to the MainDisplay
+     *
+     * @param sender - Homepage sending the click
+     * @param obj    - Playlist that was clicked and will be set for display
+     */
     public void receivePlaylistItemClick(HomepagePresenter sender, Playlist obj) {
         mainDisplayModel.setPlaylist(obj);
         showPlaylist(obj);
     }
 
+    //region Getters
+    public Parent getView() {
+        return view;
+    }
+
     public ProxyInterface getProxy() {
         return clientProxy;
     }
+    //endregion
 }

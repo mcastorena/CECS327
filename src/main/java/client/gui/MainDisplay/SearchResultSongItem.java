@@ -11,17 +11,20 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import client.model.CollectionLightWeight;
 
+/**
+ * TODO:
+ */
 public class SearchResultSongItem extends MainDisplayItem {
 
     public SearchResultSongItem(MainDisplayPresenter parent, CollectionLightWeight song) {
         super(parent, song);
 
-        AnchorPane p = super.songPane;
+        AnchorPane anchorPane = super.songPane;
 
         super.songPane.setOnDragDetected(e -> {
             App.setCursorStyle(Cursor.CLOSED_HAND);
 
-            Dragboard dragboard = p.startDragAndDrop(TransferMode.COPY);
+            Dragboard dragboard = anchorPane.startDragAndDrop(TransferMode.COPY);
             ClipboardContent content = new ClipboardContent();
             content.put(CollectionFormat.FORMAT, this.song);
             dragboard.setContent(content);
@@ -32,8 +35,8 @@ public class SearchResultSongItem extends MainDisplayItem {
                     view.snapshot(
                             new SnapshotParameters(),
                             new WritableImage(
-                                    p.widthProperty().intValue(),
-                                    p.heightProperty().intValue())));
+                                    anchorPane.widthProperty().intValue(),
+                                    anchorPane.heightProperty().intValue())));
         });
     }
 }
