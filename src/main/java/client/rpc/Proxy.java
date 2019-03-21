@@ -21,7 +21,11 @@ import java.util.Set;
 import java.util.UUID;
 
 
+/**
+ * Proxy for communication between a client and servers
+ */
 public class Proxy implements ProxyInterface {
+
     private static final Logger LOGGER = Logger.getLogger(Proxy.class);
     private ClientCommunicationProtocol communicate;
     private static final URL MUSIC_URL = Proxy.class.getResource("/client/appdata/methods.json");
@@ -82,7 +86,7 @@ public class Proxy implements ProxyInterface {
 
         Set<Map.Entry<String, String>> entrySet = params.entrySet();
 
-        for(Map.Entry<String, String> entry : entrySet) {
+        for (Map.Entry<String, String> entry : entrySet) {
             paramsObject.addProperty(entry.getKey(), entry.getValue());
         }
 
