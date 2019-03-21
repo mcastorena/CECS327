@@ -53,7 +53,7 @@ public class PlaylistItem {
     /**
      * Constructor
      *
-     * @param parent - PlaylistListPresenter
+     * @param parent   - PlaylistListPresenter
      * @param playlist - Playlist this Item represents
      */
     public PlaylistItem(PlaylistListPresenter parent, Playlist playlist) {

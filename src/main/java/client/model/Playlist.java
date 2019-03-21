@@ -9,7 +9,7 @@ public class Playlist {
     private ArrayList<CollectionLightWeight> songList;
 
     /**
-     * Default constructor for creating a new playlist. Instantiates a new ArrayList for songList.
+     * Constructs a Playlist given an ID and a name
      *
      * @param id   - ID number to reference the Playlist
      * @param name - Name of the Playlist as given by the User
@@ -20,12 +20,18 @@ public class Playlist {
         this.songList = new ArrayList<>();
     }
 
+    /**
+     * Constructs a Playlist given a name
+     *
+     * @param name - Name of the Playlist
+     */
     public Playlist(String name) {
         this.id = "001";
         this.name = name;
         this.songList = new ArrayList<>();
     }
 
+    //region Getters and Setters
     public String getId() {
         return id;
     }
@@ -45,8 +51,15 @@ public class Playlist {
     public ArrayList<CollectionLightWeight> getSongList() {
         return this.songList;
     }
+    //endregion
 
-    public boolean addToPlaylist(CollectionLightWeight song) {    // TODO: Change to a Song POJO
+    /**
+     * Adds a song to a Playlist
+     *
+     * @param song - Song to be added to the Playlist
+     * @return - True if the song was successfully added
+     */
+    public boolean addToPlaylist(CollectionLightWeight song) {
         boolean added = false;
 
         if (song != null) {

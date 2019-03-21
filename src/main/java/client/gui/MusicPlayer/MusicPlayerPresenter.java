@@ -239,7 +239,7 @@ public class MusicPlayerPresenter {
      * Retrieves a song request and opens that request in the MusicPlayer.
      *
      * @param songFile - Name of the song/file to be played
-     * @param proxy - Proxy that the client is connected through
+     * @param proxy    - Proxy that the client is connected through
      */
     private void setSongFile(String songFile, ProxyInterface proxy) {
         try {
@@ -253,8 +253,8 @@ public class MusicPlayerPresenter {
     /**
      * Receives a play request for a selected song and tries to set it for playing.
      *
-     * @param sender - Homepage sending the request for play
-     * @param song - Song selected for playing
+     * @param sender   - Homepage sending the request for play
+     * @param song     - Song selected for playing
      * @param playlist - Playlist containing the song to be played
      */
     public void receivePlaylistItemPlayRequest(HomepagePresenter sender, CollectionLightWeight song, Playlist playlist) {

@@ -2,18 +2,47 @@ package client.model;
 
 import java.io.Serializable;
 
-public class CollectionLightWeight implements Serializable {// extends Collection
+/**
+ *
+ */
+public class CollectionLightWeight implements Serializable {    // extends Collection
 
     // A container to hold all json objects related to the same releaseName id
 
+    /**
+     * Artist of the song
+     */
     private String artistName;
+
+    /**
+     * Name of the song
+     */
     private String songName;
+
+    /**
+     * Release info of the song
+     */
     private String releaseName;
+
+    /**
+     * long ID of the song
+     */
     private long idNum;
 
+    /**
+     * Empty constructor
+     */
     public CollectionLightWeight() {
     }
 
+    /**
+     * Full constructor
+     *
+     * @param id          - long ID of the song
+     * @param songName    - Name of the song
+     * @param artistName  - Artist of the song
+     * @param releaseName - Release info
+     */
     public CollectionLightWeight(long id, String songName, String artistName, String releaseName) {
         this.releaseName = releaseName;
         this.artistName = artistName;
@@ -21,6 +50,7 @@ public class CollectionLightWeight implements Serializable {// extends Collectio
         this.idNum = id;
     }
 
+    //region Getters and Setters
     public String getReleaseName() {
         return releaseName;
     }
@@ -52,9 +82,9 @@ public class CollectionLightWeight implements Serializable {// extends Collectio
     public void setId(long id) {
         this.idNum = id;
     }
+    //endregion
 
     public void serialize() {
-
     }
 }
 

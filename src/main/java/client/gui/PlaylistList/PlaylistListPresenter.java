@@ -52,7 +52,7 @@ public class PlaylistListPresenter {
      * Constructor
      *
      * @param mainDisplayPresenter - MVP connection to the MainDisplay
-     * @param homepagePresenter - MVP connection to the Homepage
+     * @param homepagePresenter    - MVP connection to the Homepage
      */
     public PlaylistListPresenter(MainDisplayPresenter mainDisplayPresenter, HomepagePresenter homepagePresenter) {
         try {
@@ -125,7 +125,7 @@ public class PlaylistListPresenter {
      * Takes the Playlist selected and sends it to the associated HomepagePresenter
      *
      * @param sender - PlaylistItem sending the click
-     * @param obj - Playlist selected
+     * @param obj    - Playlist selected
      */
     public void receivePlaylistItemClick(PlaylistItem sender, Playlist obj) {
         homepagePresenter.receivePlaylistItemClick(this, obj);
@@ -135,7 +135,7 @@ public class PlaylistListPresenter {
      * Receives a playlist title, creates a new Playlist with that title, adds it to the PlaylistListModel, and
      * re-renders the playlists
      *
-     * @param sender - Create playlist window
+     * @param sender       - Create playlist window
      * @param playlistName - Name of playlist to be created
      */
     public void receivePlaylistCreateClick(CreatePlaylistWindow sender, String playlistName) {

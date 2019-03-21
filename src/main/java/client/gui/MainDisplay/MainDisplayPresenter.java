@@ -85,7 +85,7 @@ public class MainDisplayPresenter {
      * Receives a search as a String and sends it to the SongSearchModel's `getResults()`. The list returned is then
      * passed into another method for processing.
      *
-     * @param sender - SearchBar sending the search
+     * @param sender     - SearchBar sending the search
      * @param searchText - String being searched
      * @throws IOException - Required for the created InputStream
      */
@@ -116,7 +116,7 @@ public class MainDisplayPresenter {
     /**
      * Receives a click-selection for a Playlist from the PlaylistList and sends it to the MainDisplay
      *
-     * @param sender - PlaylistList sending the click-selection
+     * @param sender    - PlaylistList sending the click-selection
      * @param selection - Title of the playlist being selected
      */
     public void receivePlaylistSelection(PlaylistListPresenter sender, String selection) {

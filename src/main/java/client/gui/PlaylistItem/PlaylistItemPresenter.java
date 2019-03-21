@@ -68,7 +68,7 @@ public class PlaylistItemPresenter {
     /**
      * Sets the playlist within the Model
      *
-     * @param sender - Presenter sending the Playlist
+     * @param sender   - Presenter sending the Playlist
      * @param playlist - Playlist object being set
      */
     public void receivePlaylist(PlaylistListPresenter sender, Playlist playlist) {

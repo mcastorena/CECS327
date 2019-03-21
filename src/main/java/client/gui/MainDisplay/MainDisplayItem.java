@@ -45,7 +45,7 @@ public class MainDisplayItem {
      * Constructor
      *
      * @param mainDisplayPresenter - Presenter associated with this item
-     * @param song - Song selected to be displayed
+     * @param song                 - Song selected to be displayed
      */
     public MainDisplayItem(MainDisplayPresenter mainDisplayPresenter, CollectionLightWeight song) {
         try {
