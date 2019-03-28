@@ -16,35 +16,61 @@ import client.rpc.ProxyInterface;
 
 import java.io.IOException;
 
-// TODO: Implement a Presenter Interface that includes common methods (i.e. switchToScene())
+/**
+ * As part of the MVP-design pattern, this class represents the Presenter for the Landing
+ */
 public class LandingPresenter {
-    private LandingModel landingModel;
+
+    /**
+     * Parent FXMLLoader
+     */
     private Parent view;
+
+    /**
+     * Model, per the MVP-design pattern
+     */
+    private LandingModel landingModel;
+
+    /**
+     * TODO:
+     */
     private LandingService landingService;
 
+    /**
+     * Proxy that the client is connected through
+     */
     private ProxyInterface clientProxy;
 
-    // Communication between landing and homepage
+    /**
+     * Reference for the Homepage
+     */
     private HomepagePresenter homepagePresenter;
 
+    //region FXML components
     @FXML
     private TextField usernameField;
-
     @FXML
     private TextField passwordField;
-
     @FXML
     private Button loginButton;
-
     @FXML
     private Button registerButton;
+    //endregion
 
+    /**
+     * Constructor
+     *
+     * @param proxy - Proxy that the client is connected through
+     */
     public LandingPresenter(ProxyInterface proxy) {
         clientProxy = proxy;
+
         try {
+            // Set the model and service
             landingModel = new LandingModel();
             landingService = LandingService.getInstance(proxy);
 
+            // Loader required for JavaFX to set the .fxml
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/client/ui/Landing.fxml"));
             loader.setController(this);
@@ -54,6 +80,9 @@ public class LandingPresenter {
         }
     }
 
+    /**
+     * Binds the actions to be taken for the username and password fields, and login and register buttons
+     */
     public void initialize() {
         usernameField.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.ENTER) {
@@ -68,26 +97,27 @@ public class LandingPresenter {
         });
 
         loginButton.setOnMouseClicked(e -> submitLogin());
-
         registerButton.setOnMouseClicked(e -> register());
     }
 
+    /**
+     * Grabs the username and password entered and verifies them through the LandingService
+     */
     private void submitLogin() {
         landingModel.setUsernameInput(usernameField.getText());
         landingModel.setPasswordInput(passwordField.getText());
 
+        // Initialize the user as an unauthorized user at first
         boolean isAuthorized = false;
         try {
             isAuthorized = landingService.authorizeUser(landingModel.getUsernameInput(), landingModel.getPasswordInput());
         } catch (IOException e) {
             e.printStackTrace();
-        } catch(NullPointerException e){
+        } catch (NullPointerException e) {
             displayError();
         }
 
         if (isAuthorized) {
-            //User user = landingService.getCurrentSession();
-            //UserSession.setCurrentSession(user);
             homepagePresenter = new HomepagePresenter(clientProxy);
             switchToHomepage();
         } else {
@@ -95,6 +125,9 @@ public class LandingPresenter {
         }
     }
 
+    /**
+     * Presents the register window to the user
+     */
     public void register() {
         Stage registerWindow = new Stage();
 
@@ -110,16 +143,21 @@ public class LandingPresenter {
         homepagePresenter.showDefaultPage();
     }
 
-    public Parent getView() {
-        return view;
-    }
-
+    /**
+     * Displays an error to the user if they've entered an invalid username or password
+     */
     private void displayError() {
-        new Alert(Alert.AlertType.ERROR, "Invalid usernameField/passwordField.", ButtonType.OK)
+        new Alert(Alert.AlertType.ERROR, "Invalid username and/or password.", ButtonType.OK)
                 .showAndWait();
     }
 
     public void showLandingPage() {
         App.getPrimaryStage().setScene(new Scene(view));
     }
+
+    //region Getters and Setters
+    public Parent getView() {
+        return view;
+    }
+    //endregion
 }

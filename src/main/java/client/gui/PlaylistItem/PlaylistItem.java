@@ -21,21 +21,41 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ *
+ */
 public class PlaylistItem {
 
+    /**
+     * Parent view
+     */
     private Parent view;
+
+    /**
+     * Playlist represented on this Item being shown
+     */
     private Playlist playlist;
+
+    /**
+     * Presenter for the PlaylistList that this item is within
+     */
     private PlaylistListPresenter parent;
 
+    //region FXML components
     @FXML
     Pane playlistItemPane;
-
     @FXML
     Text playlistNameText;
-
     @FXML
     StackPane deletePane;
+    //endregion
 
+    /**
+     * Constructor
+     *
+     * @param parent   - PlaylistListPresenter
+     * @param playlist - Playlist this Item represents
+     */
     public PlaylistItem(PlaylistListPresenter parent, Playlist playlist) {
         try {
             this.parent = parent;
@@ -44,10 +64,9 @@ public class PlaylistItem {
             // Load the delete button
             deletePane = new FXMLLoader(getClass().getResource("/client/ui/DeleteButton.fxml")).load();
 
+            // Load the playlist item pane
             FXMLLoader loader = new FXMLLoader();
             loader.setController(this);
-
-            // Load the playlist item pane
             loader.setLocation(getClass().getResource("/client/ui/PlaylistItem.fxml"));
             view = loader.load();
 
@@ -56,9 +75,14 @@ public class PlaylistItem {
         }
     }
 
+    /**
+     * Required for this object to access @FXML components
+     */
+    @FXML
     public void initialize() {
         playlistNameText.setText(playlist.getName());
 
+        //region Delete pane
         deletePane.setVisible(false);
         deletePane.setPickOnBounds(true);
         deletePane.relocate(140, 30);
@@ -73,7 +97,9 @@ public class PlaylistItem {
                     .setCursor(Cursor.DEFAULT);
         });
         deletePane.setOnMouseClicked(f -> showDeletePlaylistWindow());
+        //endregion
 
+        //region PlaylistItemPane
         playlistItemPane.getChildren().add(deletePane);
         playlistItemPane.setOnDragOver(e -> {
             Dragboard dragboard = e.getDragboard();
@@ -104,7 +130,6 @@ public class PlaylistItem {
             e.setDropCompleted(dragCompleted);
             e.consume();
         });
-
         playlistItemPane.setOnMouseEntered(e -> {
             playlistItemPane.setStyle("-fx-background-color: #464646");
             deletePane.setVisible(true);
@@ -114,12 +139,23 @@ public class PlaylistItem {
             deletePane.setVisible(false);
         });
         playlistItemPane.setOnMouseClicked(e -> sendClick());
-
-
+        //endregion
     }
 
+    /**
+     * Gets the user's click on a playlist and sends it to the Parent view
+     */
     private void sendClick() {
         parent.receivePlaylistItemClick(this, playlist);
+    }
+
+    /**
+     * TODO:
+     *
+     * @param sender - Object sending the message to delete the playlist
+     */
+    public void receivePlaylistDeleteClick(DeletePlaylistWindow sender) {
+        sendDeleteClick();
     }
 
     /**
@@ -130,22 +166,24 @@ public class PlaylistItem {
     }
 
     /**
-     * @param sender - Object sending the message to delete the playlist
+     * TODO:
      */
-    public void receivePlaylistDeleteClick(DeletePlaylistWindow sender) {
-        sendDeleteClick();
-    }
-
-    public Parent getView() {
-        return view;
-    }
-
     private void showDeletePlaylistWindow() {
         DeletePlaylistWindow dpw = new DeletePlaylistWindow(this);
         dpw.show();
     }
 
+    /**
+     * TODO:
+     */
     private void sendDragComplete() {
         parent.receiveSongAdd(this);
+    }
+
+    /**
+     * @return - object's Parent view
+     */
+    public Parent getView() {
+        return view;
     }
 }

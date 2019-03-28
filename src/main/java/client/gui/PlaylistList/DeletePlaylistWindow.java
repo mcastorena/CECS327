@@ -15,13 +15,32 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ *
+ */
 public class DeletePlaylistWindow {
 
+    /**
+     * Parent node
+     */
     private Parent view;
-    private PlaylistItem parent;
+
+    /**
+     * JavaFX scene
+     */
     private Scene scene;
+
+    /**
+     * JavaFX stage window
+     */
     private Stage stage;
 
+    /**
+     * Parent object
+     */
+    private PlaylistItem parent;
+
+    //region FXML components
     @FXML
     private AnchorPane deletePlaylistBox;
     @FXML
@@ -30,7 +49,13 @@ public class DeletePlaylistWindow {
     private Button deleteButton;
     @FXML
     private Button cancelButton;
+    //endregion
 
+    /**
+     * Constructor
+     *
+     * @param parent - Parent object
+     */
     public DeletePlaylistWindow(PlaylistItem parent) {
         try {
             this.parent = parent;
@@ -50,6 +75,9 @@ public class DeletePlaylistWindow {
         }
     }
 
+    /**
+     * Required for this object to access @FXML components. Called post-constructor.
+     */
     @FXML
     public void initialize() {
         deletePlaylistBox.setOnKeyPressed(e -> {
@@ -58,16 +86,20 @@ public class DeletePlaylistWindow {
             }
         });
 
+        //region Delete button
         deleteButton.setOnMouseEntered(e -> stage.getScene().setCursor(Cursor.HAND));
         deleteButton.setOnMouseExited(e -> stage.getScene().setCursor(Cursor.DEFAULT));
         deleteButton.setOnMouseClicked(e -> {
             sendClick();
             stage.close();
         });
+        //endregion
 
+        //region Delete button
         cancelButton.setOnMouseEntered(e -> stage.getScene().setCursor(Cursor.HAND));
         cancelButton.setOnMouseExited(e -> stage.getScene().setCursor(Cursor.DEFAULT));
         cancelButton.setOnMouseClicked(e -> stage.close());
+        //endregion
     }
 
     public Parent getView() {

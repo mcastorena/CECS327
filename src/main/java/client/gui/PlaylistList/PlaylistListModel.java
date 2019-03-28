@@ -12,14 +12,25 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 
+/**
+ * Per the MVP design pattern, this class represents the Model for a PlaylistList
+ */
 public class PlaylistListModel {
 
     private HashMap<String, Playlist> playlists = new HashMap<>();
 
+    /* Getter */
     public HashMap<String, Playlist> getPlaylists() {
         return playlists;
     }
 
+    /**
+     * Fills the playlists hashmap and associates it with a UserSession
+     *
+     * @param is - InputStream of JSON data
+     * @throws IOException - Required for the InputStream
+     */
+    /* Setter */
     public void setPlaylists(CECS327InputStream is) throws IOException {
         Gson gson = new Gson();
         JsonReader reader = new JsonReader(new InputStreamReader(is, "UTF-8"));
@@ -28,17 +39,19 @@ public class PlaylistListModel {
         while (reader.hasNext()) {
             reader.beginObject();
             String playlistName = reader.nextName();
-            Playlist p = new Playlist(playlistName);
+            Playlist playlist = new Playlist(playlistName);
+
             reader.beginArray();
             while (reader.hasNext()) {
                 reader.beginObject();
                 reader.nextName();
-                p.addToPlaylist(gson.fromJson(reader, CollectionLightWeight.class));
+                playlist.addToPlaylist(gson.fromJson(reader, CollectionLightWeight.class));
                 reader.endObject();
             }
             reader.endArray();
             reader.endObject();
-            if (p != null) playlists.put(playlistName, p);
+
+            if (playlist != null) playlists.put(playlistName, playlist);
 
         }
         reader.endArray();

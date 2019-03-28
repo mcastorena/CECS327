@@ -26,16 +26,52 @@ import java.io.BufferedInputStream;
 import java.util.ArrayList;
 
 
+/**
+ * As part of the MVP-design pattern, this class is the Presenter for the MusicPlayer
+ */
 public class MusicPlayerPresenter {
+
+    /**
+     * List of Playlists
+     */
     ArrayList<CollectionLightWeight> playlist;
+
+    /**
+     * Current song selected for playing
+     */
     CollectionLightWeight currentSong;
 
+    /**
+     * Presenter for the MainDisplay associated with this MusicPlayer
+     */
     private MainDisplayPresenter mainDisplayPresenter;
+
+    /**
+     * TODO:
+     */
     private Node view;
+
+    /**
+     * TODO:
+     */
     private boolean isPlaying;
+
+    /**
+     * TODO:
+     */
     private BasicPlayer myPlayer = new BasicPlayer();
+
+    /**
+     * Name of the song file to be played
+     */
     private String songFile;
 
+    /**
+     * Proxy that the client is connected through
+     */
+    private ProxyInterface clientProxy;
+
+    //region FXML components
     @FXML
     private Slider slider;
     @FXML
@@ -44,25 +80,31 @@ public class MusicPlayerPresenter {
     private Group previousButton;
     @FXML
     private Group nextButton;
-
     @FXML
     private Label songLabel;
     @FXML
     private Label artistLabel;
     @FXML
     private Label albumLabel;
+    //endregion
 
+
+    /**
+     * Constructor
+     */
     public MusicPlayerPresenter() {
         this.playlist = new ArrayList<>();
     }
 
-    private ProxyInterface clientProxy;
-
+    /**
+     * Required for JavaFX; variables annotated with @FXML are accessed here.
+     */
     @FXML
     public void initialize() {
         try {
             isPlaying = false;
 
+            //region Play button
             playButton.setOnMouseEntered(e -> App.getPrimaryStage().getScene().setCursor(Cursor.HAND));
             playButton.setOnMouseExited(e -> App.getPrimaryStage().getScene().setCursor(Cursor.DEFAULT));
             playButton.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
@@ -72,7 +114,9 @@ public class MusicPlayerPresenter {
                     e.printStackTrace();
                 }
             });
+            //endregion
 
+            //region Next button
             nextButton.setOnMouseEntered(e -> App.getPrimaryStage().getScene().setCursor(Cursor.HAND));
             nextButton.setOnMouseExited(e -> App.getPrimaryStage().getScene().setCursor(Cursor.DEFAULT));
             nextButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
@@ -94,9 +138,10 @@ public class MusicPlayerPresenter {
                     artistLabel.setText(nextSong.getArtistName());
                     albumLabel.setText(nextSong.getReleaseName());
                 }
-
             });
+            //endregion
 
+            //region Previous button
             previousButton.setOnMouseEntered(e -> App.getPrimaryStage().getScene().setCursor(Cursor.HAND));
             previousButton.setOnMouseExited(e -> App.getPrimaryStage().getScene().setCursor(Cursor.DEFAULT));
             previousButton.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> {
@@ -119,12 +164,15 @@ public class MusicPlayerPresenter {
                     artistLabel.setText(prevSong.getArtistName());
                     albumLabel.setText(prevSong.getReleaseName());
                 }
-
             });
+            //endregion
 
+            //region Slider
             slider.setValue(50);
             slider.setOnMouseEntered(e -> App.getPrimaryStage().getScene().setCursor(Cursor.HAND));
             slider.setOnMouseExited(e -> App.getPrimaryStage().getScene().setCursor(Cursor.DEFAULT));
+            //endregion
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -141,10 +189,17 @@ public class MusicPlayerPresenter {
         });
     }
 
+    /**
+     * TODO:
+     *
+     * @param mainDisplayPresenter - TODO
+     */
     public MusicPlayerPresenter(MainDisplayPresenter mainDisplayPresenter) {
         try {
             this.mainDisplayPresenter = mainDisplayPresenter;
             clientProxy = mainDisplayPresenter.getProxy();
+
+            // Required for JavaFX to load the UI
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/ui/MusicPlayer.fxml"));
             loader.setController(this);
             view = loader.load();
@@ -153,7 +208,12 @@ public class MusicPlayerPresenter {
         }
     }
 
-    public void togglePlay() throws Exception {
+    /**
+     * Toggles between playing and pausing the song.
+     *
+     * @throws Exception - Required for the BasicPlayer
+     */
+    private void togglePlay() throws Exception {
         if (!isPlaying) {
             if (!songFile.isEmpty() && myPlayer.getStatus() == BasicPlayer.PAUSED) {
                 myPlayer.resume();
@@ -169,14 +229,19 @@ public class MusicPlayerPresenter {
             try {
                 myPlayer.pause();
                 isPlaying = false;
-                return;
             } catch (BasicPlayerException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    public void setSongFile(String songFile, ProxyInterface proxy) {
+    /**
+     * Retrieves a song request and opens that request in the MusicPlayer.
+     *
+     * @param songFile - Name of the song/file to be played
+     * @param proxy    - Proxy that the client is connected through
+     */
+    private void setSongFile(String songFile, ProxyInterface proxy) {
         try {
             this.songFile = songFile;
             myPlayer.open(new BufferedInputStream(new CECS327InputStream(Long.valueOf(songFile), proxy)));
@@ -185,11 +250,13 @@ public class MusicPlayerPresenter {
         }
     }
 
-    public Node getView() {
-        return view;
-    }
-
-    // play song
+    /**
+     * Receives a play request for a selected song and tries to set it for playing.
+     *
+     * @param sender   - Homepage sending the request for play
+     * @param song     - Song selected for playing
+     * @param playlist - Playlist containing the song to be played
+     */
     public void receivePlaylistItemPlayRequest(HomepagePresenter sender, CollectionLightWeight song, Playlist playlist) {
         //this.playlist = playlist.getSongList();
         this.currentSong = song;
@@ -207,12 +274,22 @@ public class MusicPlayerPresenter {
         }
     }
 
+    /**
+     * Displays an error to the user that the selected song is not playable.
+     */
     private void displayNotPlayableError() {
         new Alert(Alert.AlertType.ERROR, "This song isn't in the playable library.", ButtonType.OK)
                 .showAndWait();
     }
 
+    /**
+     * Gets the index of the song as it is in the playlist
+     *
+     * @param song - Song object
+     * @return - Index of the song within the playlist; else -1
+     */
     private int findIndex(CollectionLightWeight song) {
+        // Null check
         if (playlist == null || playlist.size() < 1) {
             return -1;
         }
@@ -224,5 +301,9 @@ public class MusicPlayerPresenter {
             index++;
         }
         return index;
+    }
+
+    public Node getView() {
+        return view;
     }
 }

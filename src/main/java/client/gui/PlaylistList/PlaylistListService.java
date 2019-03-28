@@ -1,6 +1,13 @@
 package client.gui.PlaylistList;
 
+/**
+ * TODO
+ */
 public class PlaylistListService {
+
+    /**
+     * Singleton instance of the PlaylistList service
+     */
     private PlaylistListService instance;
 
     private PlaylistListService() {
