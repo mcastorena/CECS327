@@ -1,19 +1,27 @@
 package server.core;
 
+import server.chord.DFSCommand;
+import server.chord.RemoteInputFileStream;
 import server.model.Collection;
 import server.model.User;
 import server.util.Deserializer;
+import server.chord.DFS;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStreamReader;
+import java.util.*;
+
 
 public class Server {
 
     private static final int PORT_NUMBER = 2223;
+    private static final int P2P_START_PORT = 2225;
+    public static int NEXT_PORT = P2P_START_PORT + 1;
 
-    // TODO: move most of this static info to a new user session class?
+    private static int INIT_NUM_NODES = 5;
+    public static DFS dfs;
+
     static byte[] byteSearchResult;
     static byte[] bytePlaylists;
 
@@ -38,11 +46,51 @@ public class Server {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+        dfs = new DFS(P2P_START_PORT);
+
+        // Initialize chord with (n = INIT_NUM_NODES) nodes, need to sleep for the chord to stabalize
+        for(int i = 0; i < INIT_NUM_NODES - 1; i++)
+        {
+            Thread.sleep(1000);
+            DFS newdfs = new DFS(NEXT_PORT);
+            NEXT_PORT++;
+            newdfs.print();
+            newdfs.join("127.0.0.1", P2P_START_PORT);
+            newdfs.print();
+            Thread.sleep(1000);
+        }
+
+        // Add user.json and mp3's to chord if they are not already there
+        String metaFile = "users";
+        String dfsList = dfs.lists();
+        if(!dfsList.contains(metaFile))
+        {
+            //Timer timer = new Timer();
+            dfs.create("users");
+            dfs.append("users", new RemoteInputFileStream(Server.class.getResource("/server/user.json").getPath()));
+        }
+//        metaFile = "300848.mp3";
+//        if(!dfsList.contains(metaFile))
+//        {
+//            File dir = new File(Server.class.getResource("/server/music/").getPath());
+//            File[] files = Objects.requireNonNull(dir.listFiles(), "ERROR: Attempt to listFiles() from Music folder " +
+//                    "directory turned up NULL. Check to see that MUSIC_FOLDER points to a directory, not a file");
+//            for (File file : files) {
+//                if(file.getName() == metaFile) {
+//                    dfs.create(file.getName());
+//                    dfs.append(file.getName(), new RemoteInputFileStream(Server.class.getResource("/server/music/" + file.getName()).getPath()));
+//                }
+//            }
+//        }
+
+
         requestCache = new HashMap<>();
         d = new Deserializer();
+
         songList = d.getMusicDatabase();
         userList = d.deserializeUsers();
+
         for (User u : userList) {
             if (usersInfo.containsValue(u)) {
                 throw new IllegalStateException("Duplicate user found in usersInfo");
@@ -52,5 +100,15 @@ public class Server {
 
         ServerCommunicationProtocol scp = new ServerCommunicationProtocol(PORT_NUMBER);
         scp.start();
+
+
+        // DFS Interface
+        new Thread() {
+            public void run(){
+                try {
+                    new DFSCommand(P2P_START_PORT);
+                } catch(Exception e) {e.printStackTrace();}
+            }
+        }.start();
     }
 }

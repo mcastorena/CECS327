@@ -27,7 +27,7 @@ public class Resources {
      * The song release IDs present in the music directory.
      * Used for quick lookup of available music.
      */
-    private static HashSet<Integer> ownedIDs;
+    //private static HashSet<Integer> ownedIDs;
 
 
 //    private static List<User> userList;
@@ -58,11 +58,11 @@ public class Resources {
         Resources.userLibrary = userLibrary;
     }
 
-    public static HashSet<Integer> getOwnedIDs() {
-        return ownedIDs;
-    }
-
-    public static void setOwnedIDs(final HashSet<Integer> ownedIDs) {
-        Resources.ownedIDs = ownedIDs;
-    }
+//    public static HashSet<Integer> getOwnedIDs() {
+//        return ownedIDs;
+//    }
+//
+//    public static void setOwnedIDs(final HashSet<Integer> ownedIDs) {
+//        Resources.ownedIDs = ownedIDs;
+//    }
 }

@@ -5,7 +5,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
+import server.chord.RemoteInputFileStream;
 import server.model.*;
+import server.chord.DFS;
+import static server.core.Server.dfs;
 import org.apache.log4j.Logger;
 import server.model.Collection;
 
@@ -24,9 +27,9 @@ import java.util.*;
 
 public class Deserializer {
     private static final Logger LOGGER = Logger.getLogger(Deserializer.class);
-    public static final URL MUSIC_STREAM = Deserializer.class.getResource("/server/music.json");
-    public static final URL USER_STREAM = Deserializer.class.getResource("/server/user.json");
-    public static final String MUSIC_FOLDER = Deserializer.class.getResource("/server/music/").getPath();
+    //public static final URL MUSIC_STREAM = Deserializer.class.getResource("/server/music.json");
+    //public static final URL USER_STREAM = Deserializer.class.getResource("/server/user.json");
+    //public static final String MUSIC_FOLDER = Deserializer.class.getResource("/server/music/").getPath();
 
     /**
      * A list of ALL songs (from the Music JSON).
@@ -37,7 +40,7 @@ public class Deserializer {
      * A container of references for PLAYABLE songs
      * (i.e. the song's mp3 file exists in the music directory).
      */
-    private HashMap<Integer, String> playableSongs; // key: song release ID, value: mp3 file name
+    //private HashMap<Integer, String> playableSongs; // key: song release ID, value: mp3 file name
 
     /**
      * A dictionary of the user's music library (as Collection objects).
@@ -48,46 +51,44 @@ public class Deserializer {
      * The song release IDs present in the music directory.
      * Used for quick lookup of available music.
      */
-    private HashSet<Integer> ownedIDs;
+    //private HashSet<Integer> ownedIDs;
 
     /**
      * Initializes the Deserializer and loads the music files from the filesystem.
      */
     public Deserializer() {
         userLibrary = new HashMap<>();
-        ownedIDs = new HashSet<>();
+        //ownedIDs = new HashSet<>();
 
         musicDatabase = deserializeSongsFromJson();
-        loadOwnedMusicIDs();
+        //loadOwnedMusicIDs();
         initUserLibrary();
-
-        // userLibrary = setUserLibrary();
     }
 
-    /**
-     * Loads the music mp3 files that exist on the computer.
-     */
-    private void loadOwnedMusicIDs() {
-        File dir = new File(MUSIC_FOLDER.toString());
-        File[] files = Objects.requireNonNull(dir.listFiles(), "ERROR: Attempt to listFiles() from Music folder " +
-                "directory turned up NULL. Check to see that MUSIC_FOLDER points to a directory, not a file");
-        for (File file : files) {
-            String filename = trimMp3Extension(file.getName());
+//    /**
+//     * Loads the music mp3 files that exist on the computer.
+//     */
+//    private void loadOwnedMusicIDs() {
+//        File dir = new File(MUSIC_FOLDER.toString());
+//        File[] files = Objects.requireNonNull(dir.listFiles(), "ERROR: Attempt to listFiles() from Music folder " +
+//                "directory turned up NULL. Check to see that MUSIC_FOLDER points to a directory, not a file");
+//        for (File file : files) {
+//            String filename = trimMp3Extension(file.getName());
+//
+//            if (filename.matches("^\\d{5,}$"))
+//                ownedIDs.add(Integer.parseInt(filename));
+//            else
+//                throw new IllegalStateException("Invalid file format; Music file must be an mp3 with > 4 character");
+//        }
+//
+//    }
 
-            if (filename.matches("^\\d{5,}$"))
-                ownedIDs.add(Integer.parseInt(filename));
-            else
-                throw new IllegalStateException("Invalid file format; Music file must be an mp3 with > 4 character");
-        }
-
-    }
-
-    private String trimMp3Extension(String filename) {
-        if(filename.substring(filename.length()-3).equals("mp3"))
-            return filename.substring(0, filename.length() - 4);
-        // TODO: technically fails if some file has any other extension, since it doesnt trim it
-        return filename;
-    }
+//    private String trimMp3Extension(String filename) {
+//        if(filename.substring(filename.length()-3).equals("mp3"))
+//            return filename.substring(0, filename.length() - 4);
+//        // TODO: technically fails if some file has any other extension, since it doesnt trim it
+//        return filename;
+//    }
 
     /**
      * Returns and stores a dictionary of songs that are playable
@@ -102,22 +103,38 @@ public class Deserializer {
 
         try {
             Gson gson = new Gson();
-            BufferedReader br = new BufferedReader(new InputStreamReader(MUSIC_STREAM.openStream()));
+            //BufferedReader br = new BufferedReader(new InputStreamReader(MUSIC_STREAM.openStream()));
+            String dfsList = dfs.lists();
+            Scanner dfsFileScan = new Scanner(dfsList);
+            while(dfsFileScan.hasNext()) {
+                String fileName = dfsFileScan.next();
 
-            JsonArray jsonArray = gson.fromJson(br, JsonArray.class);
+                if(fileName.equalsIgnoreCase("music")) {
+                    System.out.println(fileName);
+                    int pageNumber = 0;
+                    RemoteInputFileStream rifs;
+                    while((rifs = dfs.read(fileName, pageNumber)) != null)
+                    {
+                        rifs.connect();
+                        InputStreamReader br = new InputStreamReader(rifs);
+                        JsonArray jsonArray = gson.fromJson(br, JsonArray.class);
 
-            for (JsonElement jsonElement : jsonArray) {
-                JsonObject jsonObject = jsonElement.getAsJsonObject();
-                Release release = gson.fromJson(jsonObject.get("release"), Release.class);
-                Artist artist = gson.fromJson(jsonObject.get("artist"), Artist.class);
-                Song song = gson.fromJson(jsonObject.get("song"), Song.class);
+                        for (JsonElement jsonElement : jsonArray) {
+                            JsonObject jsonObject = jsonElement.getAsJsonObject();
+                            Release release = gson.fromJson(jsonObject.get("release"), Release.class);
+                            Artist artist = gson.fromJson(jsonObject.get("artist"), Artist.class);
+                            Song song = gson.fromJson(jsonObject.get("song"), Song.class);
 
-                songs.add(new Collection(release, artist, song));
+                            songs.add(new Collection(release, artist, song));
+                        }
+                        pageNumber++;
+                    }
+                }
             }
-
             return songs;
-        } catch (IOException e) {
+        } catch (Exception e) {
             LOGGER.error("ERROR: deserializeSongsFromJson >> " + e);
+            e.printStackTrace();
             return null;
         }
     }
@@ -127,9 +144,9 @@ public class Deserializer {
      */
     private void initUserLibrary() {
         for (Collection c : musicDatabase) {
-            if (ownedIDs.contains((int) c.getId())) {
+            //if (ownedIDs.contains((int) c.getId())) {
                 userLibrary.put((int) c.getId(), c);
-            }
+            //}
         }
     }
 
@@ -142,7 +159,10 @@ public class Deserializer {
     public List<User> deserializeUsers() {
         List<User> users = new ArrayList<>();
         try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(USER_STREAM.openStream()));
+            //BufferedReader br = new BufferedReader(new InputStreamReader(USER_STREAM.openStream()));
+            RemoteInputFileStream rifs = dfs.read("users", 0);
+            rifs.connect();
+            BufferedReader br = new BufferedReader(new InputStreamReader((InputStream) rifs));
             JsonReader jr = new JsonReader(br);
 
             jr.beginObject(); // file start '{'
@@ -243,9 +263,9 @@ public class Deserializer {
      *
      * @return
      */
-    public HashSet<Integer> getOwnedIDs() {
-        return ownedIDs;
-    }
+//    public HashSet<Integer> getOwnedIDs() {
+//        return ownedIDs;
+//    }
 
     /**
      * Returns a dictionary of songs that CAN be played
@@ -255,9 +275,9 @@ public class Deserializer {
      *
      * @return
      */
-    public HashMap<Integer, String> getPlayableSongs() {
-        return playableSongs;
-    }
+//    public HashMap<Integer, String> getPlayableSongs() {
+//        return playableSongs;
+//    }
 
     /**
      * Returns a dictionary of song information.
