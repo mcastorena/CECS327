@@ -106,7 +106,7 @@ public class Server {
         new Thread() {
             public void run(){
                 try {
-                    new DFSCommand(P2P_START_PORT);
+                    new DFSCommand();
                 } catch(Exception e) {e.printStackTrace();}
             }
         }.start();

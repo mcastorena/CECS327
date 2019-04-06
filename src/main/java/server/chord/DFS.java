@@ -418,8 +418,8 @@ public class DFS
                 }
 
                 metadata.file.get(i).incrementRef(pageNumber);                              // Increment file and page refCount
-                metadata.file.get(i).readTS = date.getTime();                               // Update file read timestamp
-                metadata.file.get(i).pages.get(pageNumber).readTS = date.getTime();         // Update page read timestamp
+                metadata.file.get(i).readTS = new Date().getTime();                              // Update file read timestamp
+                metadata.file.get(i).pages.get(pageNumber).readTS = new Date().getTime();         // Update page read timestamp
                 writeMetaData(metadata);                                                    // Update metadata with refCount and timestamps
                 find = true;
                 break;
@@ -472,8 +472,8 @@ public class DFS
                     return null;
                 }
                 tailPage = myFile.pages.size()-1;
-                metadata.file.get(i).readTS = date.getTime();                               // Update file read timestamp
-                metadata.file.get(i).pages.get(tailPage).readTS = date.getTime();             // Update page read timestamp
+                metadata.file.get(i).readTS = new Date().getTime();                              // Update file read timestamp
+                metadata.file.get(i).pages.get(tailPage).readTS = new Date().getTime();             // Update page read timestamp
                 metadata.file.get(i).incrementRef(tailPage);                                // Increment file and page referenceCount
                 writeMetaData(metadata);                                                    // Update metadata with new RefCount and timestamps
                 find = true;
@@ -530,7 +530,52 @@ public class DFS
             peer.put(pageGUID, data);
         }else return;
     }
-    
+
+    /**
+     * Appends a string marked by single quotes (') as a page to the target file
+     * @param filename The file to add a page to.
+     * @param text The text to append.
+     * @throws Exception
+     */
+    public void append(String filename, String text) throws Exception {
+        FilesJson metadata = readMetaData();
+
+        FileJson target = find(metadata.getFileList(), filename);
+        if (target != null) {
+            long timestamp = new Date().getTime();
+            long pageGUID = md5(filename + timestamp);
+            long text_len = (long)text.getBytes("UTF-8").length;
+
+            PagesJson page = new PagesJson(pageGUID, text_len);
+
+            target.writeTS = timestamp;                 // Update write timestamp
+            target.addPage(page, text_len);     // Add a new page to the file
+            target.incrementRef();
+
+            ChordMessageInterface peer = chord.locateSuccessor(pageGUID);
+            peer.put(pageGUID, text);                   // Store the file on the Chord
+
+            writeMetaData(metadata);
+        }
+        else {
+            System.out.println("File '" + filename + "' not found.");
+        }
+    }
+
+    /**
+     * Helper method to find a filename in the Metadata.
+     * @param collection Metadata's file list
+     * @param filename The file filename
+     * @return
+     */
+    private FileJson find(List<FileJson> collection, String filename) {
+        for (var item : collection) {
+            if (item.name.equals(filename)) {
+                return item;
+            }
+        }
+        return null;
+    }
 }
 
 

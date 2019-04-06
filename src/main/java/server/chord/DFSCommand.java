@@ -2,6 +2,8 @@ package server.chord;
 import java.io.*;
 import java.rmi.RemoteException;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static server.core.Server.dfs;
 import static server.core.Server.NEXT_PORT;
@@ -18,81 +20,99 @@ public class DFSCommand
 //            System.out.println("Joining "+ portToJoin);
 //            dfs.join("127.0.0.1", portToJoin);
 //        }
-    public DFSCommand(int startPort) throws Exception {
+    public DFSCommand() throws Exception {
 
         BufferedReader buffer=new BufferedReader(new InputStreamReader(System.in));
         String line = buffer.readLine();  
         while (!line.equals("quit"))
         {
             String[] result = line.split("\\s");
-            if (result[0].equals("join"))  //&& result.length > 1)
-            {
-                // Add a new node to the chord
-                dfs = new DFS(NEXT_PORT);
+            switch(result[0]) {
+                case "join":
+                    // Add a new node to the chord
+                    if (result.length == 1){
+                        try {
+                            dfs = new DFS(NEXT_PORT);
 
-                dfs.join("127.0.0.1", NEXT_PORT - 1);
-                NEXT_PORT++;
-                //dfs.join("127.0.0.1", Integer.parseInt(result[1]));
-            }
-            if (result[0].equals("print"))
-            {
-                dfs.print();     
-            }
-            if (result[0].equals("leave"))
-            {
-                dfs.leave();
-            }
+                            dfs.join("127.0.0.1", NEXT_PORT - 1);
+                            NEXT_PORT++;
+                            //dfs.join("127.0.0.1", Integer.parseInt(result[1]));
+                        } catch (NumberFormatException e) {
+                            System.out.println("Error - Second argument must be a port number.");
+                        }
+                    }
+                case "print":
+                    dfs.print();
+                    break;
 
-            // User interface:
-            // join, ls, touch, delete, read, tail, head, append, move
-            if (result[0].equals("ls"))
-            {
-                System.out.println(dfs.lists());
-            }
-            if (result[0].equals("touch"))
-            {
-                dfs.create(result[1]);                  // User must specify file name
-            }
-            if (result[0].equals("delete"))
-            {
-                dfs.delete(result[1]);                  // User must specify file name
-            }
-            if (result[0].equals("read"))
-            {
-                //dfs.read(result[1], Integer.parseInt(result[2]));   // User must specify file name and page number
-                RemoteInputFileStream r = dfs.read(result[1], Integer.parseInt(result[2]));
-                r.connect();
-                Scanner scan = new Scanner(r);
-                while(scan.hasNext()) {
-                    String payload = scan.nextLine();
-                    System.out.println("Tail:\t" + payload);
-                }
-            }
-            if (result[0].equals("tail"))
-            {
-                RemoteInputFileStream r = dfs.tail(result[1]);                    // User must specify file name
-                r.connect();
-                Scanner scan = new Scanner(r);
-                scan.useDelimiter("\\A");
-                String payload = scan.next();
-                System.out.println("Tail:\t"+payload);
-            }
-            if (result[0].equals("head"))
-            {
-                RemoteInputFileStream r = dfs.head(result[1]);                    // User must specify file name
-                r.connect();
-                Scanner scan = new Scanner(r);
-                scan.useDelimiter("\\A");
-                String payload = scan.next();
-                System.out.println("Head:\t"+payload);
-            }
-            if (result[0].equals("append"))
-            {
-                dfs.append(result[1], new RemoteInputFileStream(result[2]));        // User must specify filename they want to append data to and filepath of the data to be appended
-            }
-            if (result[0].equals("move"))
-            {
-                dfs.move(result[1], result[2]);         // User must specify file to be edited and its new name
+                case "leave":
+                    dfs.leave();
+                    break;
+
+                case "ls":
+                    System.out.println(dfs.lists());
+                    break;
+
+                case "touch":
+                    if (result.length == 2)
+                        dfs.create(result[1]);                  // User must specify a fileList name
+                    break;
+
+                case "delete":
+                    if (result.length == 2)
+                        dfs.delete(result[1]);                  // User must specify fileList name
+                    break;
+
+                case "read":
+                    if (result.length == 3) {
+                        try {
+                            var data = dfs.read(result[1], Integer.parseInt(result[2]));   // User must specify fileList name and page number
+//                            data.connect();
+//                            while (data.available() > 0) {
+//                                System.out.print(data.readNBytes(20,0));
+//                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println("Error - Second argument must be a page number.");
+                        }
+                    }
+                    break;
+
+                case "tail":
+                    if (result.length == 2) {
+                        dfs.tail(result[1]);                    // User must specify fileList name
+                    }
+                    break;
+
+                case "head":
+                    if (result.length == 2) {
+                        dfs.head(result[1]);                    // User must specify fileList name
+                    }
+                    break;
+
+                case "append":
+                    if (result.length == 3) {
+                        // Append text by enclosing in single quotes [']
+                        if (result[2].matches("^'(.+?)'$")) {
+                            Pattern pattern = Pattern.compile("^'(.+?)'$");
+                            Matcher matcher = pattern.matcher(result[2]);
+                            matcher.find();
+                            String text = matcher.group(1);
+
+                            dfs.append(result[1], text); // Appends text
+                        } else
+                            dfs.append(result[1], new RemoteInputFileStream(result[2]));        // User must specify filename they want to append data to and filepath of the data to be appended
+                    }
+                    break;
+
+                case "move":
+                    if (result.length == 3) {
+                        dfs.move(result[1], result[2]);         // User must specify fileList to be edited and its new name
+                    }
+                    break;
+
+                default:
+                    System.out.println("Error - Not a valid command.");
+                    break;
             }
 
             line=buffer.readLine();  
