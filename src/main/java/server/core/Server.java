@@ -87,10 +87,18 @@ public class Server {
 
             int i = 0;
             for (var chunk : chunks) {
-                String jsonStr = gson.toJson(chunk);
-                dfs.append(testfile, jsonStr);
+                String jsonStr = null;
+                try {
+                    jsonStr = gson.toJson(chunk);
+                    dfs.append(testfile, jsonStr);
 
-                System.out.println(String.format("[%d/%d]", ++i, chunks.size()));
+                    System.out.println(String.format("[%d/%d]", ++i, chunks.size()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println();
+                } finally {
+
+                }
             }
         }
 //        metaFile = "300848.mp3";
