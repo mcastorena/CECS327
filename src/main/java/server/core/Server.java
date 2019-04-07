@@ -85,9 +85,12 @@ public class Server {
                             Server.class.getResource("/server/music.json").getPath(),
                             100);
 
+            int i = 0;
             for (var chunk : chunks) {
                 String jsonStr = gson.toJson(chunk);
                 dfs.append(testfile, jsonStr);
+
+                System.out.println(String.format("[%d/%d]", ++i, chunks.size()));
             }
         }
 //        metaFile = "300848.mp3";
