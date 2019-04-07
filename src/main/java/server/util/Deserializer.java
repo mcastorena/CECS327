@@ -1,9 +1,6 @@
 package server.util;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
 import server.chord.RemoteInputFileStream;
 import server.model.*;
@@ -116,9 +113,31 @@ public class Deserializer {
                     while((rifs = dfs.read(fileName, pageNumber)) != null)
                     {
                         rifs.connect();
-                        InputStreamReader br = new InputStreamReader(rifs);
-                        JsonArray jsonArray = gson.fromJson(br, JsonArray.class);
 
+                        StringBuilder jsonStr = new StringBuilder();
+                        while (rifs.available() > 0) {
+                            Stopwatch.start();
+                            byte b[] = new byte[65536];
+                            rifs.read(b, 0, 65536);
+                            String s = new String(b);
+                            jsonStr.append(s);
+                            Stopwatch.time();
+                        }
+
+                        JsonReader reader = new JsonReader(new StringReader(jsonStr.toString()));
+                        reader.setLenient(true);
+
+//                            Stopwatch.start();
+//                        InputStreamReader br = new InputStreamReader(rifs);
+//                            Stopwatch.time();
+//                            Stopwatch.start();
+//                        JsonArray jsonArray = gson.fromJson(br, JsonArray.class);
+//                            Stopwatch.time();
+
+
+                        JsonArray jsonArray = gson.fromJson(reader, JsonArray.class);
+
+                            Stopwatch.start();
                         for (JsonElement jsonElement : jsonArray) {
                             JsonObject jsonObject = jsonElement.getAsJsonObject();
                             Release release = gson.fromJson(jsonObject.get("release"), Release.class);
@@ -127,6 +146,15 @@ public class Deserializer {
 
                             songs.add(new Collection(release, artist, song));
                         }
+                            Stopwatch.time();
+
+//                            while (rifs.available() > 0) {
+//                                Stopwatch.start();
+//                                byte b[] = new byte[65536];
+//                                rifs.read(b, 0, 60000);
+//                                String s = new String(b);
+//                                Stopwatch.time();
+//                            }
                         pageNumber++;
                     }
                 }
@@ -289,4 +317,5 @@ public class Deserializer {
     public HashMap<Integer, Collection> getUserLibrary() {
         return userLibrary;
     }
+
 }
