@@ -90,7 +90,7 @@ public class Server {
                 String jsonStr = null;
                 try {
                     jsonStr = gson.toJson(chunk);
-                    dfs.append(testfile, jsonStr);
+//                    dfs.append(testfile, jsonStr);
 
                     System.out.println(String.format("[%d/%d]", ++i, chunks.size()));
                 } catch (Exception e) {

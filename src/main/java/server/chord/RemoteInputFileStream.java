@@ -203,5 +203,14 @@ public class RemoteInputFileStream extends InputStream implements Serializable {
         return total - pos;
     }
 
+    /**
+     * Generates threads to allow caller to block
+     * @param task
+     * @return
+     */
+    public Thread getThread(Runnable task) {
+        return new Thread(task);
+    }
+
 
 }
