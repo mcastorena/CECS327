@@ -255,6 +255,7 @@ public class DFS
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
         // Try to read metadata if it does not exist create a new physical file for it
+        String strMetaData = null;
         try {
             //System.out.println("Read metadata starting");
             ChordMessageInterface peer = chord.locateSuccessor(guid);
@@ -262,10 +263,11 @@ public class DFS
             metadataraw.connect();
             Scanner scan = new Scanner(metadataraw);
             scan.useDelimiter("\\A");
-            String strMetaData = scan.next();
+            strMetaData = scan.next();
             // System.out.println("Strmetadata: "+strMetaData);
             filesJson= gson.fromJson(strMetaData, FilesJson.class);
-        } catch (NoSuchElementException ex)
+        }
+        catch (NoSuchElementException ex)
         {
             File metadata = new File(this.chord.prefix+guid);       // Create file object with filepath
             metadata.createNewFile();                                         // Create the physical file
@@ -277,6 +279,9 @@ public class DFS
             // Write data to metadata file
             writeMetaData(filesJson);
 
+        }
+        catch (Exception e) {
+            e.printStackTrace();
         }
         return filesJson;
     }
