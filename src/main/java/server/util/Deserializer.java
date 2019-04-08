@@ -106,39 +106,21 @@ public class Deserializer {
             while(dfsFileScan.hasNext()) {
                 String fileName = dfsFileScan.next();
 
-                if(fileName.equalsIgnoreCase("music")) {
+                if(fileName.equalsIgnoreCase("musicChunks")) {
                     System.out.println(fileName);
+
                     int pageNumber = 0;
-                    RemoteInputFileStream rifs;
-                    while((rifs = dfs.read(fileName, pageNumber)) != null)
-                    {
-                        rifs.connect();
+                    byte bytes[];
+                    JsonArray bigArr = new JsonArray();
+                    // Piece together the music.json from each page (as a byte array) in DFS
+                    while ((bytes = dfs.read(fileName, pageNumber, 23-2392)) != null) {
+                        String jsonStr = new String(bytes);
+                        JsonArray smallArr = gson.fromJson(new JsonReader(new StringReader(jsonStr)), JsonArray.class);
 
-                        StringBuilder jsonStr = new StringBuilder();
-                        while (rifs.available() > 0) {
-                            Stopwatch.start();
-                            byte b[] = new byte[65536];
-                            rifs.read(b, 0, 65536);
-                            String s = new String(b);
-                            jsonStr.append(s);
-                            Stopwatch.time();
-                        }
+                        for (var element : smallArr)
+                            bigArr.add(element);
 
-                        JsonReader reader = new JsonReader(new StringReader(jsonStr.toString()));
-                        reader.setLenient(true);
-
-//                            Stopwatch.start();
-//                        InputStreamReader br = new InputStreamReader(rifs);
-//                            Stopwatch.time();
-//                            Stopwatch.start();
-//                        JsonArray jsonArray = gson.fromJson(br, JsonArray.class);
-//                            Stopwatch.time();
-
-
-                        JsonArray jsonArray = gson.fromJson(reader, JsonArray.class);
-
-                            Stopwatch.start();
-                        for (JsonElement jsonElement : jsonArray) {
+                        for (JsonElement jsonElement : bigArr) {
                             JsonObject jsonObject = jsonElement.getAsJsonObject();
                             Release release = gson.fromJson(jsonObject.get("release"), Release.class);
                             Artist artist = gson.fromJson(jsonObject.get("artist"), Artist.class);
@@ -146,24 +128,17 @@ public class Deserializer {
 
                             songs.add(new Collection(release, artist, song));
                         }
-                            Stopwatch.time();
-
-//                            while (rifs.available() > 0) {
-//                                Stopwatch.start();
-//                                byte b[] = new byte[65536];
-//                                rifs.read(b, 0, 60000);
-//                                String s = new String(b);
-//                                Stopwatch.time();
-//                            }
                         pageNumber++;
                     }
                 }
             }
-            return songs;
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             LOGGER.error("ERROR: deserializeSongsFromJson >> " + e);
             e.printStackTrace();
-            return null;
+        }
+        finally {
+            return songs;
         }
     }
 
