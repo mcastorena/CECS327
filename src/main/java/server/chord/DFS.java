@@ -9,6 +9,9 @@ import java.security.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import server.core.Server;
+import static server.core.Server.d;
+
 import java.io.InputStream;
 
 
@@ -528,6 +531,12 @@ public class DFS
             ChordMessageInterface peer = chord.locateSuccessor(pageGUID);
             writeMetaData(metadata);                                                        // Update metadata for write and refCount
             peer.put(pageGUID, data);
+            if(fileName.contains("music")) {
+                Thread.sleep(2000);
+                d.updateMusicOnFileAdd();
+                Server.updateSongList();
+                System.out.println("Append Complete");
+            }
         }else return;
     }
 

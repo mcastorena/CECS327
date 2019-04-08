@@ -289,4 +289,13 @@ public class Deserializer {
     public HashMap<Integer, Collection> getUserLibrary() {
         return userLibrary;
     }
+
+    /**
+     * Updates the musicdatabase, to be called when file added to DFS.
+     */
+    public void updateMusicOnFileAdd()
+    {
+        musicDatabase = deserializeSongsFromJson();
+        initUserLibrary();
+    }
 }

@@ -25,7 +25,7 @@ public class Server {
     static byte[] byteSearchResult;
     static byte[] bytePlaylists;
 
-    static Deserializer d;
+    public static Deserializer d;
 
     static List<User> currentSessions = new ArrayList<>();
     public static List<User> userList;
@@ -36,7 +36,8 @@ public class Server {
     static Map<String, String> requestCache;
     
         // Used to update userList and usersInfo after a new user registers
-    static void update(){songList = d.getMusicDatabase();
+    static void update(){
+        songList = d.getMusicDatabase();
         userList = d.deserializeUsers();
         for (User u : userList) {
             if (usersInfo.containsValue(u)) {
@@ -44,6 +45,11 @@ public class Server {
             }
             usersInfo.put(u.getUsername()+u.getPassword(), u);
         }
+    }
+
+    public static void updateSongList()
+    {
+        songList = d.getMusicDatabase();
     }
 
     public static void main(String[] args) throws Exception {
