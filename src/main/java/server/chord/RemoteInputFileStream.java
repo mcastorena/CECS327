@@ -20,6 +20,10 @@ public class RemoteInputFileStream extends InputStream implements Serializable {
     public int port;
     public int total;
     public int pos;
+    public int lastRead = 0;
+    private int lastRead2;
+    private int index = 0;
+    public int numbytes;
     public InputStream input;
     public Semaphore sem;
     private static int BUFFER_LENGTH = 2 << 15;
@@ -83,7 +87,6 @@ public class RemoteInputFileStream extends InputStream implements Serializable {
             new Thread() {
                 public void run() {
                     try {
-                        //Thread.sleep(500);
                         Socket socket = serverSocket.accept();
                         OutputStream socketOutputStream = socket.getOutputStream();
                         FileInputStream is = new FileInputStream(pathName);
@@ -121,8 +124,12 @@ public class RemoteInputFileStream extends InputStream implements Serializable {
                 try
                 {
 
-                    Thread.sleep(total<2000?500:6000);
-                    input.read(nextBuf);
+                    Thread.sleep(total<10000?50:150); // Fill the buffer more
+                    numbytes = input.read(nextBuf);
+                    lastRead2 = lastRead; // Save the previous numbytes read so we know when to
+                                          // transfer nextbuf into buf.
+                    lastRead = numbytes + lastRead;
+                    //System.out.println("Read buffer " + numbytes);
                     sem.release();
                     //             System.out.println("Read buffer");
                 }
@@ -149,8 +156,8 @@ public class RemoteInputFileStream extends InputStream implements Serializable {
             pos = 0;
             return -1;
         }
-        int posmod = pos % BUFFER_LENGTH;
-        if (posmod == 0)
+        //int posmod = pos % BUFFER_LENGTH;
+        if (pos == 0 || pos == lastRead || pos == lastRead2)
         {
             try
             {
@@ -159,13 +166,15 @@ public class RemoteInputFileStream extends InputStream implements Serializable {
             {
                 System.out.println(exc);
             }
-            for (int i=0; i< BUFFER_LENGTH; i++)
+            for (int i=0; i< numbytes; i++)
                 buf[i] = nextBuf[i];
 
             getBuff(fragment);
             fragment++;
+            index = 0;
         }
-        int p = pos % BUFFER_LENGTH;
+        int p = index;
+        index++;
         pos++;
         return buf[p] & 0xff;
     }

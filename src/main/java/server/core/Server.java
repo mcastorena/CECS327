@@ -60,7 +60,7 @@ public class Server {
             newdfs.print();
             Thread.sleep(1000);
         }
-
+        Thread.sleep(2000);
         // Add user.json and mp3's to chord if they are not already there
         String metaFile = "users";
         String dfsList = dfs.lists();

@@ -50,6 +50,7 @@ public class Proxy implements ProxyInterface {
 
         System.out.println("Sending request: " + remoteMethodJO.toString());
         String strRet = communicate.sendRequest(remoteMethodJO.toString().trim(), callSemantic);
+        if(strRet == null) return null;
         System.out.println("Returning response from server to inputstream: " + strRet);
         String myReturn = strRet.trim();
 
