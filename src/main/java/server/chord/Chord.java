@@ -148,7 +148,7 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface
     public RemoteInputFileStream get(long guidObject) throws RemoteException {
         RemoteInputFileStream file = null;
         try {
-             file = new RemoteInputFileStream(prefix + guidObject);
+            file = new RemoteInputFileStream(prefix + guidObject);
         } catch (IOException e)
         {
             throw(new RemoteException("File does not exists"));
@@ -172,7 +172,7 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface
             inputStream.close();
         } catch (IOException e)
         {
-            throw(new RemoteException("File does not exists"));
+            throw(new RemoteException(String.format("File %s does not exists", prefix+guidObject)));
         }
         return buf;
     }
