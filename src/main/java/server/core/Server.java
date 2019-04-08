@@ -5,10 +5,12 @@ import com.google.gson.GsonBuilder;
 import server.chord.DFSCommand;
 import server.chord.RemoteInputFileStream;
 import server.model.Collection;
+import server.model.Profile;
 import server.model.User;
 import server.util.Deserializer;
 import server.chord.DFS;
 import server.util.MusicJsonSplitter;
+import server.util.Serializer;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -132,6 +134,14 @@ public class Server {
             }
             usersInfo.put(u.getUsername()+u.getPassword(), u);
         }
+
+        // Add a new user to user json, then update file in DFS
+        System.out.println("Adding a new User \"April\" (without check for unique name) to user json...");
+        var newUser = new User("April", "8", "2019");
+        newUser.setUserProfile(new Profile());
+        userList.add(newUser);
+        new Serializer().updateUsersJson(userList);
+        System.out.println("Done.");
 
         ServerCommunicationProtocol scp = new ServerCommunicationProtocol(PORT_NUMBER);
         scp.start();
