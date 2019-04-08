@@ -74,6 +74,7 @@ public class Server {
             dfs.create("users");
             dfs.append("users", new RemoteInputFileStream(Server.class.getResource("/server/user.json").getPath()));
         }
+        // Add music.json to the Chord if it's missing.
         String testfile = "musicChunks";
         if (!dfsList.contains(testfile)) {
             dfs.create(testfile);
@@ -85,21 +86,22 @@ public class Server {
                             Server.class.getResource("/server/music.json").getPath(),
                             100);
 
+            System.out.println("Adding pages to music.json...");
             int i = 0;
             for (var chunk : chunks) {
                 String jsonStr = null;
                 try {
                     jsonStr = gson.toJson(chunk);
-//                    dfs.append(testfile, jsonStr);
+                    dfs.append(testfile, jsonStr);
 
-                    System.out.println(String.format("[%d/%d]", ++i, chunks.size()));
+                    System.out.println(String.format("Creating page [%d/%d]", ++i, chunks.size()));
                 } catch (Exception e) {
                     e.printStackTrace();
-                    System.out.println();
                 } finally {
 
                 }
             }
+            System.out.println("Done");
         }
 //        metaFile = "300848.mp3";
 //        if(!dfsList.contains(metaFile))
@@ -117,21 +119,22 @@ public class Server {
 
 
         requestCache = new HashMap<>();
-//        d = new Deserializer();
+        System.out.println("Deserializing music.json and user.json...");
+        d = new Deserializer();
+        System.out.println("Done.");
 
-//        songList = d.getMusicDatabase();
-//        userList = d.deserializeUsers();
+        songList = d.getMusicDatabase();
+        userList = d.deserializeUsers();
 
-//        for (User u : userList) {
-//            if (usersInfo.containsValue(u)) {
-//                throw new IllegalStateException("Duplicate user found in usersInfo");
-//            }
-//            usersInfo.put(u.getUsername()+u.getPassword(), u);
-//        }
+        for (User u : userList) {
+            if (usersInfo.containsValue(u)) {
+                throw new IllegalStateException("Duplicate user found in usersInfo");
+            }
+            usersInfo.put(u.getUsername()+u.getPassword(), u);
+        }
 
         ServerCommunicationProtocol scp = new ServerCommunicationProtocol(PORT_NUMBER);
         scp.start();
-
 
 ////         DFS Interface
 //        new Thread() {
