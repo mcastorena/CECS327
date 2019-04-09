@@ -16,18 +16,17 @@ import java.util.Base64;
 public class PlaylistDispatcher extends Dispatcher implements DispatcherService {
     private static final int FRAGMENT_SIZE = 8192;
 
-    public PlaylistDispatcher()
-    {
+    public PlaylistDispatcher() {
 
     }
 
     /**
      * getSearchResultChunk: Gets a chunk of a given search result
+     *
      * @param fragment: The chunk corresponds to
-     * [fragment * FRAGMENT_SIZE, FRAGMENT_SIZE]
+     *                  [fragment * FRAGMENT_SIZE, FRAGMENT_SIZE]
      */
-    public String getPlaylistsChunk(Long fragment) throws IOException
-    {
+    public String getPlaylistsChunk(Long fragment) throws IOException {
         byte buf[] = new byte[FRAGMENT_SIZE];
 
         System.out.println("PlaylistDispatcher is getting chunk");
@@ -42,19 +41,18 @@ public class PlaylistDispatcher extends Dispatcher implements DispatcherService 
 
     /**
      * getPlaylistsSize: Gets a size of the byte array
+     *
      * @param userToken: The unique token of the user
      */
-    public Integer getPlaylistsSize(Integer userToken)
-    {
+    public Integer getPlaylistsSize(Integer userToken) {
         User currentSession = Server.currentSessions.get(userToken);
         Profile userProfile = currentSession.getUserProfile();
 
         JsonArray playlistListJA = new JsonArray();
-        for(Playlist p : userProfile.getIterablePlaylists()) {
+        for (Playlist p : userProfile.getIterablePlaylists()) {
             JsonObject playlistJO = new JsonObject();
             JsonArray singlePlaylist = new JsonArray();
-            for(Collection c : p.getSongList())
-            {
+            for (Collection c : p.getSongList()) {
                 JsonObject songJO = new JsonObject();
                 JsonObject singleSongElement = new JsonObject();
                 songJO.addProperty("idNum", c.getId());
@@ -72,7 +70,7 @@ public class PlaylistDispatcher extends Dispatcher implements DispatcherService 
         System.out.println(playlistListJA.toString());
 
         Server.bytePlaylists = playlistListJA.toString().getBytes();
-        return  Server.bytePlaylists.length;
+        return Server.bytePlaylists.length;
     }
 
     public String deletePlaylist(Integer userToken, String playlistName) throws IOException {

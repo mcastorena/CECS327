@@ -3,7 +3,6 @@ package server.data;
 import server.model.Collection;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
 public class Resources {
@@ -16,12 +15,12 @@ public class Resources {
      * A container of references for PLAYABLE songs
      * (i.e. the song's mp3 file exists in the music directory).
      */
-    private static HashMap<Integer,String> playableSongs; // key: song release ID, value: mp3 file name
+    private static HashMap<Integer, String> playableSongs; // key: song release ID, value: mp3 file name
 
     /**
      * A dictionary of the user's music library (as Collection objects).
      */
-    private static HashMap<Integer,Collection> userLibrary; // key: song release ID, value: corresponding Collection object
+    private static HashMap<Integer, Collection> userLibrary; // key: song release ID, value: corresponding Collection object
 
     /**
      * The song release IDs present in the music directory.
@@ -32,8 +31,6 @@ public class Resources {
 
 //    private static List<User> userList;
 //    protected static HashMap<String,User> userDictionary;
-
-
     public static List<Collection> getMusicDatabase() {
         return musicDatabase;
     }

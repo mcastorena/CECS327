@@ -1,9 +1,6 @@
 package server.util;
 
-import server.core.MyTask;
-
-import java.io.*;
-import java.nio.file.Paths;
+import java.io.FileInputStream;
 import java.util.Scanner;
 
 public class CodeTester {
@@ -27,7 +24,6 @@ public class CodeTester {
                 Scanner in = new Scanner(p);
                 in.useDelimiter("\\A");
                 System.out.println(in.next());
-
 
 
             }

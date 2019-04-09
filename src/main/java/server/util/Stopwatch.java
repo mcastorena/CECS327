@@ -19,7 +19,7 @@ public class Stopwatch {
 
     public static void time() {
         if (end == 0) stop();
-        System.out.println(end-start + "ms");
+        System.out.println(end - start + "ms");
         reset();
     }
 }

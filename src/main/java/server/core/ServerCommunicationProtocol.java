@@ -21,23 +21,23 @@ public class ServerCommunicationProtocol extends Thread {
     Dispatcher myDispatcher;
     private int portNumber;
 
-    ServerCommunicationProtocol(int num){
+    ServerCommunicationProtocol(int num) {
         this.portNumber = num;
     }
 
-    private void connect(){                        // portNumber must be > 1023
-        try{
+    private void connect() {                        // portNumber must be > 1023
+        try {
             mySocket = new DatagramSocket(this.portNumber);                             // Initialize socket
-            System.out.println("ServerSocket opened on port: "+ this.portNumber);
-        }catch (IOException e){
+            System.out.println("ServerSocket opened on port: " + this.portNumber);
+        } catch (IOException e) {
             System.out.println(e);
         }
     }
 
-    private void listen(){                                       // Opens client socket and listens for requests
+    private void listen() {                                       // Opens client socket and listens for requests
         System.out.println("Server listening.");
-        try{
-            while(true) {
+        try {
+            while (true) {
                 DatagramPacket requestPacket = new DatagramPacket(packetSize, packetSize.length);               // Initialize request packet
                 mySocket.receive(requestPacket);                                                                // Receive request packet
                 System.out.println("Client packet received: " + requestPacket);
@@ -53,11 +53,10 @@ public class ServerCommunicationProtocol extends Thread {
 
     @Override
     // Used to run Server and clients concurrently
-    public void run(){
+    public void run() {
         connect();
         listen();
     }
-
 
 
 }

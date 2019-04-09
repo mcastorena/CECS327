@@ -2,20 +2,19 @@ package server.core;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import server.chord.DFSCommand;
+import server.chord.DFS;
 import server.chord.RemoteInputFileStream;
 import server.model.Collection;
 import server.model.Profile;
 import server.model.User;
 import server.util.Deserializer;
-import server.chord.DFS;
 import server.util.MusicJsonSplitter;
 import server.util.Serializer;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class Server {
@@ -34,20 +33,21 @@ public class Server {
 
     static List<User> currentSessions = new ArrayList<>();
     public static List<User> userList;
-    public static HashMap<String,User> usersInfo = new HashMap<>();
+    public static HashMap<String, User> usersInfo = new HashMap<>();
 
     static List<Collection> songList;
 
     static Map<String, String> requestCache;
-    
-        // Used to update userList and usersInfo after a new user registers
-    static void update(){songList = d.getMusicDatabase();
+
+    // Used to update userList and usersInfo after a new user registers
+    static void update() {
+        songList = d.getMusicDatabase();
         userList = d.deserializeUsers();
         for (User u : userList) {
             if (usersInfo.containsValue(u)) {
                 throw new IllegalStateException("Duplicate user found in usersInfo");
             }
-            usersInfo.put(u.getUsername()+u.getPassword(), u);
+            usersInfo.put(u.getUsername() + u.getPassword(), u);
         }
     }
 
@@ -55,8 +55,7 @@ public class Server {
         dfs = new DFS(P2P_START_PORT);
 
         // Initialize chord with (n = INIT_NUM_NODES) nodes, need to sleep for the chord to stabalize
-        for(int i = 0; i < INIT_NUM_NODES - 1; i++)
-        {
+        for (int i = 0; i < INIT_NUM_NODES - 1; i++) {
             Thread.sleep(1000);
             DFS newdfs = new DFS(NEXT_PORT);
             NEXT_PORT++;
@@ -70,8 +69,7 @@ public class Server {
         // Add user.json and mp3's to chord if they are not already there
         String metaFile = "users";
         String dfsList = dfs.lists();
-        if(!dfsList.contains(metaFile))
-        {
+        if (!dfsList.contains(metaFile)) {
             //Timer timer = new Timer();
             dfs.create("users");
             dfs.append("users", new RemoteInputFileStream(Server.class.getResource("/server/user.json").getPath()));
@@ -132,7 +130,7 @@ public class Server {
             if (usersInfo.containsValue(u)) {
                 throw new IllegalStateException("Duplicate user found in usersInfo");
             }
-            usersInfo.put(u.getUsername()+u.getPassword(), u);
+            usersInfo.put(u.getUsername() + u.getPassword(), u);
         }
 
         // Add a new user to user json, then update file in DFS

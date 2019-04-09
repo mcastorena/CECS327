@@ -18,11 +18,11 @@ public class SearchResultDispatcher extends Dispatcher implements DispatcherServ
 
     /**
      * getSearchResultChunk: Gets a chunk of a given search result
+     *
      * @param fragment: The chunk corresponds to
-     * [fragment * FRAGMENT_SIZE, FRAGMENT_SIZE]
+     *                  [fragment * FRAGMENT_SIZE, FRAGMENT_SIZE]
      */
-    public String getSearchResultChunk(Long fragment) throws IOException
-    {
+    public String getSearchResultChunk(Long fragment) throws IOException {
         byte buf[] = new byte[FRAGMENT_SIZE];
 
         System.out.println("SearchResultDispatcher is getting chunk");
@@ -39,8 +39,7 @@ public class SearchResultDispatcher extends Dispatcher implements DispatcherServ
      * getSize: Gets a size of the byte array
      * @param query: the search query from user
      */
-    public Integer getSize(String query)
-    {
+    public Integer getSize(String query) {
         //this.query = query;
         SearchResult searchResult = Search.search(query, Server.songList);
         List<Collection> songResults = searchResult.getSongResultList();
@@ -48,8 +47,7 @@ public class SearchResultDispatcher extends Dispatcher implements DispatcherServ
         // Convert search result to json
         JsonArray sResult = new JsonArray();
 
-        for (Collection c : songResults)
-        {
+        for (Collection c : songResults) {
             JsonObject singleSong = new JsonObject();
             singleSong.addProperty("idNum", c.getId());
             singleSong.addProperty("songName", c.getSongTitle());
@@ -60,6 +58,6 @@ public class SearchResultDispatcher extends Dispatcher implements DispatcherServ
         System.out.println(sResult.toString());
 
         Server.byteSearchResult = sResult.toString().getBytes();
-        return  Server.byteSearchResult.length;
+        return Server.byteSearchResult.length;
     }
 }

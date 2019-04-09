@@ -13,11 +13,12 @@ public class LoginDispatcher extends Dispatcher implements DispatcherService {
 
     /**
      * login: return login token if authorized
+     *
      * @param username: the username from client
      * @param password: the password from client
      */
     public String login(String username, String password) throws IOException {
-        User user = Server.usersInfo.get(username+password);
+        User user = Server.usersInfo.get(username + password);
 
         if (user != null) {
             // User is valid, give token

@@ -15,12 +15,13 @@ public class MusicJsonSplitter {
      * Returns a list of 'chunks' of the music Json file;
      * Each chunk holds a tenth of all the data in the file (release,
      * song, artist).
+     *
      * @param filename
      * @param numChunks The number of chunks to split the file into.
      * @return
      * @throws IOException
      */
-    public static List<JsonArray> getMusicJsonChunks (String filename, int numChunks) throws IOException {
+    public static List<JsonArray> getMusicJsonChunks(String filename, int numChunks) throws IOException {
         if (numChunks <= 0)
             throw new NumberFormatException("Number of chunks must at least be 1.");
 
@@ -32,7 +33,7 @@ public class MusicJsonSplitter {
         // split music.json into tenths
         for (int i = 0; i < songArray.size(); i++) {
             // create a new "tenth" and add it to the list
-            if (i % (int)(songArray.size() / numChunks) == 0) {
+            if (i % (int) (songArray.size() / numChunks) == 0) {
                 temp = new JsonArray();
                 songArrayChunks.add(temp);
             }

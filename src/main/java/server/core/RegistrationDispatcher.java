@@ -1,4 +1,5 @@
 package server.core;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -18,6 +19,7 @@ public class RegistrationDispatcher extends Dispatcher implements DispatcherServ
 
     /**
      * register: return successful registration message if info is valid
+     *
      * @param username: the username from client
      * @param password: the password from client
      */
@@ -32,7 +34,7 @@ public class RegistrationDispatcher extends Dispatcher implements DispatcherServ
             Path path = Paths.get(URI.create(userURL.getPath()));
 
             // Read in current Json file
-            String userJSON =  new String(Files.readAllBytes(path), "UTF-8");
+            String userJSON = new String(Files.readAllBytes(path), "UTF-8");
             JsonObject userFile = new Gson().fromJson(userJSON, JsonObject.class);
 
             // Get userlist
@@ -59,11 +61,11 @@ public class RegistrationDispatcher extends Dispatcher implements DispatcherServ
 
             // Write to file
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            try{
+            try {
                 FileWriter file = new FileWriter(String.valueOf(path));
                 gson.toJson(userFile, file);
                 file.close();
-            }catch(Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             // Call server update

@@ -1,17 +1,21 @@
 package server.util;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
+import org.apache.log4j.Logger;
 import server.chord.RemoteInputFileStream;
 import server.model.*;
-import server.chord.DFS;
-import static server.core.Server.dfs;
-import org.apache.log4j.Logger;
-import server.model.Collection;
 
 import java.io.*;
-import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Scanner;
+
+import static server.core.Server.dfs;
 
 /**
  * This class deserializes both the Music and User JSON into POJOs.
@@ -103,17 +107,17 @@ public class Deserializer {
             //BufferedReader br = new BufferedReader(new InputStreamReader(MUSIC_STREAM.openStream()));
             String dfsList = dfs.lists();
             Scanner dfsFileScan = new Scanner(dfsList);
-            while(dfsFileScan.hasNext()) {
+            while (dfsFileScan.hasNext()) {
                 String fileName = dfsFileScan.next();
 
-                if(fileName.equalsIgnoreCase("musicChunks")) {
+                if (fileName.equalsIgnoreCase("musicChunks")) {
                     System.out.println(fileName);
 
                     int pageNumber = 0;
                     byte bytes[];
                     JsonArray bigArr = new JsonArray();
                     // Piece together the music.json from each page (as a byte array) in DFS
-                    while ((bytes = dfs.read(fileName, pageNumber, 23-2392)) != null) {
+                    while ((bytes = dfs.read(fileName, pageNumber, 23 - 2392)) != null) {
                         String jsonStr = new String(bytes);
                         JsonArray smallArr = gson.fromJson(new JsonReader(new StringReader(jsonStr)), JsonArray.class);
 
@@ -132,12 +136,10 @@ public class Deserializer {
                     }
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.error("ERROR: deserializeSongsFromJson >> " + e);
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             return songs;
         }
     }
@@ -148,7 +150,7 @@ public class Deserializer {
     private void initUserLibrary() {
         for (Collection c : musicDatabase) {
             //if (ownedIDs.contains((int) c.getId())) {
-                userLibrary.put((int) c.getId(), c);
+            userLibrary.put((int) c.getId(), c);
             //}
         }
     }
@@ -210,7 +212,7 @@ public class Deserializer {
             jr.endArray(); // "userList" ']'
             jr.endObject(); // file end
         } catch (Exception e) {
-            LOGGER.error("Error while deserializing users: " , e);
+            LOGGER.error("Error while deserializing users: ", e);
         }
 
         return users;
@@ -251,6 +253,7 @@ public class Deserializer {
         }
         return playlist;
     }
+
     /**
      * Returns the song information in the Music JSON as an ArrayList.
      *

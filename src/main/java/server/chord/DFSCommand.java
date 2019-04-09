@@ -1,18 +1,17 @@
 package server.chord;
-import java.io.*;
-import java.rmi.RemoteException;
-import java.util.Scanner;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static server.core.Server.dfs;
 import static server.core.Server.NEXT_PORT;
+import static server.core.Server.dfs;
 
-public class DFSCommand
-{
+public class DFSCommand {
     //DFS dfs;
-        
-//    public DFSCommand(int p, int portToJoin) throws Exception {
+
+    //    public DFSCommand(int p, int portToJoin) throws Exception {
 //        dfs = new DFS(p);
 //
 //        if (portToJoin > 0)
@@ -22,15 +21,14 @@ public class DFSCommand
 //        }
     public DFSCommand() throws Exception {
 
-        BufferedReader buffer=new BufferedReader(new InputStreamReader(System.in));
-        String line = buffer.readLine();  
-        while (!line.equals("quit"))
-        {
+        BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
+        String line = buffer.readLine();
+        while (!line.equals("quit")) {
             String[] result = line.split("\\s");
-            switch(result[0]) {
+            switch (result[0]) {
                 case "join":
                     // Add a new node to the chord
-                    if (result.length == 1){
+                    if (result.length == 1) {
                         try {
                             dfs = new DFS(NEXT_PORT);
 
@@ -115,12 +113,12 @@ public class DFSCommand
                     break;
             }
 
-            line=buffer.readLine();  
+            line = buffer.readLine();
         }
         // If user inputs quit, exit program
         System.exit(0);
     }
-    
+
 //    static public void main(String args[]) throws Exception
 //    {
 //        DFSCommand dfsCommand=new DFSCommand(2008, 2000);

@@ -9,7 +9,7 @@ public class ClientRequestPacketHandler extends Thread {
     private DatagramPacket packet = null;
     public Dispatcher dispatcher = null;
 
-    ClientRequestPacketHandler(DatagramSocket s, DatagramPacket d){
+    ClientRequestPacketHandler(DatagramSocket s, DatagramPacket d) {
         this.socket = s;                                            // Set socket
         this.packet = d;                                            // Set packet as received request packet
 
@@ -24,9 +24,9 @@ public class ClientRequestPacketHandler extends Thread {
     }
 
     @Override
-    public void run(){
+    public void run() {
         String request = new String(packet.getData(), 0, packet.getLength());               // Get packet's payload
-        System.out.println("Server request string: "+ request);
+        System.out.println("Server request string: " + request);
         String response = dispatcher.dispatch(request.trim());           // Send request to dispatcher
         System.out.println("Server preparing response packet");
         byte[] payload = response.getBytes();                       // Initialize payload with response bytes

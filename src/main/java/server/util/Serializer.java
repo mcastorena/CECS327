@@ -49,7 +49,7 @@ public class Serializer {
 
         JsonArray playlistJA = new JsonArray();
         List<Playlist> playlists = u.getUserProfile()
-                                    .getIterablePlaylists();
+                .getIterablePlaylists();
 
         if (playlists != null) {
             for (Playlist p : playlists)
@@ -67,10 +67,10 @@ public class Serializer {
 
     public void updateUsersJson(HashMap<String, User> users) throws IOException {
         try (PrintWriter writer =
-                new PrintWriter(
-                        new File(
-                                getClass().getResource("/server/user.json")
-                                        .getPath()))) {
+                     new PrintWriter(
+                             new File(
+                                     getClass().getResource("/server/user.json")
+                                             .getPath()))) {
 
             Gson gson = new GsonBuilder()
                     .setPrettyPrinting()
@@ -93,6 +93,7 @@ public class Serializer {
 
     /**
      * Updates the user.json with a list of users
+     *
      * @param users
      * @throws IOException
      */
@@ -126,8 +127,8 @@ public class Serializer {
     }
 
     public static byte[] serialize(Collection collection) throws IOException {
-        try(ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            ObjectOutput out = new ObjectOutputStream(bos)){
+        try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
+             ObjectOutput out = new ObjectOutputStream(bos)) {
             out.writeObject(collection);
             out.flush();
             return bos.toByteArray();
