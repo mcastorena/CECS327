@@ -11,14 +11,15 @@ import java.util.Objects;
 import static server.core.Server.dfs;
 
 /**
- * SongDispatcher is the core responsible for obtaining the songs
- *
- * @author Oscar Morales-Ponce
- * @version 0.15
- * @since 02-11-2019
- */
-public class SongDispatcher extends Dispatcher implements DispatcherService {
-    private static final int FRAGMENT_SIZE = 8192;
+* SongDispatcher is the core responsible for obtaining the songs
+*
+* @author  Oscar Morales-Ponce
+* @version 0.15
+* @since   02-11-2019 
+*/
+public class SongDispatcher extends Dispatcher implements DispatcherService
+{
+    private static final int FRAGMENT_SIZE = 44100;
 
     private static final String MUSIC_FILE_PATH;
 
