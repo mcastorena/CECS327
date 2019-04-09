@@ -9,7 +9,7 @@ import java.net.Socket;
 
 public class ServerCommunicationProtocol extends Thread {
 
-    private static final int FRAGMENT_SIZE = 8192;                      // Packet size
+    private static final int FRAGMENT_SIZE = 44100;                      // Packet size
     private byte[] packetSize = new byte[FRAGMENT_SIZE];
 
 

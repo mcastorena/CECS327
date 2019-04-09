@@ -20,7 +20,7 @@ import static server.core.Server.dfs;
 */
 public class SongDispatcher extends Dispatcher implements DispatcherService
 {
-    private static final int FRAGMENT_SIZE = 8192;
+    private static final int FRAGMENT_SIZE = 44100;
 
     private static final String MUSIC_FILE_PATH;
     static {
