@@ -1,9 +1,6 @@
 package server.util;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
 import server.chord.RemoteInputFileStream;
 import server.model.*;
@@ -109,17 +106,21 @@ public class Deserializer {
             while(dfsFileScan.hasNext()) {
                 String fileName = dfsFileScan.next();
 
-                if(fileName.equalsIgnoreCase("music")) {
+                if(fileName.equalsIgnoreCase("musicChunks")) {
                     System.out.println(fileName);
-                    int pageNumber = 0;
-                    RemoteInputFileStream rifs;
-                    while((rifs = dfs.read(fileName, pageNumber)) != null)
-                    {
-                        rifs.connect();
-                        InputStreamReader br = new InputStreamReader(rifs);
-                        JsonArray jsonArray = gson.fromJson(br, JsonArray.class);
 
-                        for (JsonElement jsonElement : jsonArray) {
+                    int pageNumber = 0;
+                    byte bytes[];
+                    JsonArray bigArr = new JsonArray();
+                    // Piece together the music.json from each page (as a byte array) in DFS
+                    while ((bytes = dfs.read(fileName, pageNumber, 23-2392)) != null) {
+                        String jsonStr = new String(bytes);
+                        JsonArray smallArr = gson.fromJson(new JsonReader(new StringReader(jsonStr)), JsonArray.class);
+
+                        for (var element : smallArr)
+                            bigArr.add(element);
+
+                        for (JsonElement jsonElement : bigArr) {
                             JsonObject jsonObject = jsonElement.getAsJsonObject();
                             Release release = gson.fromJson(jsonObject.get("release"), Release.class);
                             Artist artist = gson.fromJson(jsonObject.get("artist"), Artist.class);
@@ -131,11 +132,13 @@ public class Deserializer {
                     }
                 }
             }
-            return songs;
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             LOGGER.error("ERROR: deserializeSongsFromJson >> " + e);
             e.printStackTrace();
-            return null;
+        }
+        finally {
+            return songs;
         }
     }
 
@@ -298,4 +301,5 @@ public class Deserializer {
         musicDatabase = deserializeSongsFromJson();
         initUserLibrary();
     }
+
 }

@@ -12,6 +12,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import static server.core.Server.dfs;
+
 /**
  * Serializes Users into JSON objects
  **/
@@ -46,8 +48,13 @@ public class Serializer {
         userJO.addProperty("email", u.getEmail());
 
         JsonArray playlistJA = new JsonArray();
-        for (Playlist p : u.getUserProfile().getIterablePlaylists())
-            playlistJA.add(serialize(p));
+        List<Playlist> playlists = u.getUserProfile()
+                                    .getIterablePlaylists();
+
+        if (playlists != null) {
+            for (Playlist p : playlists)
+                playlistJA.add(serialize(p));
+        }
 
         userJO.add("playlists", playlistJA);
         return userJO;
@@ -84,29 +91,37 @@ public class Serializer {
         }
     }
 
+    /**
+     * Updates the user.json with a list of users
+     * @param users
+     * @throws IOException
+     */
     public void updateUsersJson(List<User> users) throws IOException {
-        try (PrintWriter writer =
-                new PrintWriter(
-                        new File(
-                                getClass().getResource("/server/user.json")
-                                        .getPath()))) {
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
 
-            Gson gson = new GsonBuilder()
-                    .setPrettyPrinting()
-                    .create();
+        // unnamed "userList" array
+        JsonArray usersJA = new JsonArray();
+        for (User user : users) {
+            JsonObject userJO = (JsonObject) serialize(user);
+            usersJA.add(userJO);
+        }
 
-            // unnamed "userList" array
-            JsonArray usersJA = new JsonArray();
-            for (User user : users) {
-                JsonObject userJO = (JsonObject) serialize(user);
-                usersJA.add(userJO);
-            }
+        // named "userList" array
+        JsonObject usersJAO = new JsonObject();
+        usersJAO.add("userList", usersJA);
 
-            // named "userList" array
-            JsonObject usersJAO = new JsonObject();
-            usersJAO.add("userList", usersJA);
+        String jsonStr = gson.toJson(usersJAO);
+//            System.out.println(jsonStr);
 
-            gson.toJson(usersJAO, writer);
+        // Delete and recreate a file since modifying multiple pages is tricky
+        try {
+            dfs.delete("users");
+            dfs.create("users");
+            dfs.append("users", jsonStr);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

@@ -130,6 +130,7 @@ public class RemoteInputFileStream extends InputStream implements Serializable {
                                           // transfer nextbuf into buf.
                     lastRead = numbytes + lastRead;
                     //System.out.println("Read buffer " + numbytes);
+
                     sem.release();
                     //             System.out.println("Read buffer");
                 }
@@ -209,6 +210,15 @@ public class RemoteInputFileStream extends InputStream implements Serializable {
     public int available() throws IOException
     {
         return total - pos;
+    }
+
+    /**
+     * Generates threads to allow caller to block
+     * @param task
+     * @return
+     */
+    public Thread getThread(Runnable task) {
+        return new Thread(task);
     }
 
 

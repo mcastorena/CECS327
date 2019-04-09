@@ -8,6 +8,7 @@ import java.math.BigInteger;
 import java.security.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.stream.JsonReader;
 
 import server.core.Server;
 import static server.core.Server.d;
@@ -261,14 +262,19 @@ public class DFS
         try {
             //System.out.println("Read metadata starting");
             ChordMessageInterface peer = chord.locateSuccessor(guid);
-            RemoteInputFileStream metadataraw = peer.get(guid);
-            metadataraw.connect();
+
+            int len = 1024<<9;
+            var bytes = peer.get(guid,0,len);
+
+            String metadataraw = new String(bytes);
+
             Scanner scan = new Scanner(metadataraw);
             scan.useDelimiter("\\A");
-            String strMetaData = scan.next();
-            // System.out.println("Strmetadata: "+strMetaData);
-            filesJson= gson.fromJson(strMetaData, FilesJson.class);
-        } catch (NoSuchElementException ex)
+            var reader = new JsonReader(new StringReader(metadataraw));
+            reader.setLenient(true);
+            filesJson= gson.fromJson(reader, FilesJson.class);
+        }
+        catch (NoSuchElementException ex)
         {
             File metadata = new File(this.chord.prefix+guid);       // Create file object with filepath
             metadata.createNewFile();                                         // Create the physical file
@@ -280,6 +286,9 @@ public class DFS
             // Write data to metadata file
             writeMetaData(filesJson);
 
+        }
+        catch (Exception e) {
+            e.printStackTrace();
         }
         return filesJson;
     }
@@ -438,6 +447,41 @@ public class DFS
             System.out.println(peer.getId());
             return peer.get(myPage.guid);
         }else return null;
+    }
+
+    /**
+     * Retrieves a byte array representation of the queried page.
+     * @param filename Name of the file in the Metadata list.
+     * @param pageNumber The page to retrieve.
+     * @param unused_variable Unused.
+     * @return The page as a byte array.
+     * @throws Exception
+     */
+    public byte[] read(String filename, int pageNumber, int unused_variable) throws Exception
+    {
+        // Read Metadata
+        FilesJson metadata = readMetaData();
+
+        // Find file
+
+        var file = find(metadata.getFileList(), filename);
+        if (file != null) {
+            if(file.numberOfPages == 0 || pageNumber >= file.numberOfPages){
+                return null;
+            }
+
+            var timestamp = new Date().getTime();
+            var page = file.pages.get(pageNumber);
+
+            file.readTS = timestamp;
+            page.readTS = timestamp;
+
+            var peer = chord.locateSuccessor(page.getGUID());
+
+            writeMetaData(metadata);
+            return peer.get(page.getGUID(), 0, 1024 << 9);
+        }
+        return null;
     }
 
     /**
