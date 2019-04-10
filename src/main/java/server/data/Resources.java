@@ -5,7 +5,11 @@ import server.model.Collection;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * TODO: Currently not used
+ */
 public class Resources {
+
     /**
      * A list of ALL songs (from the Music JSON).
      */
@@ -22,15 +26,7 @@ public class Resources {
      */
     private static HashMap<Integer, Collection> userLibrary; // key: song release ID, value: corresponding Collection object
 
-    /**
-     * The song release IDs present in the music directory.
-     * Used for quick lookup of available music.
-     */
-    //private static HashSet<Integer> ownedIDs;
-
-
-//    private static List<User> userList;
-//    protected static HashMap<String,User> userDictionary;
+    //region Getters and Setters
     public static List<Collection> getMusicDatabase() {
         return musicDatabase;
     }
@@ -54,12 +50,5 @@ public class Resources {
     public static void setUserLibrary(final HashMap<Integer, Collection> userLibrary) {
         Resources.userLibrary = userLibrary;
     }
-
-//    public static HashSet<Integer> getOwnedIDs() {
-//        return ownedIDs;
-//    }
-//
-//    public static void setOwnedIDs(final HashSet<Integer> ownedIDs) {
-//        Resources.ownedIDs = ownedIDs;
-//    }
+    //endregion
 }
