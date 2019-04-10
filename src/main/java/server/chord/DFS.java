@@ -1,59 +1,77 @@
 package server.chord;
 
-import java.util.*;
-import java.io.*;
-import java.nio.file.*;
-import java.math.BigInteger;
-import java.security.*;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
-
 import server.core.Server;
+
+import java.io.File;
+import java.io.StringReader;
+import java.math.BigInteger;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.*;
+
 import static server.core.Server.deserializer;
 
-
-/* JSON Format
-
-{"file":
-  [
-     {"name":"MyFile",
-      "size":128000000,
-      "pages":
-      [
-         {
-            "guid":11,
-            "size":64000000
-         },
-         {
-            "guid":13,
-            "size":64000000
-         }
-      ]
-      }
-   ]
-} 
-*/
-
-
+/**
+ * This class represents a Distributed File System
+ */
 public class DFS {
+
+    /**
+     * Date
+     */
     Date date = new Date();
+
+    /**
+     *
+     */
     Long metadata;
 
-
+    /**
+     * This class represents a Page as a JSON
+     */
     public class PagesJson {
-        // guid = md5(filename+pagenumber)
+
+        /**
+         * Global Unique Identifier
+         */
         Long guid;
+
+        /**
+         * Size of the file
+         */
         Long size;
 
+        /**
+         * Creation timestamp
+         */
         Long creationTS;
+
+        /**
+         * Timestamp of file being read
+         */
         Long readTS;
+
+        /**
+         * Write timestamp
+         */
         Long writeTS;
 
+        /**
+         * Number of clients referencing this object
+         */
         int referenceCount;
 
-
+        /**
+         * Default constructor
+         *
+         * @param g
+         * @param s
+         */
         public PagesJson(Long g, Long s) {
             this.guid = g;
             this.size = s;
@@ -65,59 +83,99 @@ public class DFS {
             this.writeTS = date.getTime();
         }
 
-        // getters
+        // Getters
 
         /**
          * Returns the object's GUID
+         *
          * @return Object's GUID as Long
          */
-        public Long getGUID(){
+        public Long getGUID() {
             return this.guid;
         }
 
         /**
          * Return object's size
+         *
          * @return Object's size as LONG
          */
-        public Long getSize(){
+        public Long getSize() {
             return this.size;
         }
 
-        // setters
+        // Setters
 
         /**
          * Set object's GUID
+         *
          * @param g - Long GUID created using md5 function
          */
-        public void setGUID(Long g){
+        public void setGUID(Long g) {
             this.guid = g;
         }
 
         /**
          * Set object's size
+         *
          * @param s - Long size that reflects the page's physical size on the disk
          */
-        public void setSize(Long s){
+        public void setSize(Long s) {
             this.size = s;
         }
 
     }
 
-    ;
-
+    /**
+     * This class represents a File as a JSON
+     */
     public class FileJson {
+
+        /**
+         * Name of the File
+         */
         String name;
+
+        /**
+         * Size of the File
+         */
         Long size;
 
+        /**
+         * Creation timestamp for the File
+         */
         Long creationTS;
+
+        /**
+         * Read timestamp for the File
+         */
         Long readTS;
+
+        /**
+         * Write timestamp for the File
+         */
         Long writeTS;
 
+        /**
+         * Number of the pages the File has
+         */
         int numberOfPages;
+
+        /**
+         * Number of clients referencing this File
+         */
         int referenceCount;
 
+        /**
+         * ArrayList of PagesJson this File contains
+         */
         ArrayList<PagesJson> pages;
 
+        /**
+         * Constructor
+         *
+         * @param n Name of the File
+         * @param s Size of the File
+         */
         public FileJson(String n, Long s) {
             this.name = n;
             this.size = s;
@@ -135,17 +193,19 @@ public class DFS {
 
         /**
          * Return object name
+         *
          * @return Object's name
          */
-        public String getName(){
+        public String getName() {
             return this.name;
         }
 
         /**
          * Return object's siZe
+         *
          * @return Return the sum of the object's Pages's sizes
          */
-        public Long getSize(){
+        public Long getSize() {
             return this.size;
         }
 
@@ -153,118 +213,128 @@ public class DFS {
 
         /**
          * Set object's name
+         *
          * @param n - string to be set as object's name
          */
-        public void setName(String n){
+        public void setName(String n) {
             this.name = n;
         }
 
         /**
          * Set object's size, called everytime a page is added
+         *
          * @param s
          */
-        public void setSize(Long s){
+        public void setSize(Long s) {
             this.size = s;
         }
 
         /**
          * Update object's number of pages by getting it's pages array size
          */
-        public void updateNumPages(){
+        public void updateNumPages() {
             this.numberOfPages = pages.size();
         }
 
         /**
          * Increment object's reference count when object is in use
          */
-        public void incrementRef(){
+        public void incrementRef() {
             this.referenceCount++;
         }
 
         /**
          * Decrement object's reference count when object is no longer in use
          */
-        public void decrementRef(){
+        public void decrementRef() {
             this.referenceCount--;
         }
 
         /**
          * Increment object and it's page's refCount when in use
+         *
          * @param pageIndex - pageIndex for page in use
          */
-        public void incrementRef(int pageIndex){
+        public void incrementRef(int pageIndex) {
             this.referenceCount++;
             pages.get(pageIndex).referenceCount++;
         }
 
         /**
-         *  Decrement object and it's page's refCount when in use
+         * Decrement object and it's page's refCount when in use
+         *
          * @param pageIndex - pageIndex for page in use
          */
-        public void decrementRef(int pageIndex){
+        public void decrementRef(int pageIndex) {
             this.referenceCount--;
             this.pages.get(pageIndex).referenceCount--;
         }
 
         /**
          * Add's a page this object. Update numberOfPages and object's size
-         * @param p - page to be added
+         *
+         * @param p    - page to be added
          * @param size - size of the page to be added
          */
-        public void addPage(PagesJson p, Long size){
+        public void addPage(PagesJson p, Long size) {
             this.pages.add(p);
             this.numberOfPages++;
             this.size += size;
         }
     }
 
-    ;
-
+    /**
+     * This class represents a List of FileJson objects.
+     */
     public class FilesJson {
+
+        /**
+         * List of Files
+         */
         List<FileJson> file;
 
+        /**
+         * Constructor
+         */
         public FilesJson() {
             file = new ArrayList<FileJson>();
         }
 
-        // getters
+        // Getters
 
         /**
          * Return object's file list
+         *
          * @return - file - file list
          */
-        public List<FileJson> getFileList(){
-             return this.file;
+        public List<FileJson> getFileList() {
+            return this.file;
         }
 
-        // setters
-
+        // Setters
 
         /**
          * Add a file to the files
+         *
          * @param f - file to be added
          */
-        public void addFile(FileJson f){
-             this.file.add(f);
+        public void addFile(FileJson f) {
+            this.file.add(f);
         }
     }
 
-    ;
-
-
     int port;
-    Chord  chord;
+    Chord chord;
 
 
     /**
      * Creates a md5 hash from string input
+     *
      * @param objectName - name of the object to be hashed
      * @return md5 hash in Long format
      */
-    private long md5(String objectName)
-    {
-        try
-        {
+    private long md5(String objectName) {
+        try {
             MessageDigest m = MessageDigest.getInstance("MD5");
             m.reset();
             m.update(objectName.getBytes());
@@ -278,9 +348,13 @@ public class DFS {
     }
 
 
+    /**
+     * DFS Constructor
+     *
+     * @param port Port the DFS is connecting to
+     * @throws Exception
+     */
     public DFS(int port) throws Exception {
-
-
         this.port = port;
         this.metadata = md5("Metadata");
         long guid = md5("" + port);
@@ -292,18 +366,17 @@ public class DFS {
                 chord.leave();
             }
         });
-
     }
 
 
     /**
      * Join the chord
-     * @param Ip - IP for the chord to be joined
-     * @param port - port to join
+     *
+     * @param Ip   IP for the chord to be joined
+     * @param port Port to join
      * @throws Exception
      */
-    public void join(String Ip, int port) throws Exception
-    {
+    public void join(String Ip, int port) throws Exception {
         chord.joinRing(Ip, port);
         chord.print();
     }
@@ -311,29 +384,29 @@ public class DFS {
 
     /**
      * Leave the chord
+     *
      * @throws Exception
      */
-    public void leave() throws Exception
-    {        
-       chord.leave();
+    public void leave() throws Exception {
+        chord.leave();
     }
 
     /**
      * Print the status of the peer in the chord
+     *
      * @throws Exception
      */
-    public void print() throws Exception
-    {
+    public void print() throws Exception {
         chord.print();
     }
 
     /**
      * Read the metadata in the chord
+     *
      * @return FilesJson object containing all "files", or null if an exception is encountered
      * @throws Exception
      */
-    public FilesJson readMetaData() throws Exception
-    {
+    public FilesJson readMetaData() throws Exception {
         FilesJson filesJson = null;
         long guid = md5("Metadata");
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -372,11 +445,11 @@ public class DFS {
 
     /**
      * Write the metadata back to the cord
+     *
      * @param filesJson - Object that will form the new metadata to be written
      * @throws Exception
      */
-    public void writeMetaData(FilesJson filesJson) throws Exception
-    {
+    public void writeMetaData(FilesJson filesJson) throws Exception {
         long guid = md5("Metadata");
         ChordMessageInterface peer = chord.locateSuccessor(guid);
 
@@ -413,11 +486,11 @@ public class DFS {
 
     /**
      * List the files in the chord
+     *
      * @return string containing the names of all files in the chord
      * @throws Exception
      */
-    public String lists() throws Exception
-    {
+    public String lists() throws Exception {
         StringBuilder listOfFiles = new StringBuilder("\nFiles:\n");                        // Initialize string to hold file names
 
         List<FileJson> myFiles = readMetaData().file;               // Get our list of files
@@ -650,13 +723,13 @@ public class DFS {
             ChordMessageInterface peer = chord.locateSuccessor(pageGUID);
             writeMetaData(metadata);                                                        // Update metadata for write and refCount
             peer.put(pageGUID, data);
-            if(fileName.contains("music")) {
+            if (fileName.contains("music")) {
                 Thread.sleep(2000);
                 deserializer.updateMusicOnFileAdd();
                 Server.updateSongList();
                 System.out.println("Append Complete");
             }
-        }else return;
+        } else return;
     }
 
     /**

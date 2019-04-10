@@ -8,21 +8,20 @@ import java.util.regex.Pattern;
 import static server.core.Server.NEXT_PORT;
 import static server.core.Server.dfs;
 
+/**
+ *
+ */
 public class DFSCommand {
-    //DFS dfs;
 
-    //    public DFSCommand(int p, int portToJoin) throws Exception {
-//        dfs = new DFS(p);
-//
-//        if (portToJoin > 0)
-//        {
-//            System.out.println("Joining "+ portToJoin);
-//            dfs.join("127.0.0.1", portToJoin);
-//        }
+    /**
+     * Constructor
+     *
+     * @throws Exception
+     */
     public DFSCommand() throws Exception {
-
         BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
         String line = buffer.readLine();
+
         while (!line.equals("quit")) {
             String[] result = line.split("\\s");
             switch (result[0]) {
@@ -53,22 +52,18 @@ public class DFSCommand {
 
                 case "touch":
                     if (result.length == 2)
-                        dfs.create(result[1]);                  // User must specify a fileList name
+                        dfs.create(result[1]);  // User must specify a fileList name
                     break;
 
                 case "delete":
                     if (result.length == 2)
-                        dfs.delete(result[1]);                  // User must specify fileList name
+                        dfs.delete(result[1]);  // User must specify fileList name
                     break;
 
                 case "read":
                     if (result.length == 3) {
                         try {
                             var data = dfs.read(result[1], Integer.parseInt(result[2]));   // User must specify fileList name and page number
-//                            data.connect();
-//                            while (data.available() > 0) {
-//                                System.out.print(data.readNBytes(20,0));
-//                            }
                         } catch (NumberFormatException e) {
                             System.out.println("Error - Second argument must be a page number.");
                         }
@@ -77,13 +72,13 @@ public class DFSCommand {
 
                 case "tail":
                     if (result.length == 2) {
-                        dfs.tail(result[1]);                    // User must specify fileList name
+                        dfs.tail(result[1]);    // User must specify fileList name
                     }
                     break;
 
                 case "head":
                     if (result.length == 2) {
-                        dfs.head(result[1]);                    // User must specify fileList name
+                        dfs.head(result[1]);    // User must specify fileList name
                     }
                     break;
 
@@ -104,7 +99,7 @@ public class DFSCommand {
 
                 case "move":
                     if (result.length == 3) {
-                        dfs.move(result[1], result[2]);         // User must specify fileList to be edited and its new name
+                        dfs.move(result[1], result[2]); // User must specify fileList to be edited and its new name
                     }
                     break;
 
@@ -118,19 +113,4 @@ public class DFSCommand {
         // If user inputs quit, exit program
         System.exit(0);
     }
-
-//    static public void main(String args[]) throws Exception
-//    {
-//        DFSCommand dfsCommand=new DFSCommand(2008, 2000);
-////        if (args.length < 1 ) {
-////            throw new IllegalArgumentException("Parameter: <port> <portToJoin>");
-////        }
-////        if (args.length > 1 ) {
-////            DFSCommand dfsCommand=new DFSCommand(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
-////        }
-////        else
-////        {
-////            DFSCommand dfsCommand=new DFSCommand( Integer.parseInt(args[0]), 0);
-////        }
-//     }
 }

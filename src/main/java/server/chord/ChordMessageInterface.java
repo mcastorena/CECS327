@@ -3,14 +3,16 @@ package server.chord;
 import java.rmi.*;
 import java.io.*;
 
+/**
+ * Chord interface
+ */
 public interface ChordMessageInterface extends Remote {
 
     public ChordMessageInterface getPredecessor() throws RemoteException;
 
     // Pass a GUID and returns the node contianing the key
     ChordMessageInterface locateSuccessor(long key) throws RemoteException;
-
-
+    
     ChordMessageInterface closestPrecedingNode(long key) throws RemoteException;
 
     public void joinRing(String Ip, int port) throws RemoteException;
