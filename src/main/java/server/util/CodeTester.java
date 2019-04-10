@@ -3,6 +3,9 @@ package server.util;
 import java.io.FileInputStream;
 import java.util.Scanner;
 
+/**
+ * This class is used as a tester
+ */
 public class CodeTester {
     public static void main(String[] args) throws Exception {
         try {

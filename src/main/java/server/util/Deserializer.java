@@ -7,41 +7,42 @@ import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 import org.apache.log4j.Logger;
 import server.chord.RemoteInputFileStream;
+import server.model.Collection;
 import server.model.*;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 import static server.core.Server.dfs;
 
 /**
  * This class deserializes both the Music and User JSON into POJOs.
+ *
  * Contains data structures to hold:
  * 1. the song info database (musicDatabase),
  * 2. songs able to be played from the music folder (playableSongs),
  * 3. a lookup of song information by release ID, and
  * 4. the user's set of owned mp3s (from the music folder)
  */
-
 public class Deserializer {
+
+    /**
+     * Logger for the Deserializer, declared static and final
+     */
     private static final Logger LOGGER = Logger.getLogger(Deserializer.class);
     //public static final URL MUSIC_STREAM = Deserializer.class.getResource("/server/music.json");
     //public static final URL USER_STREAM = Deserializer.class.getResource("/server/user.json");
     //public static final String MUSIC_FOLDER = Deserializer.class.getResource("/server/music/").getPath();
 
     /**
-     * A list of ALL songs (from the Music JSON).
+     * A list of all songs (from the Music JSON).
      */
     private List<Collection> musicDatabase;
 
     /**
-     * A container of references for PLAYABLE songs
-     * (i.e. the song's mp3 file exists in the music directory).
+     * A container of references for PLAYABLE songs (i.e. the song's mp3 file exists in the music directory).
      */
-    //private HashMap<Integer, String> playableSongs; // key: song release ID, value: mp3 file name
+    private HashMap<Integer, String> playableSongs; // key: song release ID, value: mp3 file name
 
     /**
      * A dictionary of the user's music library (as Collection objects).
@@ -49,10 +50,9 @@ public class Deserializer {
     private HashMap<Integer, Collection> userLibrary; // key: song release ID, value: corresponding Collection object
 
     /**
-     * The song release IDs present in the music directory.
-     * Used for quick lookup of available music.
+     * The song release IDs present in the music directory. Used for quick lookup of available music.
      */
-    //private HashSet<Integer> ownedIDs;
+    private HashSet<Integer> ownedIDs;
 
     /**
      * Initializes the Deserializer and loads the music files from the filesystem.
@@ -158,7 +158,7 @@ public class Deserializer {
     /**
      * Parses the User JSON file and returns a list of User objects.
      *
-     * @return List<User>
+     * @return List containing User objects
      * @throws IOException
      */
     public List<User> deserializeUsers() {
@@ -175,7 +175,7 @@ public class Deserializer {
             jr.nextName(); // "userList"
             jr.beginArray(); // "userList" '['
 
-            /** Parse each user object in "userList" **/
+            /* Parse each user object in "userList" */
             while (jr.hasNext()) {
                 jr.beginObject(); // user object '{'
 
@@ -190,7 +190,7 @@ public class Deserializer {
 
                 Profile profile = new Profile();
 
-                /** Parse the userList's playlists and add to user Profile **/
+                /* Parse the userList's playlists and add to user Profile */
                 jr.nextName(); // "playlists"
                 jr.beginArray(); // "playlists" '['
                 while (jr.hasNext()) {
@@ -202,7 +202,7 @@ public class Deserializer {
                 jr.endArray(); // "playlists" ']'
 
 
-                /** Load the user and add to list **/
+                /* Load the user and add to list */
                 User user = new User(username, email, password);
                 user.setUserProfile(profile);
                 users.add(user);
@@ -219,11 +219,11 @@ public class Deserializer {
     }
 
     /**
-     * Deserializes a single Playlist from the "playlists" json array.
-     * A helper function for deserializeUsers().
+     * Deserializes a single Playlist from the "playlists" JSON array.
+     * A helper function for the deserializeUsers function.
      *
-     * @param reader - The parent method's JsonReader
-     * @return
+     * @param reader The parent method's JsonReader
+     * @return A deserialized Playlist object
      * @throws IOException
      */
     private Playlist deserializePlaylist(JsonReader reader) throws IOException {
@@ -257,7 +257,7 @@ public class Deserializer {
     /**
      * Returns the song information in the Music JSON as an ArrayList.
      *
-     * @return
+     * @return A List of songs, as Collections, from the music database.
      */
     public List<Collection> getMusicDatabase() {
         return musicDatabase;
@@ -267,11 +267,11 @@ public class Deserializer {
      * Returns a dictionary of the user's
      * owned mp3s in the music directory.
      *
-     * @return
+     * @return A HashSet of the User's owned MP3's.
      */
-//    public HashSet<Integer> getOwnedIDs() {
-//        return ownedIDs;
-//    }
+    public HashSet<Integer> getOwnedIDs() {
+        return ownedIDs;
+    }
 
     /**
      * Returns a dictionary of songs that CAN be played
@@ -279,25 +279,25 @@ public class Deserializer {
      * Key: song release ID
      * Value: the mp3 file name (without '.mp3' extension)
      *
-     * @return
+     * @return A HashMap of songs that the User can play.
      */
-//    public HashMap<Integer, String> getPlayableSongs() {
-//        return playableSongs;
-//    }
+    public HashMap<Integer, String> getPlayableSongs() {
+        return playableSongs;
+    }
 
     /**
      * Returns a dictionary of song information.
      * Key: song release ID
      * Value: the song info as a Collection
      *
-     * @return
+     * @return A HashMap of songs in the User's Library
      */
     public HashMap<Integer, Collection> getUserLibrary() {
         return userLibrary;
     }
 
     /**
-     * Updates the musicdatabase, to be called when file added to DFS.
+     * Updates the music database; called when a file is added to DFS.
      */
     public void updateMusicOnFileAdd()
     {
