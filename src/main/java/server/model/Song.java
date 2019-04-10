@@ -2,8 +2,12 @@ package server.model;
 
 import java.io.Serializable;
 
-// Holds song info from json, this class is created by gson
+/**
+ * This class represents a Song in our Music App
+ */
 public class Song implements Serializable {
+
+    //region Metadata contained in music.json
     private float key;
     private float modeConfidence;
     private float artistMbtagsCount;
@@ -27,7 +31,9 @@ public class Song implements Serializable {
     private short mode;
     private float timeSignature;
     private float loudness;
+    //endregion
 
+    //region Getters and Setters
     public float getKey() {
         return key;
     }
@@ -211,6 +217,7 @@ public class Song implements Serializable {
     public void setLoudness(float loudness) {
         this.loudness = loudness;
     }
+    //endregion
 
     @Override
     public String toString() {

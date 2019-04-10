@@ -2,17 +2,33 @@ package server.model;
 
 import java.util.List;
 
-// Contains list of collections for song/artists
-// Can use this to obtain information to be displayed
+/**
+ * This class represents the result of a Song search and is used to obtain information to be displayed.
+ */
 public class SearchResult {
+
+    /**
+     * List of Songs
+     */
     List<Collection> songs;
+
+    /**
+     * List of Artists
+     */
     List<Collection> artists;
 
+    /**
+     * Constructor
+     *
+     * @param songs   List of Collection objects representing Songs
+     * @param artists List of Collection objects representing Artists
+     */
     public SearchResult(List<Collection> songs, List<Collection> artists) {
         this.songs = songs;
         this.artists = artists;
     }
 
+    //region Getters and Setters
     public List<Collection> getSongResultList() {
         return songs;
     }
@@ -20,7 +36,6 @@ public class SearchResult {
     public List<Collection> getArtistResultList() {
         return artists;
     }
-
 
     public String getSongTitle(int index) {
         return songs.get(index).getSongTitle();
@@ -49,6 +64,7 @@ public class SearchResult {
     public List<Collection> getArtists() {
         return artists;
     }
+    //endregion
 
     @Override
     public String toString() {

@@ -2,15 +2,43 @@ package server.model;
 
 import java.io.Serializable;
 
-// A container to hold all json objects related to the same release id
+/**
+ * This class represents a container that holds relevant information about a Song
+ */
 public class Collection implements Serializable {
+
+    /**
+     * Serial Version UID
+     */
     private static long serialVersionUID = 1L;
 
+    /**
+     * Release info about the song
+     */
     private Release release;
+
+    /**
+     * Artist of the song
+     */
     private Artist artist;
+
+    /**
+     * Song being referenced
+     */
     private Song song;
+
+    /**
+     * ID of the Song
+     */
     private long id;
 
+    /**
+     * Default constructor
+     *
+     * @param release Release info for the song
+     * @param artist Artist of the song
+     * @param song Song being referenced
+     */
     public Collection(Release release, Artist artist, Song song) {
         this.release = release;
         this.artist = artist;
@@ -18,10 +46,16 @@ public class Collection implements Serializable {
         this.id = release.getId();
     }
 
+    /**
+     * Constructor ?
+     *
+     * @param id ID of the Song
+     */
     public Collection(long id) {
         this.id = id;
     }
 
+    //region Getters and Setters
     public long getId() {
         return id;
     }
@@ -61,13 +95,10 @@ public class Collection implements Serializable {
     public String getArtistName() {
         return artist.getName();
     }
+    //endregion
 
     @Override
     public String toString() {
         return getArtistName();
-    }
-
-    public void serialize() {
-
     }
 }
