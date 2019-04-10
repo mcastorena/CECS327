@@ -4,16 +4,37 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
+/**
+ * This class handles all of the packets requested by the Client
+ */
 public class ClientRequestPacketHandler extends Thread {
+
+    /**
+     * Socket for client connection
+     */
     private DatagramSocket socket = null;
+
+    /**
+     * Datagram packet for requests
+     */
     private DatagramPacket packet = null;
+
+    /**
+     * Dispatcher for handling the client request
+     */
     public Dispatcher dispatcher = null;
 
-    ClientRequestPacketHandler(DatagramSocket s, DatagramPacket d) {
-        this.socket = s;                                            // Set socket
-        this.packet = d;                                            // Set packet as received request packet
+    /**
+     * Default constructor
+     *
+     * @param dgramSocket
+     * @param dgramPacket
+     */
+    ClientRequestPacketHandler(DatagramSocket dgramSocket, DatagramPacket dgramPacket) {
+        this.socket = dgramSocket;  // Set socket
+        this.packet = dgramPacket;  // Set packet as received request packet
 
-        this.dispatcher = new Dispatcher();                       // Create a dispatcher object to process request
+        this.dispatcher = new Dispatcher(); // Create a dispatcher object to process request
         dispatcher.registerDispatcher(SongDispatcher.class.getSimpleName(), new SongDispatcher());  // Add dispatcher modules
         dispatcher.registerDispatcher(SearchResultDispatcher.class.getSimpleName(), new SearchResultDispatcher());
         dispatcher.registerDispatcher(LoginDispatcher.class.getSimpleName(), new LoginDispatcher());
@@ -23,14 +44,29 @@ public class ClientRequestPacketHandler extends Thread {
         System.out.println("New client packet handler created");
     }
 
+    /**
+     * Override of the Thread's run() method
+     */
     @Override
     public void run() {
-        String request = new String(packet.getData(), 0, packet.getLength());               // Get packet's payload
+        String request;
+        String response;
+        byte[] payload;
+        DatagramPacket responsePacket;
+
+        // Get packet's payload
+        request = new String(packet.getData(), 0, packet.getLength());
         System.out.println("Server request string: " + request);
-        String response = dispatcher.dispatch(request.trim());           // Send request to dispatcher
+
+        // Send request to dispatcher
+        response = dispatcher.dispatch(request.trim());
         System.out.println("Server preparing response packet");
-        byte[] payload = response.getBytes();                       // Initialize payload with response bytes
-        DatagramPacket responsePacket = new DatagramPacket(payload, payload.length, packet.getAddress(), packet.getPort());     // Prepare response packet
+
+        // Initialize payload with response bytes
+        payload = response.getBytes();
+
+        // Prepare the response packet
+        responsePacket = new DatagramPacket(payload, payload.length, packet.getAddress(), packet.getPort());
         try {
             socket.send(responsePacket);                            // Send response packet
             System.out.println("Server has sent response packet, thread terminating");
@@ -39,5 +75,4 @@ public class ClientRequestPacketHandler extends Thread {
             e.printStackTrace();
         }
     }
-
 }

@@ -17,16 +17,30 @@ import java.util.Map;
 import java.util.Set;
 
 
+/**
+ * Parent Dispatcher class for specialized Dispatchers.
+ */
 public class Dispatcher implements DispatcherInterface {
+
+    /**
+     * Logger for the Dispatcher
+     */
     private static final Logger LOGGER = Logger.getLogger(Dispatcher.class);
+
+    /**
+     * HashMap of specialized Dispatchers
+     */
     private HashMap<String, Object> dispatchers;
 
+    /**
+     * Default constructor
+     */
     public Dispatcher() {
         dispatchers = new HashMap<String, Object>();
     }
 
     /**
-     * dispatch: Executes the remote method in the corresponding Object
+     * Executes the remote method in the corresponding Object
      *
      * @param request: Request: it is a Json file
      *                 {

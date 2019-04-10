@@ -51,9 +51,9 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        //Deserializer d = new Deserializer();
-        //Resources.setOwnedIDs(d.getOwnedIDs());
-        //Resources.setMusicDatabase(d.deserializeMusicLibrary());
+        //Deserializer deserializer = new Deserializer();
+        //Resources.setOwnedIDs(deserializer.getOwnedIDs());
+        //Resources.setMusicDatabase(deserializer.deserializeMusicLibrary());
 
         primaryStage = stage; // does nothing atm
         primaryStage.setWidth(1024);

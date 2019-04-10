@@ -13,18 +13,27 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Base64;
 
+/**
+ * This class represents a specialized Dispatcher for Playlists
+ */
 public class PlaylistDispatcher extends Dispatcher implements DispatcherService {
+
+    /**
+     * Fragment size; required by Dispatcher interface
+     */
     private static final int FRAGMENT_SIZE = 44100;
 
+    /**
+     * Default constructor
+     */
     public PlaylistDispatcher() {
-
     }
 
     /**
-     * getSearchResultChunk: Gets a chunk of a given search result
+     * Gets a chunk of a given search result
      *
-     * @param fragment: The chunk corresponds to
-     *                  [fragment * FRAGMENT_SIZE, FRAGMENT_SIZE]
+     * @param fragment The chunk corresponds to
+     *                 [fragment * FRAGMENT_SIZE, FRAGMENT_SIZE]
      */
     public String getPlaylistsChunk(Long fragment) throws IOException {
         byte buf[] = new byte[FRAGMENT_SIZE];
@@ -40,9 +49,9 @@ public class PlaylistDispatcher extends Dispatcher implements DispatcherService 
     }
 
     /**
-     * getPlaylistsSize: Gets a size of the byte array
+     * Gets a size of the byte array
      *
-     * @param userToken: The unique token of the user
+     * @param userToken The unique token of the user
      */
     public Integer getPlaylistsSize(Integer userToken) {
         User currentSession = Server.currentSessions.get(userToken);
@@ -73,6 +82,14 @@ public class PlaylistDispatcher extends Dispatcher implements DispatcherService 
         return Server.bytePlaylists.length;
     }
 
+    /**
+     * Informs the Server to delete the Playlist
+     *
+     * @param userToken    User being accessed
+     * @param playlistName Name of Playlist to be deleted
+     * @return Acknowledgement of Playlist deletion
+     * @throws IOException
+     */
     public String deletePlaylist(Integer userToken, String playlistName) throws IOException {
         Serializer s = new Serializer();
         User currentSession = Server.currentSessions.get(userToken);
@@ -85,6 +102,15 @@ public class PlaylistDispatcher extends Dispatcher implements DispatcherService 
         return ackMessage.toString();
     }
 
+    /**
+     * Informs the Server to add a Song to a Playlist
+     *
+     * @param userToken    User being referenced
+     * @param playlistName Name of the playlist to be modified
+     * @param songID       ID of the song being added
+     * @return Acknowledgment that the song has been added
+     * @throws IOException
+     */
     public String addSongToPlaylist(Integer userToken, String playlistName, Long songID) throws IOException {
         Serializer s = new Serializer();
         User currentSession = Server.currentSessions.get(userToken);
@@ -93,7 +119,7 @@ public class PlaylistDispatcher extends Dispatcher implements DispatcherService 
         currentSession.getUserProfile().addPlaylist(playlistName, new Playlist(playlistName));
 
         // Add the song to the playlist as a Collection
-        currentSession.getUserProfile().getPlaylist(playlistName).addToPlaylist(Server.d.getUserLibrary().get(Math.toIntExact(songID)));
+        currentSession.getUserProfile().getPlaylist(playlistName).addToPlaylist(Server.deserializer.getUserLibrary().get(Math.toIntExact(songID)));
         s.updateUsersJson(Server.userList);
 
         JsonObject ackMessage = new JsonObject();

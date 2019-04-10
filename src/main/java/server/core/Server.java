@@ -17,32 +17,83 @@ import java.util.List;
 import java.util.Map;
 
 
+/**
+ * This class represents the Music App's Server
+ */
 public class Server {
 
+    /**
+     * Port number to connect clients to
+     */
     private static final int PORT_NUMBER = 2223;
+
+    /**
+     * Starting port for P2P clients
+     */
     private static final int P2P_START_PORT = 2225;
+
+    /**
+     * Next port for the P2P client
+     */
     public static int NEXT_PORT = P2P_START_PORT + 1;
 
+    /**
+     * Number of Nodes to be initialized
+     */
     private static int INIT_NUM_NODES = 5;
+
+    /**
+     * Distributed File System
+     */
     public static DFS dfs;
 
+    /**
+     * SearchResult information as a byte array
+     */
     static byte[] byteSearchResult;
+
+    /**
+     * Playlists information as a byte array
+     */
     static byte[] bytePlaylists;
 
-    public static Deserializer d;
+    /**
+     * Song and User deserializer for the Server
+     */
+    public static Deserializer deserializer;
 
+    /**
+     * List of active sessions
+     */
     static List<User> currentSessions = new ArrayList<>();
+
+    /**
+     * List of Users
+     */
     public static List<User> userList;
+
+    /**
+     * HashMap of User information; Key: username + user's password, Value: User object
+     */
     public static HashMap<String, User> usersInfo = new HashMap<>();
 
+    /**
+     * List of Songs in the music database
+     */
     static List<Collection> songList;
 
+    /**
+     * Server request cache
+     */
     static Map<String, String> requestCache;
-    
-        // Used to update userList and usersInfo after a new user registers
-    static void update(){
-        songList = d.getMusicDatabase();
-        userList = d.deserializeUsers();
+
+    /**
+     * Updates userList and usersInfo after a new user registers
+     */
+    static void update() {
+        songList = deserializer.getMusicDatabase();
+        userList = deserializer.deserializeUsers();
+
         for (User u : userList) {
             if (usersInfo.containsValue(u)) {
                 throw new IllegalStateException("Duplicate user found in usersInfo");
@@ -51,11 +102,19 @@ public class Server {
         }
     }
 
-    public static void updateSongList()
-    {
-        songList = d.getMusicDatabase();
+    /**
+     * Updates the song list by using the deserializer's getMusicDatabase method.
+     */
+    public static void updateSongList() {
+        songList = deserializer.getMusicDatabase();
     }
 
+    /**
+     * Main method for starting the Server
+     *
+     * @param args N/A
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
         dfs = new DFS(P2P_START_PORT);
 
@@ -99,7 +158,7 @@ public class Server {
                     jsonStr = gson.toJson(chunk);
                     dfs.append(testfile, jsonStr);
 
-                    System.out.println(String.format("Creating page [%d/%d]", ++i, chunks.size()));
+                    System.out.println(String.format("Creating page [%deserializer/%deserializer]", ++i, chunks.size()));
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
@@ -122,14 +181,13 @@ public class Server {
 //            }
 //        }
 
-
         requestCache = new HashMap<>();
         System.out.println("Deserializing music.json and user.json...");
-        d = new Deserializer();
+        deserializer = new Deserializer();
         System.out.println("Done.");
 
-        songList = d.getMusicDatabase();
-        userList = d.deserializeUsers();
+        songList = deserializer.getMusicDatabase();
+        userList = deserializer.deserializeUsers();
 
         for (User u : userList) {
             if (usersInfo.containsValue(u)) {

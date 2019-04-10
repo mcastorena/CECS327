@@ -11,16 +11,22 @@ import java.util.Objects;
 import static server.core.Server.dfs;
 
 /**
-* SongDispatcher is the core responsible for obtaining the songs
-*
-* @author  Oscar Morales-Ponce
-* @version 0.15
-* @since   02-11-2019 
-*/
-public class SongDispatcher extends Dispatcher implements DispatcherService
-{
+ * SongDispatcher is the core responsible for obtaining the songs
+ *
+ * @author Oscar Morales-Ponce
+ * @version 0.15
+ * @since 02-11-2019
+ */
+public class SongDispatcher extends Dispatcher implements DispatcherService {
+
+    /**
+     * Size of each fragment
+     */
     private static final int FRAGMENT_SIZE = 44100;
 
+    /**
+     * Relative file path for the music files
+     */
     private static final String MUSIC_FILE_PATH;
 
     static {
@@ -37,9 +43,9 @@ public class SongDispatcher extends Dispatcher implements DispatcherService
     /**
      * getSongChunk: Gets a chunk of a given song
      *
-     * @param key:      Song ID. Each song has a unique ID
-     * @param fragment: The chunk corresponds to
-     *                  [fragment * FRAGMENT_SIZE, FRAGMENT_SIZE]
+     * @param key      Song ID. Each song has a unique ID
+     * @param fragment The chunk corresponds to
+     *                 [fragment * FRAGMENT_SIZE, FRAGMENT_SIZE]
      */
     public String getSongChunk(Long key, Long fragment) throws IOException {
         byte buf[] = new byte[FRAGMENT_SIZE];
@@ -66,7 +72,7 @@ public class SongDispatcher extends Dispatcher implements DispatcherService
     /**
      * getFileSize: Gets a size of the file
      *
-     * @param key: Song ID. Each song has a unique ID
+     * @param key Song ID. Each song has a unique ID
      */
     public Integer getFileSize(Long key) {
         File file = new File(MUSIC_FILE_PATH + File.separator + key + ".mp3");

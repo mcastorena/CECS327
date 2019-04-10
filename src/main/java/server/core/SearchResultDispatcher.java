@@ -13,14 +13,21 @@ import java.util.Base64;
 import java.util.List;
 
 
+/**
+ * This class dispatches SearchResults
+ */
 public class SearchResultDispatcher extends Dispatcher implements DispatcherService {
+
+    /**
+     * Size of each fragment
+     */
     static final int FRAGMENT_SIZE = 44100;
 
     /**
-     * getSearchResultChunk: Gets a chunk of a given search result
+     * Gets a chunk of a given search result
      *
-     * @param fragment: The chunk corresponds to
-     *                  [fragment * FRAGMENT_SIZE, FRAGMENT_SIZE]
+     * @param fragment The chunk corresponds to
+     *                 [fragment * FRAGMENT_SIZE, FRAGMENT_SIZE]
      */
     public String getSearchResultChunk(Long fragment) throws IOException {
         byte buf[] = new byte[FRAGMENT_SIZE];
@@ -35,14 +42,18 @@ public class SearchResultDispatcher extends Dispatcher implements DispatcherServ
         return Base64.getEncoder().encodeToString(buf);
     }
 
-    /*
-     * getSize: Gets a size of the byte array
-     * @param query: the search query from user
+    /**
+     * Gets the size of a SearchResult
+     *
+     * @param query Song being searched
+     * @return Size of the SearchResult as a byte array, as an Integer
      */
     public Integer getSize(String query) {
-        //this.query = query;
-        SearchResult searchResult = Search.search(query, Server.songList);
-        List<Collection> songResults = searchResult.getSongResultList();
+        SearchResult searchResult;
+        List<Collection> songResults;
+
+        searchResult = Search.search(query, Server.songList);
+        songResults = searchResult.getSongResultList();
 
         // Convert search result to json
         JsonArray sResult = new JsonArray();

@@ -1,7 +1,5 @@
 package server.chord;
 
-import java.rmi.*;
-import java.net.*;
 import java.util.*;
 import java.io.*;
 import java.nio.file.*;
@@ -13,9 +11,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 
 import server.core.Server;
-import static server.core.Server.d;
-
-import java.io.InputStream;
+import static server.core.Server.deserializer;
 
 
 /* JSON Format
@@ -656,7 +652,7 @@ public class DFS {
             peer.put(pageGUID, data);
             if(fileName.contains("music")) {
                 Thread.sleep(2000);
-                d.updateMusicOnFileAdd();
+                deserializer.updateMusicOnFileAdd();
                 Server.updateSongList();
                 System.out.println("Append Complete");
             }
