@@ -106,21 +106,17 @@ public class Deserializer {
             while(dfsFileScan.hasNext()) {
                 String fileName = dfsFileScan.next();
 
-                if(fileName.equalsIgnoreCase("musicChunks")) {
+                if(fileName.equalsIgnoreCase("music")) {
                     System.out.println(fileName);
-
                     int pageNumber = 0;
-                    byte bytes[];
-                    JsonArray bigArr = new JsonArray();
-                    // Piece together the music.json from each page (as a byte array) in DFS
-                    while ((bytes = dfs.read(fileName, pageNumber, 23-2392)) != null) {
-                        String jsonStr = new String(bytes);
-                        JsonArray smallArr = gson.fromJson(new JsonReader(new StringReader(jsonStr)), JsonArray.class);
+                    RemoteInputFileStream rifs;
+                    while((rifs = dfs.read(fileName, pageNumber)) != null)
+                    {
+                        rifs.connect();
+                        InputStreamReader br = new InputStreamReader(rifs);
+                        JsonArray jsonArray = gson.fromJson(br, JsonArray.class);
 
-                        for (var element : smallArr)
-                            bigArr.add(element);
-
-                        for (JsonElement jsonElement : bigArr) {
+                        for (JsonElement jsonElement : jsonArray) {
                             JsonObject jsonObject = jsonElement.getAsJsonObject();
                             Release release = gson.fromJson(jsonObject.get("release"), Release.class);
                             Artist artist = gson.fromJson(jsonObject.get("artist"), Artist.class);
