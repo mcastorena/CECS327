@@ -14,17 +14,17 @@ class DeserializerTest {
         deserializer = new Deserializer();
     }
 
-    @Test
-    void musicFilePathExists() {
-        System.out.println(Deserializer.MUSIC_STREAM.toString());
-        assertNotNull(Deserializer.MUSIC_STREAM);
-    }
+//    @Test
+//    void musicFilePathExists() {
+//        System.out.println(Deserializer.MUSIC_STREAM.toString());
+//        assertNotNull(Deserializer.MUSIC_STREAM);
+//    }
 
-    @Test
-    void loadOwnedMusicIds() {
-        System.out.println(deserializer.getOwnedIDs());
-        assertNotNull(deserializer.getOwnedIDs());
-    }
+//    @Test
+//    void loadOwnedMusicIds() {
+//        System.out.println(deserializer.getOwnedIDs());
+//        assertNotNull(deserializer.getOwnedIDs());
+//    }
 
     @Test
     void getMusicDatabase_notNull() {

@@ -11,8 +11,8 @@ import java.net.SocketTimeoutException;
 class ClientCommunicationProtocol {
 
     private static final Logger LOGGER = Logger.getLogger(ClientCommunicationProtocol.class);
-    private static final int FRAGMENT_SIZE = 15000;                      // Packet size
-    private static final int TIMEOUT_DURATION = 10000;
+    private static final int FRAGMENT_SIZE = 62000;                      // Packet size
+    private static final int TIMEOUT_DURATION = 20000;
     private static final int RETRY_ATTEMPTS = 15;
     private byte[] packetSize = new byte[FRAGMENT_SIZE];
 
@@ -26,7 +26,6 @@ class ClientCommunicationProtocol {
             this.socket = new DatagramSocket();             // Initialize Socket
             socket.setSoTimeout(TIMEOUT_DURATION);
             this.portNumber = portNum;                      // Initialize port number
-            //socket.connect(ip,portNum);//Not sure if this is needed
 
         } catch (IOException e) {
             e.printStackTrace();

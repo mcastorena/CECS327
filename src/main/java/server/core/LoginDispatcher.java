@@ -9,7 +9,7 @@ import java.io.InputStream;
 import java.util.Base64;
 
 public class LoginDispatcher extends Dispatcher implements DispatcherService {
-    private static final int FRAGMENT_SIZE = 8192;
+    private static final int FRAGMENT_SIZE = 44100;
 
     /**
      * login: return login token if authorized

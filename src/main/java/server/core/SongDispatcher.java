@@ -1,10 +1,15 @@
 package server.core;
 
+import server.chord.RemoteInputFileStream;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Base64;
 import java.util.Objects;
+
+import static server.core.Server.dfs;
 
 /**
 * SongDispatcher is the core responsible for obtaining the songs
@@ -15,7 +20,7 @@ import java.util.Objects;
 */
 public class SongDispatcher extends Dispatcher implements DispatcherService
 {
-    private static final int FRAGMENT_SIZE = 8192;
+    private static final int FRAGMENT_SIZE = 44100;
 
     private static final String MUSIC_FILE_PATH;
     static {
@@ -37,9 +42,19 @@ public class SongDispatcher extends Dispatcher implements DispatcherService
     */
     public String getSongChunk(Long key, Long fragment) throws IOException {
         byte buf[] = new byte[FRAGMENT_SIZE];
-        File file = new File(MUSIC_FILE_PATH + File.separator + key + ".mp3");
-        System.out.println("SongDispatcher has found file: " + key + "\tStatus: " + file.exists());
-        FileInputStream inputStream = new FileInputStream(file);
+        //File file = new File(MUSIC_FILE_PATH + File.separator + key + ".mp3");
+        //System.out.println("SongDispatcher has found file: " + key + "\tStatus: " + file.exists());
+
+        RemoteInputFileStream rifs = null;
+        try {
+            rifs = dfs.read(key+".mp3", 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        rifs.connect();
+        //FileInputStream inputStream = new FileInputStream(file);
+        InputStream inputStream = rifs;
+
         inputStream.skip(fragment * FRAGMENT_SIZE);
         inputStream.read(buf);
         inputStream.close();
