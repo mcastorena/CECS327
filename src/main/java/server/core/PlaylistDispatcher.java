@@ -119,7 +119,7 @@ public class PlaylistDispatcher extends Dispatcher implements DispatcherService 
         currentSession.getUserProfile().addPlaylist(playlistName, new Playlist(playlistName));
 
         // Add the song to the playlist as a Collection
-        currentSession.getUserProfile().getPlaylist(playlistName).addToPlaylist(Server.deserializer.getUserLibrary().get(Math.toIntExact(songID)));
+        currentSession.getUserProfile().getPlaylist(playlistName).addToPlaylist(Server.d.getUserLibrary().get(Math.toIntExact(songID)));
         s.updateUsersJson(Server.userList);
 
         JsonObject ackMessage = new JsonObject();

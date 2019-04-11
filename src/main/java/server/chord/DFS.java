@@ -14,7 +14,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
-import static server.core.Server.deserializer;
+import static server.core.Server.d;
 
 /**
  * This class represents a Distributed File System
@@ -730,7 +730,7 @@ public class DFS {
 
             if(fileName.contains("music")) {
                 Thread.sleep(2000);
-                deserializer.updateMusicOnFileAdd();
+                d.updateMusicOnFileAdd();
                 Server.updateSongList();
                 System.out.println("Append Complete");
             }

@@ -76,7 +76,7 @@ public class Deserializer {
 //        for (File file : files) {
 //            String filename = trimMp3Extension(file.getName());
 //
-//            if (filename.matches("^\\deserializer{5,}$"))
+//            if (filename.matches("^\\d{5,}$"))
 //                ownedIDs.add(Integer.parseInt(filename));
 //            else
 //                throw new IllegalStateException("Invalid file format; Music file must be an mp3 with > 4 character");

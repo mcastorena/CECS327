@@ -1,15 +1,11 @@
 package server.core;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import server.chord.DFS;
+import server.chord.DFSCommand;
 import server.chord.RemoteInputFileStream;
 import server.model.Collection;
-import server.model.Profile;
 import server.model.User;
 import server.util.Deserializer;
-import server.util.MusicJsonSplitter;
-import server.util.Serializer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,9 +54,9 @@ public class Server {
     static byte[] bytePlaylists;
 
     /**
-     * Song and User deserializer for the Server
+     * Song and User d for the Server
      */
-    public static Deserializer deserializer;
+    public static Deserializer d;
 
     /**
      * List of active sessions
@@ -100,10 +96,10 @@ public class Server {
     }
 
     /**
-     * Updates the song list by using the deserializer's getMusicDatabase method.
+     * Updates the song list by using the d's getMusicDatabase method.
      */
     public static void updateSongList() {
-        songList = deserializer.getMusicDatabase();
+        songList = d.getMusicDatabase();
     }
 
     /**
@@ -140,11 +136,11 @@ public class Server {
 
         requestCache = new HashMap<>();
         System.out.println("Deserializing music.json and user.json...");
-        deserializer = new Deserializer();
+        d = new Deserializer();
         System.out.println("Done.");
 
-        songList = deserializer.getMusicDatabase();
-        userList = deserializer.deserializeUsers();
+        songList = d.getMusicDatabase();
+        userList = d.deserializeUsers();
 
         for (User u : userList) {
             if (usersInfo.containsValue(u)) {

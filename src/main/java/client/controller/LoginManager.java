@@ -19,8 +19,8 @@ package client.controller;//package controller;
 //
 //    public boolean JSONLoginValidation() throws IOException {
 //        boolean isUser = false;
-//        Deserializer deserializer = new Deserializer();
-//        List<User> users = deserializer.deserializeUsers();
+//        Deserializer d = new Deserializer();
+//        List<User> users = d.deserializeUsers();
 //        HashMap<String, User> userInfo = new HashMap<>();
 //
 //        for(User u : users){

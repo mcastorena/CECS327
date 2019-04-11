@@ -22,8 +22,8 @@ class DeserializerTest {
 
 //    @Test
 //    void loadOwnedMusicIds() {
-//        System.out.println(deserializer.getOwnedIDs());
-//        assertNotNull(deserializer.getOwnedIDs());
+//        System.out.println(d.getOwnedIDs());
+//        assertNotNull(d.getOwnedIDs());
 //    }
 
     @Test
