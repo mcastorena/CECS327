@@ -70,19 +70,37 @@ public class DFS
             this.writeTS = date.getTime();
         }
         // getters
+
+        /**
+         * Returns the object's GUID
+         * @return Object's GUID as Long
+         */
         public Long getGUID(){
             return this.guid;
         }
 
+        /**
+         * Return object's size
+         * @return Object's size as LONG
+         */
         public Long getSize(){
             return this.size;
         }
 
         // setters
+
+        /**
+         * Set object's GUID
+         * @param g - Long GUID created using md5 function
+         */
         public void setGUID(Long g){
             this.guid = g;
         }
 
+        /**
+         * Set object's size
+         * @param s - Long size that reflects the page's physical size on the disk
+         */
         public void setSize(Long s){
             this.size = s;
         }
@@ -116,41 +134,84 @@ public class DFS
          this.writeTS = date.getTime();
         }
         // getters
+
+        /**
+         * Return object name
+         * @return Object's name
+         */
         public String getName(){
             return this.name;
         }
+
+        /**
+         * Return object's siZe
+         * @return Return the sum of the object's Pages's sizes
+         */
         public Long getSize(){
             return this.size;
         }
         // setters
+
+        /**
+         * Set object's name
+         * @param n - string to be set as object's name
+         */
         public void setName(String n){
             this.name = n;
         }
+
+        /**
+         * Set object's size, called everytime a page is added
+         * @param s
+         */
         public void setSize(Long s){
             this.size = s;
         }
 
+        /**
+         * Update object's number of pages by getting it's pages array size
+         */
         public void updateNumPages(){
             this.numberOfPages = pages.size();
         }
+
+        /**
+         * Increment object's reference count when object is in use
+         */
         public void incrementRef(){
             this.referenceCount++;
         }
 
+        /**
+         * Decrement object's reference count when object is no longer in use
+         */
         public void decrementRef(){
             this.referenceCount--;
         }
 
+        /**
+         * Increment object and it's page's refCount when in use
+         * @param pageIndex - pageIndex for page in use
+         */
         public void incrementRef(int pageIndex){
             this.referenceCount++;
             pages.get(pageIndex).referenceCount++;
         }
 
+        /**
+         *  Decrement object and it's page's refCount when in use
+         * @param pageIndex - pageIndex for page in use
+         */
         public void decrementRef(int pageIndex){
             this.referenceCount--;
             this.pages.get(pageIndex).referenceCount--;
         }
 
+        /**
+         * Add's a page this object. Update numberOfPages and object's size
+         * @param p - page to be added
+         * @param size - size of the page to be added
+         */
         public void addPage(PagesJson p, Long size){
             this.pages.add(p);
             this.numberOfPages++;
@@ -166,10 +227,21 @@ public class DFS
             file = new ArrayList<FileJson>();
          }
         // getters
+
+        /**
+         * Return object's file list
+         * @return - file - file list
+         */
         public List<FileJson> getFileList(){
              return this.file;
         }
         // setters
+
+
+        /**
+         * Add a file to the files
+         * @param f - file to be added
+         */
         public void addFile(FileJson f){
              this.file.add(f);
         }
@@ -178,8 +250,13 @@ public class DFS
     
     int port;
     Chord  chord;
-    
-    
+
+
+    /**
+     * Creates a md5 hash from string input
+     * @param objectName - name of the object to be hashed
+     * @return md5 hash in Long format
+     */
     private long md5(String objectName)
     {
         try
@@ -217,41 +294,44 @@ public class DFS
         });
         
     }
-    
-  
-/**
- * Join the chord
-  *
- */
+
+
+    /**
+     * Join the chord
+     * @param Ip - IP for the chord to be joined
+     * @param port - port to join
+     * @throws Exception
+     */
     public void join(String Ip, int port) throws Exception
     {
         chord.joinRing(Ip, port);
         chord.print();
     }
-    
-    
-   /**
- * leave the chord
-  *
- */ 
+
+
+    /**
+     * Leave the chord
+     * @throws Exception
+     */
     public void leave() throws Exception
     {        
        chord.leave();
     }
-  
-   /**
- * print the status of the peer in the chord
-  *
- */
+
+    /**
+     * Print the status of the peer in the chord
+     * @throws Exception
+     */
     public void print() throws Exception
     {
         chord.print();
     }
-    
-/**
- * readMetaData read the metadata from the chord
-  *
- */
+
+    /**
+     * Read the metadata in the chord
+     * @return FilesJson object containing all "files", or null if an exception is encountered
+     * @throws Exception
+     */
     public FilesJson readMetaData() throws Exception
     {
         FilesJson filesJson = null;
@@ -292,11 +372,12 @@ public class DFS
 //        }
         return filesJson;
     }
-    
-/**
- * writeMetaData write the metadata back to the chord
-  *
- */
+
+    /**
+     * Write the metadata back to the cord
+     * @param filesJson - Object that will form the new metadata to be written
+     * @throws Exception
+     */
     public void writeMetaData(FilesJson filesJson) throws Exception
     {
         long guid = md5("Metadata");
@@ -332,11 +413,12 @@ public class DFS
         }
     }
 
-  
-/**
- * List the files in the system
-  *
- */
+
+    /**
+     * List the files in the chord
+     * @return string containing the names of all files in the chord
+     * @throws Exception
+     */
     public String lists() throws Exception
     {
         StringBuilder listOfFiles = new StringBuilder("\nFiles:\n");                        // Initialize string to hold file names
