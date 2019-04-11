@@ -539,33 +539,33 @@ public class DFS
 //     * @return The page as a byte array.
 //     * @throws Exception
 //     */
-//    public byte[] read(String filename, int pageNumber, int unused_variable) throws Exception
-//    {
-//        // Read Metadata
-//        FilesJson metadata = readMetaData();
-//
-//        // Find file
-//
-//        var file = find(metadata.getFileList(), filename);
-//        if (file != null) {
-//            if(file.numberOfPages == 0 || pageNumber >= file.numberOfPages){
-//                return null;
-//            }
-//
-//            var timestamp = new Date().getTime();
-//            var page = file.pages.get(pageNumber);
-//            file.incrementRef();
-//
-//            file.readTS = timestamp;
-//            page.readTS = timestamp;
-//
-//            var peer = chord.locateSuccessor(page.getGUID());
-//
-//            writeMetaData(metadata);
-//            return peer.get(page.getGUID(), 0, 1024 << 9);
-//        }
-//        return null;
-//    }
+    public byte[] read(String filename, int pageNumber, int unused_variable) throws Exception
+    {
+        // Read Metadata
+        FilesJson metadata = readMetaData();
+
+        // Find file
+
+        var file = find(metadata.getFileList(), filename);
+        if (file != null) {
+            if(file.numberOfPages == 0 || pageNumber >= file.numberOfPages){
+                return null;
+            }
+
+            var timestamp = new Date().getTime();
+            var page = file.pages.get(pageNumber);
+            file.incrementRef();
+
+            file.readTS = timestamp;
+            page.readTS = timestamp;
+
+            var peer = chord.locateSuccessor(page.getGUID());
+
+            writeMetaData(metadata);
+            return peer.get(page.getGUID(), 0, 1024 << 9);
+        }
+        return null;
+    }
 
     /**
      * Read the first page for a file
