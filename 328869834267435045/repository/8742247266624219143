@@ -1,0 +1,52 @@
+{
+  "userList": [
+    {
+      "username": "user",
+      "password": "pass",
+      "email": "example@email.com",
+      "playlists": [
+        {
+          "first": []
+        },
+        {
+          "second": []
+        }
+      ]
+    },
+    {
+      "username": "mark",
+      "password": "manson",
+      "email": "mark@email.com",
+      "playlists": [
+        {
+          "hits": []
+        },
+        {
+          "New Songs": []
+        },
+        {
+          "jams": []
+        }
+      ]
+    },
+    {
+      "username": "test",
+      "password": "test",
+      "email": "example@email.com",
+      "playlists": [
+        {
+          "playlist1": []
+        },
+        {
+          "playlist2": []
+        }
+      ]
+    },
+    {
+      "username": "new",
+      "password": "user",
+      "email": "test@test.com",
+      "playlists": []
+    }
+  ]
+}

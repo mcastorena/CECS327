@@ -425,9 +425,11 @@ public class DFS {
             scan.useDelimiter("\\A");
             var reader = new JsonReader(new StringReader(metadataraw));
             reader.setLenient(true);
-            filesJson = gson.fromJson(reader, FilesJson.class);
-        } catch (NoSuchElementException ex) {
-            File metadata = new File(this.chord.prefix + guid);       // Create file object with filepath
+            filesJson= gson.fromJson(reader, FilesJson.class);
+        }
+        catch (Exception ex)
+        {
+            File metadata = new File(this.chord.prefix+guid);       // Create file object with filepath
             metadata.createNewFile();                                         // Create the physical file
 
             // Create initial data for metadata
@@ -437,9 +439,10 @@ public class DFS {
             // Write data to metadata file
             writeMetaData(filesJson);
 
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+//        catch (Exception e) {
+//            e.printStackTrace();
+//        }
         return filesJson;
     }
 
@@ -593,21 +596,21 @@ public class DFS {
             metadata.file.get(fileIndex).decrementRef(pageNumber);                          // Decrement refCount
             writeMetaData(metadata);                                                        // Update metadata for read and refCount
             ChordMessageInterface peer = chord.locateSuccessor(myPage.getGUID());
-            System.out.println(peer.getId());
+            //System.out.println(peer.getId());
             return peer.get(myPage.guid);
         } else return null;
     }
 
-    /**
-     * Retrieves a byte array representation of the queried page.
-     *
-     * @param filename        Name of the file in the Metadata list.
-     * @param pageNumber      The page to retrieve.
-     * @param unused_variable Unused.
-     * @return The page as a byte array.
-     * @throws Exception
-     */
-    public byte[] read(String filename, int pageNumber, int unused_variable) throws Exception {
+//    /**
+//     * Retrieves a byte array representation of the queried page.
+//     * @param filename Name of the file in the Metadata list.
+//     * @param pageNumber The page to retrieve.
+//     * @param unused_variable Unused.
+//     * @return The page as a byte array.
+//     * @throws Exception
+//     */
+    public byte[] read(String filename, int pageNumber, int unused_variable) throws Exception
+    {
         // Read Metadata
         FilesJson metadata = readMetaData();
 
@@ -621,6 +624,7 @@ public class DFS {
 
             var timestamp = new Date().getTime();
             var page = file.pages.get(pageNumber);
+            file.incrementRef();
 
             file.readTS = timestamp;
             page.readTS = timestamp;
@@ -723,13 +727,16 @@ public class DFS {
             ChordMessageInterface peer = chord.locateSuccessor(pageGUID);
             writeMetaData(metadata);                                                        // Update metadata for write and refCount
             peer.put(pageGUID, data);
-            if (fileName.contains("music")) {
+
+            if(fileName.contains("music")) {
                 Thread.sleep(2000);
                 deserializer.updateMusicOnFileAdd();
                 Server.updateSongList();
                 System.out.println("Append Complete");
             }
-        } else return;
+            else
+                System.out.println("Append Complete");
+        }else return;
     }
 
     /**
@@ -758,7 +765,9 @@ public class DFS {
             peer.put(pageGUID, text);                   // Store the file on the Chord
 
             writeMetaData(metadata);
-        } else {
+            target.decrementRef();
+        }
+        else {
             System.out.println("File '" + filename + "' not found.");
         }
     }

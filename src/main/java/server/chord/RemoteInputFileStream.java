@@ -189,8 +189,9 @@ public class RemoteInputFileStream extends InputStream implements Serializable {
                     //System.out.println("Read buffer " + numbytes);
 
                     sem.release();
-                    //             System.out.println("Read buffer");
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
 
                 }
             }

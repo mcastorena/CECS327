@@ -1,23 +1,19 @@
 package server.chord;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import server.core.Server;
+import server.util.MusicJsonSplitter;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.rmi.RemoteException;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static server.core.Server.NEXT_PORT;
-import static server.core.Server.dfs;
+import static server.core.Server.*;
 
-/**
- *
- */
-public class DFSCommand {
-
-    /**
-     * Constructor
-     *
-     * @throws Exception
-     */
+public class DFSCommand
+{
     public DFSCommand() throws Exception {
         BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
         String line = buffer.readLine();
@@ -33,7 +29,6 @@ public class DFSCommand {
 
                             dfs.join("127.0.0.1", NEXT_PORT - 1);
                             NEXT_PORT++;
-                            //dfs.join("127.0.0.1", Integer.parseInt(result[1]));
                         } catch (NumberFormatException e) {
                             System.out.println("Error - Second argument must be a port number.");
                         }
@@ -63,7 +58,7 @@ public class DFSCommand {
                 case "read":
                     if (result.length == 3) {
                         try {
-                            var data = dfs.read(result[1], Integer.parseInt(result[2]));   // User must specify fileList name and page number
+                            dfs.read(result[1], Integer.parseInt(result[2]));   // User must specify fileList name and page number
                         } catch (NumberFormatException e) {
                             System.out.println("Error - Second argument must be a page number.");
                         }
@@ -92,7 +87,36 @@ public class DFSCommand {
                             String text = matcher.group(1);
 
                             dfs.append(result[1], text); // Appends text
-                        } else
+                        }
+                        else if (result[1].contains("music"))
+                        {
+
+                            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+                            var chunks =
+                                    MusicJsonSplitter.getMusicJsonChunks(result[2], 100);
+//                                DFSCommand.class.getResource("/server/music.json").getPath(),
+//                                100);
+
+                            System.out.println("Adding pages to music.json...");
+                            int i = 0;
+                            for (var chunk : chunks) {
+                                String jsonStr = null;
+                                try {
+                                    jsonStr = gson.toJson(chunk);
+                                    dfs.append(result[1], jsonStr);
+
+                                    System.out.println(String.format("Creating page [%d/%d]", ++i, chunks.size()));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            d.updateMusicOnFileAdd();
+                            Server.updateSongList();
+
+                            System.out.println("Done");
+                        }
+                        else
                             dfs.append(result[1], new RemoteInputFileStream(result[2]));        // User must specify filename they want to append data to and filepath of the data to be appended
                     }
                     break;
