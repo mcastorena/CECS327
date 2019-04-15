@@ -561,8 +561,48 @@ public class DFS
 
             var peer = chord.locateSuccessor(page.getGUID());
 
+            file.decrementRef();
             writeMetaData(metadata);
             return peer.get(page.getGUID(), 0, 1024 << 9);
+        }
+        return null;
+    }
+
+
+    //    /**
+//     * Retrieves a byte array representation of the queried page.
+//     * @param filename Name of the file in the Metadata list.
+//     * @param pageNumber The page to retrieve.
+//     * @param offset The fragment number.
+//     * @param len The max length to be read in the buf
+//     * @return The page as a byte array.
+//     * @throws Exception
+//     */
+    public byte[] read(String filename, int pageNumber, int offset, int len) throws Exception
+    {
+        // Read Metadata
+        FilesJson metadata = readMetaData();
+
+        // Find file
+
+        var file = find(metadata.getFileList(), filename);
+        if (file != null) {
+            if(file.numberOfPages == 0 || pageNumber >= file.numberOfPages){
+                return null;
+            }
+
+            var timestamp = new Date().getTime();
+            var page = file.pages.get(pageNumber);
+            file.incrementRef();
+
+            file.readTS = timestamp;
+            page.readTS = timestamp;
+
+            var peer = chord.locateSuccessor(page.getGUID());
+
+            file.decrementRef();
+            writeMetaData(metadata);
+            return peer.get(page.getGUID(), offset, len);
         }
         return null;
     }
