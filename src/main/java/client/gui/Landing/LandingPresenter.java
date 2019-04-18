@@ -62,7 +62,7 @@ public class LandingPresenter {
      *
      * @param proxy - Proxy that the client is connected through
      */
-    public LandingPresenter(ProxyInterface proxy) {
+    public LandingPresenter(ProxyInterface proxy, LandingModel landingModel) {
         clientProxy = proxy;
 
         try {
