@@ -46,6 +46,8 @@ public class DFS
 {
     Date date = new Date();
     Long metadata;
+    TreeMap<String, ArrayList> myMap;
+
     
 
     public class PagesJson
@@ -285,6 +287,7 @@ public class DFS
         
         
         this.port = port;
+        myMap = new TreeMap<String, ArrayList>();                          // Initialize myMap for use in mapReduce
         this.metadata = md5("Metadata");
         long guid = md5("" + port);
         chord = new Chord(port, guid);
@@ -787,8 +790,22 @@ public class DFS
         this.onPageComplete(file);
     }
 
-    public void reduceContext(JsonArray page, Mapper reducer, DFS coordinator, String file){
-
+    public void reduceContext(JsonArray page, Mapper reducer, DFS coordinator, String file) throws IOException {
+        for(int i = 0; i < page.size(); i++){
+            int index = i;
+            JsonObject value = (JsonObject) page.get(index);
+            JsonArray release = value.getAsJsonArray();
+            String key = release.get(1).getAsString();                          // Song name is key
+            reducer.reduce(key, value, this, file);
+        }
+    }
+  
+  private void addKeyValue(String key, JsonObject value){
+        if(!myMap.containsKey(key)){                            // If key is not in map, add an entry
+            ArrayList tmpList = new ArrayList();
+            myMap.put(key, tmpList);
+        }
+        myMap.get(key).add(value);                              // Add value to map
     }
 
     public void emit(String key, JsonElement value, String file) {
