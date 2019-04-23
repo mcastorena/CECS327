@@ -1,3 +1,4 @@
+package server.chord;
 /**
 * Chord implements Chord P2P
 *
@@ -12,6 +13,10 @@ import java.rmi.server.*;
 import java.net.*;
 import java.util.*;
 import java.io.*;
+
+import jdk.jshell.execution.RemoteExecutionControl;
+import server.chord.ChordMessageInterface;
+import server.chord.RemoteInputFileStream;
 
 /**
  * Chord extends from UnicastRemoteObject to support RMI.
@@ -556,7 +561,8 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface
      * @param n - number of nodes counted, init 1
      * @return n - the number of nodes in the chord
      */
-    public int onChordSize(Long source, int n){
+    public int onChordSize(Long source, int n) throws RemoteException {
+        System.out.println("on chord size: " + n);
         if(source != this.guid){
             this.successor.onChordSize(source, n++);
         }

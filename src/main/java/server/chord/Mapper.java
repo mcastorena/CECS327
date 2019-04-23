@@ -1,3 +1,5 @@
+package server.chord;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -5,7 +7,7 @@ import com.google.gson.JsonObject;
 import java.io.IOException;
 
 public class Mapper implements MapReduceInterface {
-    public void map(int key, JsonObject value, DFS context, String file) throws IOException
+    public void map(String key, JsonObject value, DFS context, String file) throws IOException
     {
         //let newKey be the song title in value
         JsonArray release =(JsonArray) value.get("release");

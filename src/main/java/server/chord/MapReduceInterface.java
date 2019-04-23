@@ -1,3 +1,5 @@
+package server.chord;
+
 import com.google.gson.JsonObject;
 import java.io.IOException;
 

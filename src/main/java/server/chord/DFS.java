@@ -1,3 +1,5 @@
+package server.chord;
+
 import java.rmi.*;
 import java.net.*;
 import java.util.*;
@@ -5,14 +7,14 @@ import java.io.*;
 import java.nio.file.*;
 import java.math.BigInteger;
 import java.security.*;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+
+import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
 
 import server.core.Server;
 import static server.core.Server.d;
+
+import server.chord.Chord;
 
 import java.io.InputStream;
 
@@ -780,12 +782,16 @@ public class DFS
         for(int i = 0; i < page.size(); i++){
             int index = i;
             JsonObject value = (JsonObject) page.get(index);
-            mapper.map(index, value, this, file);
+            mapper.map(Integer.toString(index), value, this, file);
         }
         this.onPageComplete(file);
     }
 
     public void reduceContext(JsonArray page, Mapper reducer, DFS coordinator, String file){
+
+    }
+
+    public void emit(String key, JsonElement value, String file) {
 
     }
 

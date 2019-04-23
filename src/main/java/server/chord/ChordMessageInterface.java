@@ -1,5 +1,10 @@
+package server.chord;
+import server.chord.RemoteInputFileStream;
+
 import java.rmi.*;
 import java.io.*;
+
+
 
 public interface ChordMessageInterface extends Remote
 {
@@ -24,5 +29,5 @@ public interface ChordMessageInterface extends Remote
     public byte[] get(long guidObject, long offset, int len) throws IOException, RemoteException;  
     public void delete(long guidObject) throws IOException, RemoteException;
 
-    public int onChordSize(Long source, int n);
+    public int onChordSize(Long source, int n) throws RemoteException;
 }
