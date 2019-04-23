@@ -1,4 +1,3 @@
-package server.chord;
 import java.rmi.*;
 import java.net.*;
 import java.util.*;
@@ -8,6 +7,8 @@ import java.math.BigInteger;
 import java.security.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 
 import server.core.Server;
@@ -756,6 +757,50 @@ public class DFS
         }
         return null;
     }
+
+//    public void runMapReduce(String fileInput, String fileOutput){
+//        int size = this.chord.successor.onChordSize(this.chord.guid, 1);
+//        int interval = 1936/size;
+//
+//
+//    }
+
+    private void onPageComplete(String file) throws Exception {
+        FilesJson metadata = this.readMetaData();
+        for(int i = 0; i < metadata.file.size(); i++){
+            if(metadata.file.get(i).getName().equals(file)){
+                metadata.file.get(i).numberOfPages--;
+                break;
+            }
+        }
+        writeMetaData(metadata);
+    }
+
+    public void mapContext(JsonArray page, Mapper mapper, DFS coordinator, String file) throws Exception {
+        for(int i = 0; i < page.size(); i++){
+            int index = i;
+            JsonObject value = (JsonObject) page.get(index);
+            mapper.map(index, value, this, file);
+        }
+        this.onPageComplete(file);
+    }
+
+    public void reduceContext(JsonArray page, Mapper reducer, DFS coordinator, String file){
+
+    }
+
+    private void createFile(String file, int interval, int size) throws Exception {
+        int lower = 0;
+        this.create(file);
+        for(int i = 0; i < size - 1; i++){
+            Long page = this.md5(file+i);
+        }
+
+    }
+
+
+
+
 }
 
 
