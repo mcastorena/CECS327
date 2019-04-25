@@ -1,3 +1,4 @@
+
 package server.chord;
 
 import java.rmi.*;
@@ -763,6 +764,22 @@ public class DFS
         return null;
     }
 
+    /**
+     *
+     * @param source - GUID of the chord peer that initiates onChordSize
+     * @param n - number of nodes counted, init 1
+     * @return n - the number of nodes in the chord
+     */
+    public int onChordSize(Long source, int n) throws RemoteException {
+        System.out.println("on chord size: " + n);
+        if(source != this.chord.guid){
+            this.chord.successor.onChordSize(source, n++);
+        }
+        // When source == this.guid then all nodes in the chord have been counted
+        return n;
+    }
+
+
 //    public void runMapReduce(String fileInput, String fileOutput){
 //        int size = this.chord.successor.onChordSize(this.chord.guid, 1);
 //        int interval = 1936/size;
@@ -770,6 +787,11 @@ public class DFS
 //
 //    }
 
+    /**
+     * After page has been mapped, remove it from the file's pages in metadata
+     * @param file - Name of the file being edited
+     * @throws Exception
+     */
     private void onPageComplete(String file) throws Exception {
         FilesJson metadata = this.readMetaData();
         for(int i = 0; i < metadata.file.size(); i++){
@@ -781,6 +803,14 @@ public class DFS
         writeMetaData(metadata);
     }
 
+    /**
+     * Runs map for mapreduce
+     * @param page - Page being mapped
+     * @param mapper - Mapper object performing the mapping
+     * @param coordinator - DFS coordinating the mapreduce (this)
+     * @param file - Name of the file being mapped
+     * @throws Exception
+     */
     public void mapContext(JsonArray page, Mapper mapper, DFS coordinator, String file) throws Exception {
         for(int i = 0; i < page.size(); i++){
             int index = i;
@@ -790,6 +820,14 @@ public class DFS
         this.onPageComplete(file);
     }
 
+    /**
+     * Runs reduce for mapreduce
+     * @param page - Page being reduced
+     * @param reducer - Mapper object performing the reduce
+     * @param coordinator - DFS coordinating the reduce (this)
+     * @param file - Name of the file being reduced
+     * @throws IOException
+     */
     public void reduceContext(JsonArray page, Mapper reducer, DFS coordinator, String file) throws IOException {
         for(int i = 0; i < page.size(); i++){
             int index = i;
@@ -799,8 +837,13 @@ public class DFS
             reducer.reduce(key, value, this, file);
         }
     }
-  
-  private void addKeyValue(String key, JsonObject value){
+
+    /**
+     * Adds key, value pair to TreeMap data structure
+     * @param key - Key value in string format
+     * @param value - Content of entry being mapped (data)
+     */
+    private void addKeyValue(String key, JsonObject value){
         if(!myMap.containsKey(key)){                            // If key is not in map, add an entry
             ArrayList tmpList = new ArrayList();
             myMap.put(key, tmpList);
@@ -812,6 +855,25 @@ public class DFS
 
     }
 
+    /**
+     * Store tree in the page in order
+     * @param page - Page receiving TreeMap Data
+     */
+//    private void bulk(PagesJson page){
+//        for(int i = 0; i< myMap.size(); i++){
+//            String key = myMap.firstKey();
+//            ArrayList value = myMap.get(key);
+//            JsonObject data =
+//        }
+//    }
+
+    /**
+     * Creates a file in the DFS
+     * @param file
+     * @param interval
+     * @param size
+     * @throws Exception
+     */
     private void createFile(String file, int interval, int size) throws Exception {
         int lower = 0;
         this.create(file);

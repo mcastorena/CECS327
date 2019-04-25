@@ -555,20 +555,20 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface
         }
     }
 
-    /**
-     *
-     * @param source - GUID of the chord peer that initiates onChordSize
-     * @param n - number of nodes counted, init 1
-     * @return n - the number of nodes in the chord
-     */
-    public int onChordSize(Long source, int n) throws RemoteException {
-        System.out.println("on chord size: " + n);
-        if(source != this.guid){
-            this.successor.onChordSize(source, n++);
-        }
-        // When source == this.guid then all nodes in the chord have been counted
-        return n;
-    }
+//    /**
+//     *
+//     * @param source - GUID of the chord peer that initiates onChordSize
+//     * @param n - number of nodes counted, init 1
+//     * @return n - the number of nodes in the chord
+//     */
+//    public int onChordSize(Long source, int n) throws RemoteException {
+//        System.out.println("on chord size: " + n);
+//        if(source != this.guid){
+//            this.successor.onChordSize(source, n++);
+//        }
+//        // When source == this.guid then all nodes in the chord have been counted
+//        return n;
+//    }
 
 
 }
