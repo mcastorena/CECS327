@@ -309,4 +309,28 @@ public class Deserializer {
         initUserLibrary();
     }
 
+    /**
+     * Get collection (song/artist/release) from a single json object.
+     *
+     * @return A Collection representing the json object.
+     * @param value A json object representing a single song/artist/release.
+     */
+    public Collection jsonToCollection(JsonObject value) {
+
+        try {
+            Gson gson = new Gson();
+
+            Release release = gson.fromJson(value.get("release"), Release.class);
+            Artist artist = gson.fromJson(value.get("artist"), Artist.class);
+            Song song = gson.fromJson(value.get("song"), Song.class);
+
+            return new Collection(release, artist, song);
+        }
+        catch (Exception e) {
+            LOGGER.error("ERROR: jsonToCollection >> " + e);
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }
