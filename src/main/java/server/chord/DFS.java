@@ -896,35 +896,35 @@ public class DFS implements Serializable, IDFSInterface {
 
         int size = this.chord.getSuccessor().onChordSize(this.chord.getId(), 1);
         int interval = 1936/size;
-//
-//        createFile(fileOutput + ".map", interval, size);
+
+        createFile(fileOutput + ".map", interval, size);
         FilesJson metadata = readMetaData();
-//
+
         FileJson fj = null;
-//        for(int i = 0; i < metadata.file.size(); i++){
-//            fj = metadata.file.get(i);
-//            if(fj.getName().equals(fileInput)){
-//                break;
-//            }
-//        }
-//        for(int i = 0; i < fj.pages.size(); i++)
-//        {
-//            PagesJson pg = fj.pages.get(i);
-//            increaseCounter(fileOutput + ".map");
-//            ChordMessageInterface peer = chord.locateSuccessor(pg.getGUID());
-//
-//
-//            try {
-//                peer.mapContext(pg.getGUID(), mapReducer,  this, fileOutput + ".map");
-//            }
-//            catch (Exception e)
-//            {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//        while(getCounter(fileOutput + ".map") != 0)//counter.get(fileOutput + ".map") != 0)
-//            Thread.sleep(10);
+        for(int i = 0; i < metadata.file.size(); i++){
+            fj = metadata.file.get(i);
+            if(fj.getName().equals(fileInput)){
+                break;
+            }
+        }
+        for(int i = 0; i < fj.pages.size(); i++)
+        {
+            PagesJson pg = fj.pages.get(i);
+            increaseCounter(fileOutput + ".map");
+            ChordMessageInterface peer = chord.locateSuccessor(pg.getGUID());
+
+
+            try {
+                peer.mapContext(pg.getGUID(), mapReducer,  this, fileOutput + ".map");
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        while(getCounter(fileOutput + ".map") != 0)
+            Thread.sleep(10);
         bulkTree(fileOutput + ".map", size);
 
         createFile(fileOutput, interval, size);
@@ -948,12 +948,10 @@ public class DFS implements Serializable, IDFSInterface {
             peer.reduceContext(pageData, mapReducer, this, fileOutput);
         }
 
-        while(getCounter(fileOutput) != 0)//counter.get(fileOutput) != 0)
+        while(getCounter(fileOutput) != 0)
             Thread.sleep(10);
         bulkTree(fileOutput, size);
 
-        // Clean up counter mapping
-        //counter.clear();
     }
 
     /**
@@ -1158,10 +1156,10 @@ public class DFS implements Serializable, IDFSInterface {
 
             ChordMessageInterface peer = chord.locateSuccessor(page.getGUID());
             peer.put(page.getGUID(), gson.toJson(map));                   // Store the file on the Chord
-            //Thread.sleep(2000);
 
-            writeMetaData(metadata);
             target.decrementRef();
+            writeMetaData(metadata);
+
         }
         else {
             System.out.println("File '" + filename + "' not found.");
