@@ -47,6 +47,9 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface
     int nextFinger;
     // GUID
     long guid;
+
+    int chordSize = 0;
+
     // path prefix
     String prefix;
 
@@ -97,6 +100,7 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface
     }
 
 
+
 /**
  * return true if the key is in the open interval (key1, key2)
  */
@@ -106,6 +110,10 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface
           return (key > key1 && key < key2);
       else
           return (key > key1 || key < key2);
+    }
+
+    public int getChordSize(){
+        return chordSize;
     }
 
 
@@ -584,21 +592,22 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface
      * @param n - number of nodes counted, init 1
      * @return n - the number of nodes in the chord
      */
-    public int onChordSize(Long source, int n) throws RemoteException {
+    public void onChordSize(Long source, int n) throws RemoteException {
         System.out.println("on chord size: " + n);
         if(source != this.guid){
-            ChordMessageInterface nextNode = this.successor;
-            while(nextNode.getId() != source)
+            //ChordMessageInterface nextNode = this.successor;
+/*            while(nextNode.getId() != source)
             {
                 n++;
                 nextNode = nextNode.getSuccessor();
             }
-            n++;
-            //this.successor.onChordSize(source, n++);
+            n++;*/
+            this.successor.onChordSize(source, n++);
         }
+        chordSize = n;
         // When source == this.guid then all nodes in the chord have been counted
         System.out.println("on chord size2: " + n);
-        return n;
+        //return n;
     }
 
     /**

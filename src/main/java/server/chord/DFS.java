@@ -853,20 +853,25 @@ public class DFS implements Serializable, IDFSInterface {
     public void runMapReduce(String fileInput, String fileOutput) throws Exception {
 
         MapReduceInterface mapReducer = new Mapper();
+        this.chord.getSuccessor().onChordSize(this.chord.getId(), 1);
 
-        int size = this.chord.getSuccessor().onChordSize(this.chord.getId(), 1);
+        int size = this.chord.getChordSize();
+
         int interval = 1936/size;
 
         createFile(fileOutput + ".map", interval, size);//
         FilesJson metadata = readMetaData();
 
         FileJson fj = null;
+        System.out.println("iterating throught json file");
         for(int i = 0; i < metadata.file.size(); i++){//
             fj = metadata.file.get(i);
             if(fj.getName().equals(fileInput)){
                 break;
             }
         }
+        System.out.println("finished iterating throught json file \n " +
+                "now iterating through pages");
         for(int i = 0; i < fj.pages.size(); i++)
         {
             PagesJson pg = fj.pages.get(i);
@@ -883,6 +888,7 @@ public class DFS implements Serializable, IDFSInterface {
             }
         }
 
+        System.out.println("putting thread to sleep");
         while(getCounter(fileOutput + ".map") != 0)
             Thread.sleep(10);//
         bulkTree(fileOutput + ".map", size);
@@ -891,12 +897,15 @@ public class DFS implements Serializable, IDFSInterface {
         metadata = readMetaData();
 
         fj = null;
+        System.out.println("iterating through json file second time until we find the file");
         for(int i = 0; i < metadata.file.size(); i++){
             fj = metadata.file.get(i);
             if(fj.getName().equals(fileOutput + ".map")){
                 break;
             }
         }
+
+        System.out.println("cycling through pages again");
         for(int i = 0; i < fj.pages.size(); i++)
         {
             PagesJson pg = fj.pages.get(i);
@@ -906,6 +915,7 @@ public class DFS implements Serializable, IDFSInterface {
             peer.reduceContext(pg.getGUID(), mapReducer, this, fileOutput);
         }
 
+        System.out.println("sleeping the thread again");
         while(getCounter(fileOutput) != 0)
             Thread.sleep(10);
         bulkTree(fileOutput, size);
@@ -994,7 +1004,7 @@ public class DFS implements Serializable, IDFSInterface {
 
         int lower = 0;
         this.create(file);
-        for(int i = 0; i < size; i++){
+        for(int i = 0; i < size -1; i++){
             Long page = this.md5(file+i);
             String lowerBoundInterval = String.valueOf(index[Math.floorDiv(lower,38)]) + index[lower % 38];
             appendEmptyPage(file, page, lowerBoundInterval);
