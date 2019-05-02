@@ -14,12 +14,7 @@ import com.google.gson.stream.JsonReader;
 
 import server.core.Server;
 import static server.core.Server.d;
-import server.model.Collection;
 
-import server.chord.Chord;
-
-import java.io.InputStream;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Semaphore;
 
 
@@ -90,7 +85,6 @@ public class DFS implements Serializable, IDFSInterface {
         Long writeTS;
 
         int referenceCount;
-        TreeMap<String, ArrayList> myMap;
         String lowerBoundInterval;
 
         public PagesJson(Long g, Long s)
@@ -108,7 +102,6 @@ public class DFS implements Serializable, IDFSInterface {
         public PagesJson(Long g, Long s, String lowerBoundInterval)
         {
             this(g, s);
-            myMap = new TreeMap<String, ArrayList>(); // Initialize myMap for use in mapReduce
             this.lowerBoundInterval = lowerBoundInterval;
         }
 
@@ -799,8 +792,8 @@ public class DFS implements Serializable, IDFSInterface {
             ChordMessageInterface peer = chord.locateSuccessor(pageGUID);
             peer.put(pageGUID, text);                   // Store the file on the Chord
 
-            writeMetaData(metadata);
             target.decrementRef();
+            writeMetaData(metadata);
         }
         else {
             System.out.println("File '" + filename + "' not found.");
@@ -856,52 +849,19 @@ public class DFS implements Serializable, IDFSInterface {
         return null;
     }
 
-//    /**
-//     *
-//     * @param source - GUID of the chord peer that initiates onChordSize
-//     * @param n - number of nodes counted, init 1
-//     * @return n - the number of nodes in the chord
-//     */
-//    public int onChordSize(Long source, int n) throws RemoteException {
-//        System.out.println("on chord size: " + n);
-//        if(source != this.chord.guid){
-//            this.chord.successor.onChordSize(source, n++);
-//        }
-//        // When source == this.guid then all nodes in the chord have been counted
-//        return n;
-//    }
-
-//    @Override
-//    public synchronized void increaseCounter(String file)
-//    {
-////        try {
-////            sem.acquire();
-////        } catch (InterruptedException e) {
-////            e.printStackTrace();
-////        }
-////        Integer value = counter.get(file);
-////        value = value + 1;
-////        counter.replace(file, value);
-//        counter++;
-//        //sem.release();
-//    }
-
     @Override
     public void runMapReduce(String fileInput, String fileOutput) throws Exception {
 
         MapReduceInterface mapReducer = new Mapper();
-        Gson gson = new GsonBuilder()
-                .setPrettyPrinting()
-                .create();
 
         int size = this.chord.getSuccessor().onChordSize(this.chord.getId(), 1);
         int interval = 1936/size;
 
-        createFile(fileOutput + ".map", interval, size);
+        createFile(fileOutput + ".map", interval, size);//
         FilesJson metadata = readMetaData();
 
         FileJson fj = null;
-        for(int i = 0; i < metadata.file.size(); i++){
+        for(int i = 0; i < metadata.file.size(); i++){//
             fj = metadata.file.get(i);
             if(fj.getName().equals(fileInput)){
                 break;
@@ -924,7 +884,7 @@ public class DFS implements Serializable, IDFSInterface {
         }
 
         while(getCounter(fileOutput + ".map") != 0)
-            Thread.sleep(10);
+            Thread.sleep(10);//
         bulkTree(fileOutput + ".map", size);
 
         createFile(fileOutput, interval, size);
@@ -943,9 +903,7 @@ public class DFS implements Serializable, IDFSInterface {
             increaseCounter(fileOutput);
             ChordMessageInterface peer = chord.locateSuccessor(pg.getGUID());
 
-            RemoteInputFileStream rifs = read(fileOutput + ".map", i);
-            JsonObject pageData = gson.fromJson(new JsonReader(new InputStreamReader(rifs)), JsonObject.class);
-            peer.reduceContext(pageData, mapReducer, this, fileOutput);
+            peer.reduceContext(pg.getGUID(), mapReducer, this, fileOutput);
         }
 
         while(getCounter(fileOutput) != 0)
@@ -993,62 +951,6 @@ public class DFS implements Serializable, IDFSInterface {
         return -1;
     }
 
-//    @Override
-//    public synchronized void onPageComplete(String file) throws Exception{
-////         sem.acquire();
-////         Integer value = counter.get(file);
-////         value = value - 1;
-////         counter.replace(file, value);
-//        counter1++;
-////         sem.release();
-//    }
-//
-//    @Override
-//    public void increaseCounter(String file)
-//    {
-//        Integer value = counter.get(file);
-//        value = value + 1;
-//        counter.replace(file, value);
-//    }
-
-
-
-//    @Override
-//    public void emit(String key, JsonElement value, String file) throws Exception {
-//        key = key.toUpperCase();
-//
-//        FilesJson metadata = readMetaData();
-//
-//        FileJson fj = null;
-//        for(int i = 0; i < metadata.file.size(); i++){
-//            fj = metadata.file.get(i);
-//            if(fj.getName().equals(file)){
-//                break;
-//            }
-//        }
-//        for(int i = 0; i < fj.numberOfPages - 2; i++)
-//        {
-//            PagesJson page1 = fj.pages.get(i);
-//            PagesJson page2 = fj.pages.get(i + 1);
-//
-//            String indexString = new String(this.index);
-//            int keyLetter1 = indexString.indexOf(key.charAt(0));
-//            int pg1Letter1 = indexString.indexOf(page1.lowerBoundInterval.charAt(0));
-//            int pg2Letter1 = indexString.indexOf(page2.lowerBoundInterval.charAt(0));
-//
-//            if( keyLetter1 >= pg1Letter1 && keyLetter1 < pg2Letter1)
-//            {
-//                int keyLetter2 = indexString.indexOf(key.charAt(1));
-//                int pg1Letter2 = indexString.indexOf(page1.lowerBoundInterval.charAt(1));
-//                int pg2Letter2 = indexString.indexOf(page2.lowerBoundInterval.charAt(1));
-//                if( keyLetter2 >= pg1Letter2 && keyLetter2 < pg2Letter2) {
-//                    page1.addKeyValue(key, value);
-//                    break;
-//                }
-//            }
-//        }
-//    }
-
 
     @Override
     public void bulkTree(String file, int size) throws Exception {
@@ -1060,6 +962,7 @@ public class DFS implements Serializable, IDFSInterface {
 
             FileJson fj = null;
             for(int j = 0; j < metadata.file.size(); j++){
+                //TODO: Small optimization - start the loop from size - 1 (FOR all map reduce functions)
                 fj = metadata.file.get(j);
                 if(fj.getName().equals(file)){
                     break;
@@ -1091,7 +994,7 @@ public class DFS implements Serializable, IDFSInterface {
 
         int lower = 0;
         this.create(file);
-        for(int i = 0; i < size - 1; i++){
+        for(int i = 0; i < size; i++){
             Long page = this.md5(file+i);
             String lowerBoundInterval = String.valueOf(index[Math.floorDiv(lower,38)]) + index[lower % 38];
             appendEmptyPage(file, page, lowerBoundInterval);
@@ -1100,32 +1003,6 @@ public class DFS implements Serializable, IDFSInterface {
 
     }
 
-
-//    /**
-//     * Adds key, value pair to TreeMap data structure
-//     * @param key - Key value in string format
-//     * @param value - Content of entry being mapped (data)
-//     */
-//    public void addKeyValue(String key, JsonElement value, PagesJson page, String filename, int pageNumber) throws Exception {
-//        if(!page.myMap.containsKey(key)){                            // If key is not in map, add an entry
-//            ArrayList tmpList = new ArrayList();
-//            page.myMap.put(key, tmpList);
-//        }
-//        page.myMap.get(key).add(value);                              // Add value to map
-//
-//        append(filename, page.myMap.toString()); // Need to read page, edit (before append to page )
-//        FilesJson metadata = readMetaData();
-//
-//        FileJson fj = null;
-//        for(int j = 0; j < metadata.file.size(); j++){
-//            fj = metadata.file.get(j);
-//            if(fj.getName().equals(filename)){
-//                metadata.file.get(j).pages.set(pageNumber, page);
-//                writeMetaData(metadata);
-//                break;
-//            }
-//        }
-//    }
 
     /**
      * Appends a string marked by single quotes (') as a page to the target file

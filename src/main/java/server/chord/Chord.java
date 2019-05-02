@@ -610,9 +610,20 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface
                 .setPrettyPrinting()
                 .create();
 
+        TreeMap<String, ArrayList> myMap = null;
+        try {
+            RemoteInputFileStream rifs = get(page.getGUID());
+            rifs.connect();
+            myMap = gson.fromJson(new JsonReader(new InputStreamReader(rifs)), TreeMap.class);
+        } catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+
         JsonObject allData = new JsonObject();
 
-        for(Map.Entry<String, ArrayList> entry : page.myMap.entrySet()){
+        for(Map.Entry<String, ArrayList> entry : myMap.entrySet()){
             String key = entry.getKey();
             ArrayList value = entry.getValue();
 
@@ -661,7 +672,15 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface
      * @param file - Name of the file being reduced
      * @throws IOException
      */
-    public void reduceContext(JsonObject page, MapReduceInterface reducer, DFS coordinator, String file) throws Exception {
+    public void reduceContext(long pageGuid, MapReduceInterface reducer, DFS coordinator, String file) throws Exception {
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
+        RemoteInputFileStream rifs = get(pageGuid);
+        rifs.connect();
+
+        JsonObject page = gson.fromJson(new JsonReader(new InputStreamReader(rifs)), JsonObject.class);
+
         Set<Map.Entry<String, JsonElement>> entrySet = page.entrySet();
 
         for(Map.Entry<String, JsonElement> entry: entrySet){
@@ -737,19 +756,12 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface
                 .create();
 
         TreeMap<String, ArrayList> myMap = null;
-//        RemoteInputFileStream rifs = context.read(filename, pageNumber);
-//        rifs.connect();
-        JsonObject jsonObject;
         try {
             RemoteInputFileStream rifs = context.read(filename, pageNumber);
             rifs.connect();
             myMap = gson.fromJson(new JsonReader(new InputStreamReader(rifs)), TreeMap.class);
-//            Type type = new TypeToken<TreeMap<String,ArrayList>>(){}.getType();
-//            myMap = (TreeMap<String,ArrayList>) gson.fromJson(jsonObject.get("myMap"), type);
         } catch(Exception e)
         {
-//            myMap = new TreeMap<>();
-            //jsonObject = new JsonObject();
             e.printStackTrace();
         }
 
@@ -764,19 +776,8 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface
         }
         myMap.get(key).add(value);                              // Add value to map
 
-        //jsonObject.addProperty("myMap", myMap.toString());
-        context.writePage(filename, myMap, pageNumber, guid); // Need to read page, edit (before append to page )
-//        DFS.FilesJson metadata = readMetaData();
-//
-//        DFS.FileJson fj = null;
-//        for(int j = 0; j < metadata.file.size(); j++){
-//            fj = metadata.file.get(j);
-//            if(fj.getName().equals(filename)){
-//                metadata.file.get(j).pages.set(pageNumber, page);
-//                writeMetaData(metadata);
-//                break;
-//            }
-//        }
+
+        context.writePage(filename, myMap, pageNumber, guid);
     }
 
 

@@ -28,15 +28,15 @@ public class Mapper implements MapReduceInterface, Serializable {
 
         JsonObject jo1 = new JsonObject();
         JsonObject releasejo = new JsonObject();
-        //JsonObject songJo = new JsonObject();
+        JsonObject songJo = new JsonObject();
         JsonObject artistJo = new JsonObject();
-        //songJo.addProperty("title", c.getSongTitle());
+        songJo.addProperty("title", c.getSongTitle());
         releasejo.addProperty("id", c.getId());
         artistJo.addProperty("name", c.getArtistName());
 
         jo1.add("release", releasejo);
         jo1.add("artist", artistJo);
-        //jo1.add("song", songJo);
+        jo1.add("song", songJo);
 
         // Using the whole jsonobject as the value for now. Needs to at least store all data shown on UI and the release id.
         chordContext.emit(newKey, jo1, context, file);
