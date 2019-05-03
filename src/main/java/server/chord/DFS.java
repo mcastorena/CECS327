@@ -848,7 +848,10 @@ public class DFS implements Serializable, IDFSInterface {
         MapReduceInterface mapReducer = new Mapper();
         this.chord.getSuccessor().onChordSize(this.chord.getId(), 1);
 
-        int size = this.chord.getChordSize();
+        int size;
+        while( (size = this.chord.getChordSize()) == 0 )
+            Thread.sleep(10);
+        System.out.println("on chord size: " + size);
 
         int interval = 1369/size; //1936
 
@@ -1008,12 +1011,12 @@ public class DFS implements Serializable, IDFSInterface {
     }
 
 
-    /**
-     * Appends a string marked by single quotes (') as a page to the target file
-     * @param filename The file to add a page to.
-     * @param text The text to append.
-     * @throws Exception
-     */
+//    /**
+//     * Appends a string marked by single quotes (') as a page to the target file
+//     * @param filename The file to add a page to.
+//     * @param text The text to append.
+//     * @throws Exception
+//     */
     @Override
     public void writePage(String filename, TreeMap<String,ArrayList> map, int pageNumber, long guid) throws Exception {
         Gson gson = new GsonBuilder()

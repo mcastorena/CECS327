@@ -25,7 +25,7 @@ public interface ChordMessageInterface extends Remote
     public void notify(ChordMessageInterface j) throws RemoteException;
     public boolean isAlive() throws RemoteException;
     public long getId() throws RemoteException;
-    public int getChordSize();
+
     
     public void leave() throws Exception;
     public String print() throws Exception;
@@ -40,7 +40,7 @@ public interface ChordMessageInterface extends Remote
     public void bulk(DFS.PagesJson page) throws Exception;
 
     public void onChordSize(Long source, int n) throws RemoteException;
-
+    int getChordSize() throws RemoteException;
 
     public void mapContext(long pageGUID, MapReduceInterface mapper, IDFSInterface coordinator, String file) throws Exception;
     public void reduceContext(long pageGuid, MapReduceInterface reducer, DFS coordinator, String file) throws Exception;

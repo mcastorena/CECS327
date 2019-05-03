@@ -112,7 +112,7 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface
           return (key > key1 || key < key2);
     }
 
-    public int getChordSize(){
+    public int getChordSize() throws RemoteException{
         return chordSize;
     }
 
@@ -593,7 +593,7 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface
      * @return n - the number of nodes in the chord
      */
     public void onChordSize(Long source, int n) throws RemoteException {
-        System.out.println("on chord size: " + n);
+
         if(source != this.guid){
             //ChordMessageInterface nextNode = this.successor;
 /*            while(nextNode.getId() != source)
@@ -602,12 +602,13 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface
                 nextNode = nextNode.getSuccessor();
             }
             n++;*/
-            this.successor.onChordSize(source, n++);
+            this.successor.onChordSize(source, ++n);
         }
-        chordSize = n;
+        else {
+            this.chordSize = n;
+        }
         // When source == this.guid then all nodes in the chord have been counted
-        System.out.println("on chord size2: " + n);
-        //return n;
+
     }
 
     /**
