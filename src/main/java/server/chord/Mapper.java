@@ -42,7 +42,7 @@ public class Mapper implements MapReduceInterface, Serializable {
         chordContext.emit(newKey, jo1, context, file);
     }
 
-    public void reduce(String key, JsonElement values, IDFSInterface context, ChordMessageInterface chordContext, String file) throws Exception
+    public void reduce(String key, ArrayList valuesList, IDFSInterface context, ChordMessageInterface chordContext, String file) throws Exception
     {
         //sort(values);
 
@@ -51,7 +51,7 @@ public class Mapper implements MapReduceInterface, Serializable {
                 .create();
 
         // Turn JsonArray into Java Arraylist
-        ArrayList valuesList = gson.fromJson(values, ArrayList.class);
+        //ArrayList valuesList = gson.fromJson(values, ArrayList.class);
 
         // Turn the jsonobjects in the arraylist into collections for easy sorting.
         valuesList.sort(new CollectionComparator());

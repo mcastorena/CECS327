@@ -36,11 +36,10 @@ public interface ChordMessageInterface extends Remote
     public void delete(long guidObject) throws IOException, RemoteException;
 
     public int onChordSize(Long source, int n) throws RemoteException;
-    public void bulk(DFS.PagesJson page) throws IOException;
+    public void bulk(DFS.PagesJson page) throws Exception;
     public void mapContext(long pageGUID, MapReduceInterface mapper, IDFSInterface coordinator, String file) throws Exception;
     public void reduceContext(long pageGuid, MapReduceInterface reducer, DFS coordinator, String file) throws Exception;
     void emit(String key, JsonElement value, IDFSInterface context, String file) throws Exception;
-    void addKeyValue(String key, JsonElement value, IDFSInterface context, String filename, int pageNumber, long guid) throws Exception;
+    void addKeyValue(String key, String value, IDFSInterface context, String filename, int pageNumber, long guid) throws Exception;
 
-//    public void onPageComplete(String file) throws Exception;
 }

@@ -45,9 +45,6 @@ public class DFS implements Serializable, IDFSInterface {
     Date date = new Date();
     Long metadata;
 
-    //public ConcurrentHashMap<String, Integer> counter = new ConcurrentHashMap<>();
-//    public int counter = 0;
-//    public int counter1 = 0;
     Semaphore sem;
 
     // Init index
@@ -69,10 +66,6 @@ public class DFS implements Serializable, IDFSInterface {
         return index;
     }
 
-//    public ConcurrentHashMap<String, Integer> getCounter() throws Exception
-//    {
-//        return counter;
-//    }
 
     public class PagesJson implements Serializable
     {
@@ -806,14 +799,14 @@ public class DFS implements Serializable, IDFSInterface {
         FilesJson metadata = readMetaData();
 
         boolean find = false;
-        int newPageIndex = 0;
+        //int newPageIndex = 0;
         int fileIndex = 0;
         for(int i = 0; i < metadata.file.size(); i++){
             if(metadata.file.get(i).getName().equals(file)){
                 fileIndex = i;
                 metadata.file.get(i).incrementRef();                                            // Increment file refCount
                 writeMetaData(metadata);                                                        // Write updated metadata
-                newPageIndex = metadata.file.get(i).pages.size();
+                //newPageIndex = metadata.file.get(i).pages.size();
 
                 metadata.file.get(i).addPage(new PagesJson(page,  Long.valueOf(0), lowerBoundInterval), Long.valueOf(0));     // Add new page entry to file and update filesize
                 metadata.file.get(i).writeTS = date.getTime();              // Update file write timestamp
@@ -828,7 +821,7 @@ public class DFS implements Serializable, IDFSInterface {
             metadata.file.get(fileIndex).decrementRef();                                    // Decrement refcount
             ChordMessageInterface peer = chord.locateSuccessor(page);
             writeMetaData(metadata);                                                        // Update metadata for write and refCount
-            //peer.put(page, "");
+            peer.put(page, "");
         }else return;
 
     }
@@ -855,7 +848,7 @@ public class DFS implements Serializable, IDFSInterface {
         MapReduceInterface mapReducer = new Mapper();
 
         int size = this.chord.getSuccessor().onChordSize(this.chord.getId(), 1);
-        int interval = 1936/size;
+        int interval = 1369/size; //1936
 
         createFile(fileOutput + ".map", interval, size);//
         FilesJson metadata = readMetaData();
@@ -909,7 +902,7 @@ public class DFS implements Serializable, IDFSInterface {
         while(getCounter(fileOutput) != 0)
             Thread.sleep(10);
         bulkTree(fileOutput, size);
-
+        System.out.println("Map Reduce Complete");
     }
 
     /**
@@ -996,7 +989,7 @@ public class DFS implements Serializable, IDFSInterface {
         this.create(file);
         for(int i = 0; i < size; i++){
             Long page = this.md5(file+i);
-            String lowerBoundInterval = String.valueOf(index[Math.floorDiv(lower,38)]) + index[lower % 38];
+            String lowerBoundInterval = String.valueOf(index[Math.floorDiv(lower, 37)]) + index[lower % 37];
             appendEmptyPage(file, page, lowerBoundInterval);
             lower += interval;
         }

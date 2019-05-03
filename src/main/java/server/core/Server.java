@@ -1,20 +1,13 @@
 package server.core;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import server.chord.DFSCommand;
 import server.chord.RemoteInputFileStream;
 import server.model.Collection;
-import server.model.Profile;
+
 import server.model.User;
 import server.util.Deserializer;
 import server.chord.DFS;
-import server.util.MusicJsonSplitter;
-import server.util.Serializer;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStreamReader;
 import java.util.*;
 
 
@@ -68,7 +61,6 @@ public class Server {
             NEXT_PORT++;
             newdfs.print();
             newdfs.join("127.0.0.1", P2P_START_PORT);
-            newdfs.print();
 
         }
         Thread.sleep(2000);
