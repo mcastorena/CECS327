@@ -595,13 +595,6 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface
     public void onChordSize(Long source, int n) throws RemoteException {
 
         if(source != this.guid){
-            //ChordMessageInterface nextNode = this.successor;
-/*            while(nextNode.getId() != source)
-            {
-                n++;
-                nextNode = nextNode.getSuccessor();
-            }
-            n++;*/
             this.successor.onChordSize(source, ++n);
         }
         else {
@@ -615,40 +608,16 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface
      * Store tree in the page in order
      * @param page - Page receiving TreeMap Data
      */
-    public void bulk(DFS.PagesJson page) throws Exception {
+    public void bulk(DFS.PagesJson page, String file) throws Exception {
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .create();
 
-//        TreeMap<String, ArrayList> myMap = null;
-//        try {
-//            RemoteInputFileStream rifs = get(page.getGUID());
-//            rifs.connect();
-//            myMap = gson.fromJson(new JsonReader(new InputStreamReader(rifs)), TreeMap.class);
-//        } catch(Exception e)
-//        {
-//            e.printStackTrace();
-//        }
-//
-//
-//        JsonObject allData = new JsonObject();
         try {
-//            for (Map.Entry<String, ArrayList> entry : myMap.entrySet()) {
-//                String key = entry.getKey();
-//                ArrayList value = entry.getValue();
-//
-//                String jsonString = gson.toJson(value);
-//
-//                JsonParser parser = new JsonParser();
-//                JsonArray valuesArray = parser.parse(jsonString).getAsJsonArray();
-//
-//                allData.add(key, valuesArray);
-//            }
             long pageGuid = page.getGUID();
             if(myPageMap.get(pageGuid) != null) {
-                //ChordMessageInterface peer = locateSuccessor(pageGuid);
-                put(page.getGUID(), gson.toJson(myPageMap.get(pageGuid)));
-                myPageMap.remove(pageGuid);
+                    put(pageGuid, gson.toJson(myPageMap.get(pageGuid)));
+                    myPageMap.remove(pageGuid);
             }
         }
         catch(Exception e)
@@ -676,7 +645,6 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface
         rifs.connect();
         JsonArray page = gson.fromJson(new JsonReader(new InputStreamReader(rifs)), JsonArray.class);
         for(int i = 0; i < page.size(); i++){
-            Thread.sleep(10);
             int index = i;
             JsonObject value = (JsonObject) page.get(index);
             mapper.map(Integer.toString(index), value, coordinator, this, file);
@@ -708,18 +676,12 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface
 
 
                 for (Map.Entry<String, ArrayList> entry : entrySet) {
-//            int index = i;
-//            JsonObject value = (JsonObject) page.get(index);
-//            JsonArray release = value.getAsJsonArray();
-//            String key = release.get(1).getAsString();                          // Song name is key
-
                     reducer.reduce(entry.getKey(), entry.getValue(), coordinator, this, file);
                 }
             }
-        } catch(NullPointerException e)
+        } catch(Exception e)
         {
             e.printStackTrace();
-            //do nothing
         }
         coordinator.onPageComplete(file);
     }
@@ -731,59 +693,55 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface
         DFS.FilesJson metadata = context.readMetaData();
 
         DFS.FileJson fj = null;
-        for(int i = 0; i < metadata.file.size(); i++){
+        for(int i = metadata.file.size() - 1; i >= 0 ; i--){
             fj = metadata.file.get(i);
             if(fj.getName().equals(file)){
                 break;
             }
         }
-        for(int i = 0; i < fj.numberOfPages - 1; i++)
-        {
+        for(int i = 0; i < fj.numberOfPages - 1; i++) {
             DFS.PagesJson page1 = fj.pages.get(i);
             DFS.PagesJson page2 = fj.pages.get(i + 1);
 
             String indexString = new String(context.getIndex());
+
             int keyLetter1;
+            int keyLetter2;
+
             try {
                 keyLetter1 = indexString.indexOf(key.charAt(0));
-            }catch(StringIndexOutOfBoundsException e) {break;}
+                keyLetter2 = indexString.indexOf(key.charAt(1));
+            } catch (StringIndexOutOfBoundsException e) {
+                break;
+            }
+
 
             int pg1Letter1 = indexString.indexOf(page1.lowerBoundInterval.charAt(0));
             int pg2Letter1 = indexString.indexOf(page2.lowerBoundInterval.charAt(0));
+            int pg1Letter2 = indexString.indexOf(page1.lowerBoundInterval.charAt(1));
+            int pg2Letter2 = indexString.indexOf(page2.lowerBoundInterval.charAt(1));
 
-            if( keyLetter1 >= pg1Letter1 && keyLetter1 < pg2Letter1)
+            if ((keyLetter1 == pg1Letter1 && (keyLetter2 >= pg1Letter2 || key.charAt(1) == ' ')) ||
+                    (keyLetter1 == pg2Letter1 && keyLetter2 < pg2Letter2) ||
+                    (keyLetter1 > pg1Letter1 && keyLetter1 < pg2Letter1))
             {
-                try {
-                    int keyLetter2 = indexString.indexOf(key.charAt(1));
-                    int pg1Letter2 = indexString.indexOf(page1.lowerBoundInterval.charAt(1));
-                    int pg2Letter2 = indexString.indexOf(page2.lowerBoundInterval.charAt(1));
-                    if (keyLetter2 >= pg1Letter2 && keyLetter2 < pg2Letter2) {
-                        ChordMessageInterface peer = locateSuccessor(page1.getGUID());
-                        peer.addKeyValue(key, value.toString(), context, file, i, page1.getGUID());
-                        break;
-                    }
-                }
-                catch(StringIndexOutOfBoundsException e)
-                {
-                    ChordMessageInterface peer = locateSuccessor(page1.getGUID());
-                    peer.addKeyValue(key, value.toString(), context, file, i, page1.getGUID());
-                    break;
-                }
-            }
-            if(i == fj.numberOfPages - 2)
-            {
+                ChordMessageInterface peer = locateSuccessor(page1.getGUID());
+                peer.addKeyValue(key, value.toString(), file, page1.getGUID());
+                break;
+            } else if (i == fj.numberOfPages - 2) {
                 ChordMessageInterface peer = locateSuccessor(page2.getGUID());
-                peer.addKeyValue(key, value.toString(), context, file, i+1, page2.getGUID());
+                peer.addKeyValue(key, value.toString(), file, page2.getGUID());
             }
         }
+
     }
 
-    /**
-     * Adds key, value pair to TreeMap data structure
-     * @param key - Key value in string format
-     * @param value - Content of entry being mapped (data)
-     */
-    public void addKeyValue(String key, String valueString, IDFSInterface context, String filename, int pageNumber, long guid) throws Exception {
+//    /**
+//     * Adds key, value pair to TreeMap data structure
+//     * @param key - Key value in string format
+//     * @param value - Content of entry being mapped (data)
+//     */
+    public void addKeyValue(String key, String valueString, String filename, long guid) throws Exception {
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .create();
@@ -823,8 +781,6 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface
             myMap.put(key, values);
         }
 
-
-        //context.writePage(filename, myMap, pageNumber, guid);
     }
 
 

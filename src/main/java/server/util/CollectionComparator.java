@@ -10,9 +10,16 @@ import static server.core.Server.d;
 import java.util.Comparator;
 
 public class CollectionComparator implements Comparator<LinkedTreeMap> {
+
+    String file;
+    public CollectionComparator(String file)
+    {
+        super();
+        this.file = file;
+    }
     /**
      *
-     * Compares two collections by song title. Used for sorting.
+     * Compares two collections. Used for sorting values.
      */
     @Override
     public int compare(LinkedTreeMap t1, LinkedTreeMap t2) {
@@ -25,10 +32,21 @@ public class CollectionComparator implements Comparator<LinkedTreeMap> {
         Collection c1 = d.jsonToCollection(jo1);
         Collection c2 = d.jsonToCollection(jo2);
 
-        String song1 = c1.getSongTitle();
-        String song2 = c2.getSongTitle();
+        // Sort values by song title for artistInvertedIndex.
+        if(file.contains("artist")) {
+            String song1 = c1.getSongTitle();
+            String song2 = c2.getSongTitle();
 
-        return song1.compareToIgnoreCase(song2);
+            return song1.compareToIgnoreCase(song2);
+        }
+        else
+        {
+            // Sort values by artist name for musicInvertedIndex.
+            String artist1 = c1.getArtistName();
+            String artist2 = c2.getArtistName();
+
+            return artist1.compareToIgnoreCase(artist2);
+        }
     }
 
 }

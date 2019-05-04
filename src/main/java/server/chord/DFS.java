@@ -749,14 +749,7 @@ public class DFS implements Serializable, IDFSInterface {
             writeMetaData(metadata);                                                        // Update metadata for write and refCount
             peer.put(pageGUID, data);
 
-            if(fileName.equalsIgnoreCase("music")) {
-                Thread.sleep(2000);
-                d.updateMusicOnFileAdd();
-                Server.updateSongList();
-                System.out.println("Append Complete");
-            }
-            else
-                System.out.println("Append Complete");
+            System.out.println("Append Complete");
         }else return;
     }
 
@@ -861,7 +854,7 @@ public class DFS implements Serializable, IDFSInterface {
 
         FileJson fj = null;
         System.out.println("iterating throught json file");
-        for(int i = 0; i < metadata.file.size(); i++){//
+        for(int i = metadata.file.size() - 1; i >= 0 ; i--){//
             fj = metadata.file.get(i);
             if(fj.getName().equals(fileInput)){
                 break;
@@ -895,7 +888,7 @@ public class DFS implements Serializable, IDFSInterface {
 
         fj = null;
         System.out.println("iterating through json file second time until we find the file");
-        for(int i = 0; i < metadata.file.size(); i++){
+        for(int i = metadata.file.size() - 1; i >= 0 ; i--){
             fj = metadata.file.get(i);
             if(fj.getName().equals(fileOutput + ".map")){
                 break;
@@ -916,7 +909,13 @@ public class DFS implements Serializable, IDFSInterface {
         while(getCounter(fileOutput) != 0)
             Thread.sleep(10);
         bulkTree(fileOutput, size);
-        System.out.println("Map Reduce Complete");
+
+        if(fileOutput.equals("songInvertedIndex"))
+        {
+            System.out.println("\n NOW RUNNING MAP REDUCE FOR ARTISTS...");
+            runMapReduce(fileInput, "artistInvertedIndex");
+            System.out.println("Map Reduce Complete");
+        }
     }
 
     /**
@@ -926,7 +925,7 @@ public class DFS implements Serializable, IDFSInterface {
      */
     public void onPageComplete(String file) throws Exception {
         FilesJson metadata = this.readMetaData();
-        for(int i = 0; i < metadata.file.size(); i++){
+        for(int i = metadata.file.size() - 1; i >= 0 ; i--){
             if(metadata.file.get(i).getName().equals(file)){
                 metadata.file.get(i).decrementRef();
                 break;
@@ -937,7 +936,7 @@ public class DFS implements Serializable, IDFSInterface {
 
     public void increaseCounter(String file) throws Exception {
         FilesJson metadata = this.readMetaData();
-        for(int i = 0; i < metadata.file.size(); i++){
+        for(int i = metadata.file.size() - 1; i >= 0 ; i--){
             if(metadata.file.get(i).getName().equals(file)){
                 metadata.file.get(i).incrementRef();
                 break;
@@ -949,7 +948,7 @@ public class DFS implements Serializable, IDFSInterface {
     public int getCounter(String file) throws Exception
     {
         FilesJson metadata = this.readMetaData();
-        for(int i = 0; i < metadata.file.size(); i++){
+        for(int i = metadata.file.size() - 1; i >= 0 ; i--){
             if(metadata.file.get(i).getName().equals(file)){
                 int count = metadata.file.get(i).referenceCount;
                 return count;
@@ -969,7 +968,6 @@ public class DFS implements Serializable, IDFSInterface {
 
             FileJson fj = null;
             for(int j = 0; j < metadata.file.size(); j++){
-                //TODO: Small optimization - start the loop from size - 1 (FOR all map reduce functions)
                 fj = metadata.file.get(j);
                 if(fj.getName().equals(file)){
                     break;
@@ -977,12 +975,12 @@ public class DFS implements Serializable, IDFSInterface {
             }
 
             PagesJson pg = null;
-            for(int k = 0; k < fj.numberOfPages - 1; k++) {
+            for(int k = 0; k < fj.numberOfPages; k++) {
                 pg = fj.pages.get(k);
                 if(pageGUID == pg.getGUID())
                 {
                     ChordMessageInterface peer = chord.locateSuccessor(pageGUID);
-                    peer.bulk(pg);
+                    peer.bulk(pg, file);
                     break;
                 }
             }
@@ -1010,44 +1008,111 @@ public class DFS implements Serializable, IDFSInterface {
 
     }
 
+    public DFS.PagesJson getPageToSearch(String key, String file) throws Exception {
+        key = key.toUpperCase();
 
-//    /**
-//     * Appends a string marked by single quotes (') as a page to the target file
-//     * @param filename The file to add a page to.
-//     * @param text The text to append.
-//     * @throws Exception
-//     */
-    @Override
-    public void writePage(String filename, TreeMap<String,ArrayList> map, int pageNumber, long guid) throws Exception {
-        Gson gson = new GsonBuilder()
-                .setPrettyPrinting()
-                .create();
         FilesJson metadata = readMetaData();
 
-        FileJson target = find(metadata.getFileList(), filename);
-        if (target != null) {
-            long timestamp = new Date().getTime();
-//            long pageGUID = md5(filename + timestamp);
-//            long text_len = (long)map.getBytes("UTF-8").length;
-////
-////            target.setSize(text_len);
-//
-            PagesJson page = target.pages.get(pageNumber);
-//
-            target.writeTS = timestamp;                 // Update write timestamp
-//            target.addPage(page, text_len);     // Add a new page to the file
-            target.incrementRef();
-
-            ChordMessageInterface peer = chord.locateSuccessor(page.getGUID());
-            peer.put(page.getGUID(), gson.toJson(map));                   // Store the file on the Chord
-
-            target.decrementRef();
-            writeMetaData(metadata);
-
+        DFS.FileJson fj = null;
+        for(int i = metadata.file.size() - 1; i >= 0 ; i--){
+            fj = metadata.file.get(i);
+            if(fj.getName().equals(file)){
+                break;
+            }
         }
-        else {
-            System.out.println("File '" + filename + "' not found.");
+        for(int i = 0; i < fj.numberOfPages - 1; i++) {
+            DFS.PagesJson page1 = fj.pages.get(i);
+            DFS.PagesJson page2 = fj.pages.get(i + 1);
+
+            String indexString = new String(getIndex());
+
+            int keyLetter1;
+            int keyLetter2;
+
+            try {
+                keyLetter1 = indexString.indexOf(key.charAt(0));
+            } catch (StringIndexOutOfBoundsException e) {
+                break;
+            }
+
+
+            int pg1Letter1 = indexString.indexOf(page1.lowerBoundInterval.charAt(0));
+            int pg2Letter1 = indexString.indexOf(page2.lowerBoundInterval.charAt(0));
+            int pg1Letter2 = indexString.indexOf(page1.lowerBoundInterval.charAt(1));
+            int pg2Letter2 = indexString.indexOf(page2.lowerBoundInterval.charAt(1));
+
+            try {
+                keyLetter2 = indexString.indexOf(key.charAt(1));
+            } catch (StringIndexOutOfBoundsException e) {
+                if(keyLetter1 >= pg1Letter1 && keyLetter1 < pg2Letter1)
+                    return page1;
+                break;
+            }
+
+
+            if ((keyLetter1 == pg1Letter1 && (keyLetter2 >= pg1Letter2 || key.charAt(1) == ' ')) ||
+                    (keyLetter1 == pg2Letter1 && keyLetter2 < pg2Letter2) ||
+                    (keyLetter1 > pg1Letter1 && keyLetter1 < pg2Letter1))
+            {
+                return page1;
+            } else if (i == fj.numberOfPages - 2) {
+                return page2;
+            }
         }
+        return null;
+    }
+
+    public JsonArray search(String query) throws Exception {
+        PagesJson songPage = getPageToSearch(query, "songInvertedIndex");
+        PagesJson artistPage = getPageToSearch(query, "artistInvertedIndex");
+
+        JsonArray songArtistArray = new JsonArray();
+
+        if(songPage != null)
+            songArtistArray.add(searchPage(songPage, query));
+        if(artistPage != null)
+            songArtistArray.add(searchPage(artistPage, query));
+
+        if(songPage == null && artistPage == null) return null;
+
+        return songArtistArray;
+    }
+
+    public JsonArray searchPage(PagesJson page, String query) throws IOException {
+         Gson gson = new GsonBuilder()
+                 .setPrettyPrinting()
+                 .create();
+
+        ChordMessageInterface peer = chord.locateSuccessor(page.getGUID());
+        RemoteInputFileStream rifs = peer.get(page.getGUID());
+        rifs.connect();
+
+        TreeMap<String, ArrayList> invertedIndex = gson.fromJson(new JsonReader(new InputStreamReader(rifs)), TreeMap.class);
+        JsonArray ja = new JsonArray();
+        for(Map.Entry<String,ArrayList> entry : invertedIndex.entrySet())
+        {
+            if(entry.getKey().startsWith(query.toUpperCase()))
+            {
+                ArrayList result = entry.getValue();
+                for( Object o : result)
+                {
+                    JsonObject clwObject = new JsonObject(); // Single object for necessary CollectionLightWeight fields.
+                    JsonObject jo = gson.toJsonTree(o).getAsJsonObject();
+                    JsonObject release = jo.get("release").getAsJsonObject();
+                    JsonObject artist = jo.get("artist").getAsJsonObject();
+                    JsonObject song = jo.get("song").getAsJsonObject();
+
+                    clwObject.addProperty("idNum", release.getAsJsonObject().get("id").getAsLong());
+                    clwObject.addProperty("songName", song.getAsJsonObject().get("title").toString());
+                    clwObject.addProperty("artistName", artist.getAsJsonObject().get("name").toString());
+                    clwObject.addProperty("releaseName", release.getAsJsonObject().get("name").toString());
+
+                    ja.add(clwObject);
+                }
+            }
+        }
+
+        return ja;
     }
 }
 

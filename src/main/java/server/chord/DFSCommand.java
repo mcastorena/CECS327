@@ -130,7 +130,7 @@ public class DFSCommand
 
                 case "runmapreduce":
                     if (result.length == 2)
-                        dfs.runMapReduce(result[1], result[1] + "InvertedIndex");
+                        dfs.runMapReduce(result[1], "songInvertedIndex");
                     break;
 
                 default:

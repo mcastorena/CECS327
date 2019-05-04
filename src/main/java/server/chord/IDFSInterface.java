@@ -1,11 +1,7 @@
 package server.chord;
 
-import com.google.gson.JsonElement;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeMap;
-import java.util.concurrent.ConcurrentHashMap;
+
 
 public interface IDFSInterface {
     void initIndex();
@@ -71,14 +67,10 @@ public interface IDFSInterface {
 
     void increaseCounter(String file) throws Exception;
 
-//    void emit(String key, JsonElement value, IDFSInterface context, String file) throws Exception;
-
     void bulkTree(String file, int size) throws Exception;
 
     void createFile(String file, int interval, int size) throws Exception;
 
-//    public ConcurrentHashMap<String, Integer> getCounter() throws Exception;
     public char[] getIndex() throws Exception;
-    void writePage(String filename, TreeMap<String,ArrayList> map, int pageNumber, long guid) throws Exception;
-//    public void addKeyValue(String key, JsonElement value, DFS.PagesJson page, String filename, int pageNumber) throws Exception;
+
 }
