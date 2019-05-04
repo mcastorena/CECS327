@@ -4,6 +4,7 @@ import client.gui.Homepage.HomepagePresenter;
 import client.gui.PlaylistList.PlaylistListPresenter;
 import client.gui.SearchBar.SearchBarPresenter;
 import client.data.UserSession;
+import client.model.SearchResult;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -96,11 +97,13 @@ public class MainDisplayPresenter {
     /**
      * Shows the search results from a list of retrieved songs
      *
-     * @param searchResult - List of songs
+     * @param result - SearchResult containing query results for artist/songs
      */
-    private void showResults(List<CollectionLightWeight> searchResult) {
+    private void showResults(SearchResult result) {
         // Clear the previous state of the VBox
         displayVBox.getChildren().clear();
+
+        List<CollectionLightWeight> searchResult = result.getSongResultList();
 
         // Create a new item for display for each song in `searchResult`
         for (CollectionLightWeight song : searchResult) {
