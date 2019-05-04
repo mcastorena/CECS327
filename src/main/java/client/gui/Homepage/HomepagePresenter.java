@@ -13,6 +13,7 @@ import javafx.scene.layout.GridPane;
 import client.model.CollectionLightWeight;
 import client.model.Playlist;
 import client.rpc.ProxyInterface;
+import javafx.scene.text.Text;
 
 import java.io.IOException;
 
@@ -48,15 +49,19 @@ public class HomepagePresenter {
      *
      * @param proxy - Proxy that the client is connecting through
      */
-    public HomepagePresenter(ProxyInterface proxy) {
+    public HomepagePresenter(ProxyInterface proxy, MainDisplayPresenter mdp, PlaylistListPresenter plp, SearchBarPresenter sbp, MusicPlayerPresenter mpp) {
         clientProxy = proxy;
 
         try {
             // Instantiate the object's associated Presenters
-            mainDisplayPresenter = new MainDisplayPresenter(this);
-            playlistListPresenter = new PlaylistListPresenter(this.mainDisplayPresenter, this);
-            searchBarPresenter = new SearchBarPresenter(mainDisplayPresenter);
-            musicPlayerPresenter = new MusicPlayerPresenter(this.mainDisplayPresenter);
+//            mainDisplayPresenter = new MainDisplayPresenter(this);
+//            playlistListPresenter = new PlaylistListPresenter(this.mainDisplayPresenter, this);
+//            searchBarPresenter = new SearchBarPresenter(mainDisplayPresenter);
+//            musicPlayerPresenter = new MusicPlayerPresenter(this.mainDisplayPresenter);
+            mainDisplayPresenter = mdp;
+            playlistListPresenter = plp;
+            searchBarPresenter = sbp;
+            musicPlayerPresenter = mpp;
 
             // Loader required for JavaFX to set the .fxml
             FXMLLoader loader = new FXMLLoader();
@@ -65,6 +70,7 @@ public class HomepagePresenter {
             view = loader.load();
 
         } catch (IOException e) {
+            System.out.println(e.getMessage());
             e.printStackTrace();
         }
     }
@@ -75,9 +81,9 @@ public class HomepagePresenter {
      */
     public void initialize() {
         // TODO: Fix this with login dispatcher
-        //Text profileText = new Text(UserSession.getCurrentSession().getUsername());
+        Text profileText = new Text("hi");
         //profileText.requestFocus(); // doesn't work
-        //gridPane.add(profileText, 0, 0);
+//        gridPane.add(profileText, 0, 0);
         gridPane.add(searchBarPresenter.getView(), 3, 0, 3, 1);
         gridPane.add(playlistListPresenter.getView(), 0, 2, 2, 4);
         gridPane.add(mainDisplayPresenter.getView(), 3, 2, 3, 3);
@@ -117,5 +123,9 @@ public class HomepagePresenter {
      */
     public ProxyInterface getProxy() {
         return clientProxy;
+    }
+
+    public Parent getView() {
+        return view;
     }
 }

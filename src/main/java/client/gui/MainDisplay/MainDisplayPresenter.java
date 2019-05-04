@@ -57,19 +57,19 @@ public class MainDisplayPresenter {
     /**
      * Constructor
      *
-     * @param homepagePresenter - Presenter for the Homepage associated with this MainDisplay
+     * @param hp - Presenter for the Homepage associated with this MainDisplay
      */
-    public MainDisplayPresenter(HomepagePresenter homepagePresenter) {
+    public MainDisplayPresenter(MainDisplayModel mdm, HomepagePresenter hp, SongSearchModel ssm) {
 
-        mainDisplayModel = new MainDisplayModel();
-        this.homepagePresenter = homepagePresenter;
-        clientProxy = homepagePresenter.getProxy();
-        songSearchModel = new SongSearchModel();
+        mainDisplayModel = mdm;
+        homepagePresenter = hp;
+//        clientProxy = hp.getProxy();
+        songSearchModel = ssm;
 
         try {
             // Loader required for JavaFX to set the .fxml
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/client/ui/MainDisplay.fxml"));
+            loader.setLocation(getClass().getResource("/client/ui/MainDisplayTabbed.fxml"));
             loader.setController(this);
             view = loader.load();
         } catch (IOException e) {

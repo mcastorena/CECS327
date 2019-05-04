@@ -1,5 +1,6 @@
 package client.gui.Landing;
 
+import client.app.Controller;
 import client.gui.Homepage.HomepagePresenter;
 import client.app.App;
 import javafx.fxml.FXML;
@@ -20,6 +21,7 @@ import java.io.IOException;
  * As part of the MVP-design pattern, this class represents the Presenter for the Landing
  */
 public class LandingPresenter {
+    private Controller controller;
 
     /**
      * Parent FXMLLoader
@@ -62,13 +64,14 @@ public class LandingPresenter {
      *
      * @param proxy - Proxy that the client is connected through
      */
-    public LandingPresenter(ProxyInterface proxy, LandingModel landingModel) {
+    public LandingPresenter(Controller controller, ProxyInterface proxy, LandingModel lm, LandingService ls) {
+        this.controller = controller;
         clientProxy = proxy;
 
         try {
             // Set the model and service
-            landingModel = new LandingModel();
-            landingService = LandingService.getInstance(proxy);
+            landingModel = lm;
+            landingService = ls;
 
             // Loader required for JavaFX to set the .fxml
             FXMLLoader loader = new FXMLLoader();
@@ -96,7 +99,7 @@ public class LandingPresenter {
             }
         });
 
-        loginButton.setOnMouseClicked(e -> submitLogin());
+        loginButton.setOnMouseClicked(e -> submitLoginRequest());
         registerButton.setOnMouseClicked(e -> register());
     }
 
@@ -118,8 +121,8 @@ public class LandingPresenter {
         }
 
         if (isAuthorized) {
-            homepagePresenter = new HomepagePresenter(clientProxy);
-            switchToHomepage();
+//            homepagePresenter = new HomepagePresenter(clientProxy);
+//            switchToHomepage();
         } else {
             displayError();
         }
@@ -160,4 +163,12 @@ public class LandingPresenter {
         return view;
     }
     //endregion
+
+    private void submitLoginRequest() {
+        try {
+            controller.receiveLoginRequest(this, usernameField.getText(), passwordField.getText());
+        } catch (IllegalAccessException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }

@@ -61,8 +61,11 @@ public class App extends Application {
         primaryStage.setTitle("Music Player");
         primaryStage.setResizable(true);
 
-        LandingPresenter lp = new LandingPresenter(clientProxy);
-        lp.showLandingPage();
+        Controller c = new Controller(primaryStage, clientProxy);
+        c.stage.show();
+
+//        LandingPresenter lp = new LandingPresenter(clientProxy);
+//        lp.showLandingPage();
 
 //       HomepagePresenter hp = new HomepagePresenter();
 //       primaryStage.setScene(hp.g);
