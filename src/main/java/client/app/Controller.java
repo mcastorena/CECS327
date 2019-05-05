@@ -40,7 +40,8 @@ public class Controller {
         mainDisplayPresenter = new MainDisplayPresenter(
                                     new MainDisplayModel(),
                                     homepagePresenter,
-                                    new SongSearchModel()
+                                    new SongSearchModel(),
+                                    proxy
                                 );
 
         playlistListPresenter = new PlaylistListPresenter(

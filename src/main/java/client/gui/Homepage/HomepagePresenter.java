@@ -13,6 +13,7 @@ import javafx.scene.layout.GridPane;
 import client.model.CollectionLightWeight;
 import client.model.Playlist;
 import client.rpc.ProxyInterface;
+import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
@@ -80,14 +81,23 @@ public class HomepagePresenter {
      * after calling FXMLLoader.load(). This is invoked when calling any of the xView constructors.
      */
     public void initialize() {
-        // TODO: Fix this with login dispatcher
-        Text profileText = new Text("hi");
+        for (var col : gridPane.getColumnConstraints())
+        {
+            col.setPrefWidth(gridPane.getPrefWidth()/gridPane.getColumnCount());
+            col.setHgrow(Priority.NEVER);
+        }
+        for (var row : gridPane.getRowConstraints())
+        {
+            row.setPrefHeight(gridPane.getPrefHeight()/gridPane.getRowCount());
+            row.setVgrow(Priority.NEVER);
+        }
+            
         //profileText.requestFocus(); // doesn't work
 //        gridPane.add(profileText, 0, 0);
         gridPane.add(searchBarPresenter.getView(), 3, 0, 3, 1);
-        gridPane.add(playlistListPresenter.getView(), 0, 2, 2, 4);
-        gridPane.add(mainDisplayPresenter.getView(), 3, 2, 3, 3);
-        gridPane.add(musicPlayerPresenter.getView(), 2, 6);
+        gridPane.add(playlistListPresenter.getView(), 0, 2, 1, 4);
+        gridPane.add(mainDisplayPresenter.getView(), 2, 1, 5, 5);
+        gridPane.add(musicPlayerPresenter.getView(), 2, 7);
     }
 
     public void showDefaultPage() {

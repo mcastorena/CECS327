@@ -61,7 +61,7 @@ public class PlaylistListPresenter {
 
             playlistListModel = new PlaylistListModel();
 //            playlistListModel.setPlaylists(null);
-            playlistListModel.setPlaylists(new CECS327InputStream(App.userToken, homepagePresenter.getProxy()));
+//            playlistListModel.setPlaylists(new CECS327InputStream(App.userToken, homepagePresenter.getProxy()));
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/ui/PlaylistListAlt.fxml"));
             loader.setController(this);
             view = loader.load();

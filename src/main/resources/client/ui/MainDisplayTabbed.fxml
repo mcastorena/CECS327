@@ -5,10 +5,9 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.VBox?>
 
-
-<TabPane style="-fx: #333;" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<TabPane fx:id="displayTabPane" style="-fx: #333;" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <tabs>
-      <Tab closable="false" text="By Song">
+      <Tab fx:id="songTab" closable="false" text="By Song">
          <content>
             <ScrollPane fx:id="bySongDisplayScroller" hbarPolicy="NEVER" prefHeight="398.0" prefWidth="384.0" style="-fx-background-color: #333; -fx-border-color: #333;">
                <content>
@@ -17,11 +16,20 @@
             </ScrollPane>
          </content>
       </Tab>
-      <Tab closable="false" text="By Artist">
+      <Tab fx:id="artistTab" closable="false" text="By Artist">
          <content>
             <ScrollPane fx:id="byArtistDisplayScroller" hbarPolicy="NEVER" prefHeight="398.0" prefWidth="384.0" style="-fx-background-color: #333; -fx-border-color: #333;">
                <content>
                   <VBox fx:id="byArtistDisplayVBox" prefHeight="394.0" prefWidth="388.0" style="-fx-background-color: #595959; -fx-border-color: #595959;" />
+               </content>
+            </ScrollPane>
+         </content>
+      </Tab>
+      <Tab fx:id="playlistTab" closable="false" text="Playlist">
+         <content>
+            <ScrollPane fx:id="playlistDisplay" hbarPolicy="NEVER" prefHeight="398.0" prefWidth="384.0" style="-fx-background-color: #333; -fx-border-color: #333;">
+               <content>
+                  <VBox fx:id="playlistDisplayVBox" prefHeight="394.0" prefWidth="388.0" style="-fx-background-color: #595959; -fx-border-color: #595959;" />
                </content>
             </ScrollPane>
          </content>

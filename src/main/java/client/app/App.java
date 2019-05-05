@@ -62,6 +62,7 @@ public class App extends Application {
         primaryStage.setResizable(true);
 
         Controller c = new Controller(primaryStage, clientProxy);
+        c.goToHomepage();
         c.stage.show();
 
 //        LandingPresenter lp = new LandingPresenter(clientProxy);
