@@ -46,7 +46,8 @@ public class Controller {
 
         playlistListPresenter = new PlaylistListPresenter(
                                     mainDisplayPresenter,
-                                    homepagePresenter
+                                    homepagePresenter,
+                                    proxy
                                 );
 
         searchBarPresenter = new SearchBarPresenter(mainDisplayPresenter);
@@ -69,6 +70,7 @@ public class Controller {
         try {
             if (LandingService.getInstance(proxy)
                             .authorizeUser(username, password)) {
+                playlistListPresenter.loadPlaylists();
                 goToHomepage();
             }
             else {
@@ -83,4 +85,6 @@ public class Controller {
     public void goToHomepage() {
         stage.setScene(new Scene(homepagePresenter.getView()));
     }
+
+
 }

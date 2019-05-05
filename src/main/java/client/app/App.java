@@ -62,16 +62,8 @@ public class App extends Application {
         primaryStage.setResizable(true);
 
         Controller c = new Controller(primaryStage, clientProxy);
-        c.goToHomepage();
+//        c.goToHomepage();
         c.stage.show();
-
-//        LandingPresenter lp = new LandingPresenter(clientProxy);
-//        lp.showLandingPage();
-
-//       HomepagePresenter hp = new HomepagePresenter();
-//       primaryStage.setScene(hp.g);
-
-        primaryStage.show();
 
         primaryStage.setOnCloseRequest(e -> {
 //            try {

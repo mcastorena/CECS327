@@ -27,7 +27,7 @@ public class SongDispatcher extends Dispatcher implements DispatcherService
         String tmp = null;
         try {
             tmp =
-                    Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("server/music")).getPath();
+                    Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("server/music.json")).getPath();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -89,13 +89,13 @@ public class LandingPresenter {
     public void initialize() {
         usernameField.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.ENTER) {
-                submitLogin();
+                submitLoginRequest();
             }
         });
 
         passwordField.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.ENTER) {
-                submitLogin();
+                submitLoginRequest();
             }
         });
 
@@ -121,6 +121,7 @@ public class LandingPresenter {
         }
 
         if (isAuthorized) {
+            controller.goToHomepage();
 //            homepagePresenter = new HomepagePresenter(clientProxy);
 //            switchToHomepage();
         } else {
