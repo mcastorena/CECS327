@@ -65,15 +65,14 @@ public class Server {
         }
         Thread.sleep(2000);
 
-        // Add user.json to chord
+        // Add user.json to chord if not existing
         String metaFile = "users";
         String dfsList = dfs.lists();
-        if(dfsList.contains(metaFile))
-            dfs.delete(metaFile);
-
-
-        dfs.create(metaFile);
-        dfs.append(metaFile, new RemoteInputFileStream(Server.class.getResource("/server/user.json").getPath()));
+        if(!dfsList.contains(metaFile)) {
+//            dfs.delete(metaFile);
+            dfs.create(metaFile);
+            dfs.append(metaFile, new RemoteInputFileStream(Server.class.getResource("/server/user.json").getPath()));
+        }
 
 
         requestCache = new HashMap<>();
