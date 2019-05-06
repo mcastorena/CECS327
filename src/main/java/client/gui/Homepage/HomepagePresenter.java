@@ -5,8 +5,11 @@ import client.gui.MusicPlayer.MusicPlayerPresenter;
 import client.gui.PlaylistList.PlaylistListPresenter;
 import client.gui.SearchBar.SearchBarPresenter;
 import client.app.App;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
@@ -85,20 +88,32 @@ public class HomepagePresenter {
         for (var col : gridPane.getColumnConstraints())
         {
             col.setPrefWidth(gridPane.getPrefWidth()/gridPane.getColumnCount());
-            col.setHgrow(Priority.NEVER);
+            col.setMaxWidth(gridPane.getPrefWidth()/gridPane.getColumnCount());
+            col.setHgrow(Priority.ALWAYS);
         }
         for (var row : gridPane.getRowConstraints())
         {
             row.setPrefHeight(gridPane.getPrefHeight()/gridPane.getRowCount());
-            row.setVgrow(Priority.NEVER);
+            row.setMaxHeight(gridPane.getPrefHeight()/gridPane.getRowCount());
+            row.setVgrow(Priority.ALWAYS);
         }
-            
-        //profileText.requestFocus(); // doesn't work
-//        gridPane.add(profileText, 0, 0);
+
+//        gridPane.setGridLinesVisible(true);
+        gridPane.prefHeightProperty().bind(App.getPrimaryStage().heightProperty());
+        gridPane.prefWidthProperty().bind(App.getPrimaryStage().widthProperty());
         gridPane.add(searchBarPresenter.getView(), 3, 0, 3, 1);
         gridPane.add(playlistListPresenter.getView(), 0, 2, 1, 4);
         gridPane.add(mainDisplayPresenter.getView(), 2, 1, 5, 5);
         gridPane.add(musicPlayerPresenter.getView(), 2, 7);
+
+        // Shift the music player element up a little
+        try {
+            var musicPlayer = gridPane.getChildren().get(3);
+            musicPlayer.setTranslateY(-10);
+        } catch (Exception e) {
+            System.out.println("Exception trying to get music player element from gridpane.");
+            e.printStackTrace();
+        }
     }
 
     public void showDefaultPage() {
