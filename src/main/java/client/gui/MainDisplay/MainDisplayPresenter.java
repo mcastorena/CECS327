@@ -17,6 +17,7 @@ import client.model.CollectionLightWeight;
 import client.model.Playlist;
 import client.rpc.CECS327InputStream;
 import client.rpc.ProxyInterface;
+import server.model.Collection;
 
 import java.io.IOException;
 import java.util.List;
@@ -74,6 +75,8 @@ public class MainDisplayPresenter {
     ScrollPane byArtistDisplayScroller;
     @FXML
     ScrollPane bySongDisplayScroller;
+    @FXML
+    ScrollPane playlistDisplayScroller;
     //endregion
 
     /**
@@ -111,12 +114,16 @@ public class MainDisplayPresenter {
         bySongDisplayScroller.setFitToWidth(true);
         byArtistDisplayScroller.setFitToHeight(true);
         byArtistDisplayScroller.setFitToWidth(true);
+        playlistDisplayScroller.setFitToHeight(true);
+        playlistDisplayScroller.setFitToWidth(true);
 
         // Bind the VBox sizes to parent (scroll panes)
         bySongDisplayVBox.prefWidthProperty().bind(bySongDisplayScroller.prefViewportWidthProperty());
         bySongDisplayVBox.prefHeightProperty().bind(bySongDisplayScroller.prefViewportHeightProperty());
         byArtistDisplayVBox.prefWidthProperty().bind(byArtistDisplayScroller.prefViewportWidthProperty());
         byArtistDisplayVBox.prefHeightProperty().bind(byArtistDisplayScroller.prefViewportHeightProperty());
+        playlistDisplayVBox.prefWidthProperty().bind(playlistDisplayScroller.prefViewportWidthProperty());
+        playlistDisplayVBox.prefHeightProperty().bind(playlistDisplayScroller.prefViewportHeightProperty());
     }
 
     /**
@@ -158,41 +165,61 @@ public class MainDisplayPresenter {
      * @param result The SearchResult containing a list of songs and a list of songs sorted by artist.
      */
     private void showResults(SearchResult result) {
-        // Show the display tabs
+        // Bring focus to song tab
+        displayTabPane.getSelectionModel().select(songTab);
+
+        updateBySongDisplay(result.getSongResultList());
+        updateByArtistDisplay(result.getArtistResultList());
+
+    }
+
+    /**
+     * Refreshes the 'By Song' results display.
+     * @param songResultsList The new list of results, sorted by song name
+     */
+    private void updateBySongDisplay(List<CollectionLightWeight> songResultsList) {
+        // Enable the display tabs
         songTab.setDisable(false);
-        artistTab.setDisable(false);
 
-        // Clear the previous results from the display tabs
         bySongDisplayVBox.getChildren().clear();
-        byArtistDisplayVBox.getChildren().clear();
 
-        // 'By Song' tab: Add a new search result UI element for each song returned
-        for (CollectionLightWeight song : result.getSongResultList()) {
-            SearchResultSongItem displayItem = new SearchResultSongItem(this, song);
+        for (CollectionLightWeight song : songResultsList) {
+            var displayItem = new MainDisplayItem(this, song);
+            // Stretch the display item horizontally to fill the width of the display view
             displayItem.songPane.prefWidthProperty().bind(bySongDisplayVBox.widthProperty());
 
             bySongDisplayVBox.getChildren()
-                             .add(displayItem.getView());
+                    .add(displayItem.getView());
         }
+    }
 
-        // 'By Artist' tab: Add a new search result UI element for each song,
-        // but group by artist
-        var list = result.getArtistResultList();
-        for (int i = 0; i < list.size(); i++) {
-            var song = list.get(i);
+    /**
+     * Refreshes the 'By Artist' results display. Songs are grouped by artist name.
+     * @param artistResultsList The new list of results, sorted by artist name
+     */
+    private void updateByArtistDisplay(List<CollectionLightWeight> artistResultsList) {
+        // Enable the artist tab
+        artistTab.setDisable(false);
+
+        byArtistDisplayVBox.getChildren().clear();
+
+        for (int i = 0; i < artistResultsList.size(); i++) {
+            var song = artistResultsList.get(i);
+
+            String currentArtist = song.getArtistName();
+            String prevArtist = (i > 0 ? artistResultsList.get(i-1).getArtistName() : "");
 
             // Group songs by artist
-            if (i == 0 || (i > 0 && !song.getArtistName().equals(list.get(i-1).getArtistName()))) {
-//                byArtistDisplayVBox.getChildren().add(new Label("By " + song.getArtistName()));
-                byArtistDisplayVBox.getChildren().add(new ArtistLabel(song.getArtistName()).getView());
-            }
+            // Check if previous song's artist was the same
+            if ( i == 0 || !currentArtist.equals(prevArtist) )
+                byArtistDisplayVBox.getChildren().add(new ArtistLabel(currentArtist).getView());
 
             var displayItem = new MainDisplayItem2(this, song);
+            // Stretch item UI to fit display width
             displayItem.songPane.prefWidthProperty().bind(byArtistDisplayVBox.widthProperty());
-//            displayItem.songPane.setPrefWidth(700);
 
             byArtistDisplayVBox.getChildren()
-                               .add(displayItem.getView());
+                    .add(displayItem.getView());
         }
     }
 
@@ -226,14 +253,18 @@ public class MainDisplayPresenter {
      * @param playlist - Playlist to be shown
      */
     private void showPlaylist(Playlist playlist) {
-        playlistDisplayVBox.getChildren().clear();
         playlistTab.setDisable(false);
-
         playlistTab.setText(playlist.getName());
+        // Bring focus to playlist tab
+        displayTabPane.getSelectionModel().select(playlistTab);
 
+        playlistDisplayVBox.getChildren().clear();
         // Create new items for each song in the playlist
         for (CollectionLightWeight song : playlist.getSongList()) {
             MainDisplayItem displayItem = new MainDisplayItem(this, song);
+
+            // Stretch the display item horizontally to fill the width of the display view
+            displayItem.songPane.prefWidthProperty().bind(bySongDisplayVBox.widthProperty());
 
             // Add the song to the VBox
             playlistDisplayVBox.getChildren()
