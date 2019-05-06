@@ -101,6 +101,8 @@ public class PlaylistItem {
 
         //region PlaylistItemPane
         playlistItemPane.getChildren().add(deletePane);
+
+        // Set up event handling of MainDisplayItem dragged and dropped onto PlaylistItem
         playlistItemPane.setOnDragOver(e -> {
             Dragboard dragboard = e.getDragboard();
             if (e.getGestureSource() instanceof AnchorPane &&
@@ -130,6 +132,7 @@ public class PlaylistItem {
             App.setCursorStyle(Cursor.DEFAULT);
             e.setDropCompleted(dragCompleted);
             e.consume();
+
         });
         playlistItemPane.setOnMouseEntered(e -> {
             playlistItemPane.setStyle("-fx-background-color: #464646");
