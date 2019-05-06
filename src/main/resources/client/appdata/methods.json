@@ -73,7 +73,8 @@
     "params": {
       "userToken": "",
       "playlistName": "",
-      "song": ""
+      "song": "",
+      "songName": ""
     }
   },
   "deletePlaylist": {

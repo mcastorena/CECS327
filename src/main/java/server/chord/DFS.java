@@ -330,6 +330,17 @@ public class DFS implements Serializable, IDFSInterface {
         
     }
 
+    public int getFileSize(String file) throws Exception {
+        FilesJson metadata = readMetaData();
+        for(int i = 0; i < metadata.file.size(); i++){
+            if(metadata.file.get(i).getName().equals(file)){
+                long size = metadata.file.get(i).getSize();
+                return Math.toIntExact(size);
+
+            }
+        }
+        return 0;
+    }
 
     /**
      * Join the chord
@@ -1080,8 +1091,8 @@ public class DFS implements Serializable, IDFSInterface {
 
     public JsonArray searchPage(PagesJson page, String query) throws IOException {
          Gson gson = new GsonBuilder()
-                 .setPrettyPrinting()
-                 .create();
+                .setPrettyPrinting()
+                .create();
 
         ChordMessageInterface peer = chord.locateSuccessor(page.getGUID());
         RemoteInputFileStream rifs = peer.get(page.getGUID());

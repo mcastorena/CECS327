@@ -72,7 +72,6 @@ public class PlaylistListPresenter {
             e.printStackTrace();
         }
     }
-
     /**
      * Required by JavaFX for accessing @FXML components
      */
@@ -90,6 +89,7 @@ public class PlaylistListPresenter {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     /**

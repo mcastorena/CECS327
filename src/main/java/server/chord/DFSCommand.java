@@ -112,8 +112,8 @@ public class DFSCommand
                                     e.printStackTrace();
                                 }
                             }
-                            d.updateMusicOnFileAdd();
-                            Server.updateSongList();
+                            //d.updateMusicOnFileAdd();
+                            //Server.updateSongList();
 
                             System.out.println("Done");
                         }

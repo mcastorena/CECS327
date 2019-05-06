@@ -1,5 +1,7 @@
 package server.core;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import server.model.Collection;
@@ -7,10 +9,12 @@ import server.model.Playlist;
 import server.model.Profile;
 import server.model.User;
 import server.util.Serializer;
+import static server.core.Server.dfs;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Base64;
 
 public class PlaylistDispatcher extends Dispatcher implements DispatcherService {
@@ -87,7 +91,10 @@ public class PlaylistDispatcher extends Dispatcher implements DispatcherService 
         return ackMessage.toString();
     }
 
-    public String addSongToPlaylist(Integer userToken, String playlistName, Long songID) throws IOException {
+    public String addSongToPlaylist(Integer userToken, String playlistName, Long songID, String songName) throws Exception {
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
         Serializer s = new Serializer();
         User currentSession = Server.currentSessions.get(userToken);
 
@@ -95,12 +102,32 @@ public class PlaylistDispatcher extends Dispatcher implements DispatcherService 
         currentSession.getUserProfile().addPlaylist(playlistName, new Playlist(playlistName));
 
         // Add the song to the playlist as a Collection
-        currentSession.getUserProfile().getPlaylist(playlistName).addToPlaylist(Server.d.getUserLibrary().get(Math.toIntExact(songID)));
-        s.updateUsersJson(Server.userList);
+        String song = songName.substring(1,songName.length() - 1);
+        JsonArray ja = dfs.search(song);
+        JsonArray songArray = ja.get(0).getAsJsonArray();
+        Collection c = null;
+        try {
+            for(Object o : songArray)
+            {
+                JsonObject jo = gson.toJsonTree(o).getAsJsonObject();
+                c = Server.d.jsonToCollectionLightWeight(jo);
+                if(c.getId() == songID)
+                    break;
+            }
 
-        JsonObject ackMessage = new JsonObject();
-        ackMessage.addProperty("Ack:", "Song added to " + playlistName);
-        // TODO: need encoding
-        return ackMessage.toString();
+            currentSession.getUserProfile().getPlaylist(playlistName).addToPlaylist(c);
+            s.updateUsersJson(Server.userList);
+
+            JsonObject ackMessage = new JsonObject();
+            ackMessage.addProperty("Ack:", "Song added to " + playlistName);
+            // TODO: need encoding
+            return ackMessage.toString();
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return "Add Song to " + playlistName + " FAILED!" ;
+
     }
 }

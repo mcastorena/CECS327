@@ -121,6 +121,7 @@ public class PlaylistItem {
                 params.put("userToken", Integer.toString(App.userToken));
                 params.put("playlistName", playlist.getName());
                 params.put("song", Long.toString(song.getId()));
+                params.put("songName", song.getSongTitle());
                 parent.getProxy().asyncExecution("addSongToPlaylist", params);
 
                 dragCompleted = true;

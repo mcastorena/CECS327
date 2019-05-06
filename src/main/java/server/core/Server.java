@@ -29,7 +29,7 @@ public class Server {
     public static List<User> userList;
     public static HashMap<String,User> usersInfo = new HashMap<>();
 
-    static List<Collection> songList;
+    //static List<Collection> songList;
 
     static Map<String, String> requestCache;
     
@@ -47,7 +47,7 @@ public class Server {
 
     public static void updateSongList()
     {
-        songList = d.getMusicDatabase();
+        //songList = d.getMusicDatabase();
     }
 
     public static void main(String[] args) throws Exception {
@@ -77,11 +77,11 @@ public class Server {
 
 
         requestCache = new HashMap<>();
-        System.out.println("Deserializing music.json and user.json...");
+        System.out.println("Deserializing user.json...");
         d = new Deserializer();
         System.out.println("Done.");
 
-        songList = d.getMusicDatabase();
+        //songList = d.getMusicDatabase();
         userList = d.deserializeUsers();
 
         for (User u : userList) {

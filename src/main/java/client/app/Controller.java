@@ -62,6 +62,7 @@ public class Controller {
                 musicPlayerPresenter
         );
 
+
         this.stage = stage;
         this.stage.setScene(new Scene(landingPresenter.getView()));
     }

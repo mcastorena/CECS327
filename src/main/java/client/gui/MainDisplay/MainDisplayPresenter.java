@@ -226,6 +226,7 @@ public class MainDisplayPresenter {
      * @param playlist - Playlist to be shown
      */
     private void showPlaylist(Playlist playlist) {
+        playlistDisplayVBox.getChildren().clear();
         playlistTab.setDisable(false);
 
         playlistTab.setText(playlist.getName());
