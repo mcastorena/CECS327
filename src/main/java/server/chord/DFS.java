@@ -798,6 +798,12 @@ public class DFS implements Serializable, IDFSInterface {
     }
 
     @Override
+    /**
+     * Appends empty page to file in metadata
+     * file - name of the file being edited
+     * page - GUID of page being added
+     * lowerBoundInterval - lowerBoundInterval for page to store
+     */
     public void appendEmptyPage(String file, Long page, String lowerBoundInterval) throws Exception
     {
         FilesJson metadata = readMetaData();
