@@ -49,22 +49,27 @@ public class SongDispatcher extends Dispatcher implements DispatcherService {
      */
     public String getSongChunk(Long key, Long fragment) throws IOException {
         byte buf[] = new byte[FRAGMENT_SIZE];
-        //File file = new File(MUSIC_FILE_PATH + File.separator + key + ".mp3");
-        //System.out.println("SongDispatcher has found file: " + key + "\tStatus: " + file.exists());
 
-        RemoteInputFileStream rifs = null;
+// The RemoteInputFileStream will work now that it has been fixed, so leaving this here for now.
+//        RemoteInputFileStream rifs = null;
+//        try {
+//            rifs = dfs.read(key+".mp3", 0);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        rifs.connect();
+//        InputStream inputStream = rifs;
+//
+//        inputStream.skip(fragment * FRAGMENT_SIZE);
+//        inputStream.read(buf);
+//        inputStream.close();
+
         try {
-            rifs = dfs.read(key + ".mp3", 0);
+            // Need to dehardcode the pageNumber if we end up splitting the mp3 files into multiple pages.
+            buf = dfs.read(key+".mp3", 0, FRAGMENT_SIZE * Math.toIntExact(fragment), FRAGMENT_SIZE);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        rifs.connect();
-        //FileInputStream inputStream = new FileInputStream(file);
-        InputStream inputStream = rifs;
-
-        inputStream.skip(fragment * FRAGMENT_SIZE);
-        inputStream.read(buf);
-        inputStream.close();
 
         return Base64.getEncoder().encodeToString(buf);
     }

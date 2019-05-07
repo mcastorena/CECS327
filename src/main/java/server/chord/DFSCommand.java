@@ -127,6 +127,11 @@ public class DFSCommand
                     }
                     break;
 
+                case "runmapreduce":
+                    if (result.length == 2)
+                        dfs.runMapReduce(result[1], "songInvertedIndex");
+                    break;
+
                 default:
                     System.out.println("Error - Not a valid command.");
                     break;

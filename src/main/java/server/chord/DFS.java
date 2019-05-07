@@ -1,18 +1,19 @@
+
 package server.chord;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import java.rmi.*;
+import java.net.*;
+import java.util.*;
+import java.io.*;
+import java.nio.file.*;
+import java.math.BigInteger;
+import java.security.*;
+
+import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
 import server.core.Server;
 
-import java.io.File;
-import java.io.StringReader;
-import java.math.BigInteger;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.concurrent.Semaphore;
 
 import static server.core.Server.d;
 
@@ -26,19 +27,36 @@ public class DFS {
      */
     Date date = new Date();
 
-    /**
-     *
-     */
+
+public class DFS implements Serializable, IDFSInterface {
+    Date date = new Date();
     Long metadata;
 
-    /**
-     * This class represents a Page as a JSON
-     */
-    public class PagesJson {
+    Semaphore sem;
 
-        /**
-         * Global Unique Identifier
-         */
+    // Init index
+    char[] index = new char[38];
+
+    @Override
+    public void initIndex()
+    {
+        for(int i = 65; i <= 90; i++)
+            index[i-65] = (char) i;
+        for(int i = 48; i <=57; i++)
+            index[i-22] = (char) i;
+        index[36] = '-';
+        index[37] = '+';
+    }
+
+    public char[] getIndex() throws Exception
+    {
+        return index;
+    }
+
+
+    public class PagesJson implements Serializable
+    {
+        // guid = md5(filename+pagenumber)
         Long guid;
 
         /**
@@ -65,14 +83,10 @@ public class DFS {
          * Number of clients referencing this object
          */
         int referenceCount;
+        String lowerBoundInterval;
 
-        /**
-         * Default constructor
-         *
-         * @param g
-         * @param s
-         */
-        public PagesJson(Long g, Long s) {
+        public PagesJson(Long g, Long s)
+        {
             this.guid = g;
             this.size = s;
             this.referenceCount = 0;
@@ -82,6 +96,15 @@ public class DFS {
             this.readTS = date.getTime();
             this.writeTS = date.getTime();
         }
+
+        public PagesJson(Long g, Long s, String lowerBoundInterval)
+        {
+            this(g, s);
+            this.lowerBoundInterval = lowerBoundInterval;
+        }
+
+
+        // getters
 
         // Getters
 
@@ -324,7 +347,7 @@ public class DFS {
     }
 
     int port;
-    Chord chord;
+    ChordMessageInterface  chord;
 
 
     /**
@@ -333,8 +356,11 @@ public class DFS {
      * @param objectName - name of the object to be hashed
      * @return md5 hash in Long format
      */
-    private long md5(String objectName) {
-        try {
+    @Override
+    public long md5(String objectName)
+    {
+        try
+        {
             MessageDigest m = MessageDigest.getInstance("MD5");
             m.reset();
             m.update(objectName.getBytes());
@@ -344,26 +370,33 @@ public class DFS {
             e.printStackTrace();
 
         }
+        catch(NoSuchAlgorithmException e)
+        {
+                e.printStackTrace();
+
+        }
         return 0;
     }
 
 
-    /**
-     * DFS Constructor
-     *
-     * @param port Port the DFS is connecting to
-     * @throws Exception
-     */
-    public DFS(int port) throws Exception {
+
+    public DFS(int port) throws Exception
+    {
         this.port = port;
         this.metadata = md5("Metadata");
         long guid = md5("" + port);
         chord = new Chord(port, guid);
-        Files.createDirectories(Paths.get(guid + File.separator + "repository" + File.separator));
-        Files.createDirectories(Paths.get(guid + File.separator + "tmp" + File.separator));
+        initIndex();
+        sem = new Semaphore(1);
+        Files.createDirectories(Paths.get(guid+ File.separator +"repository"+ File.separator));
+        Files.createDirectories(Paths.get(guid+ File.separator +"tmp"+ File.separator));
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
-                chord.leave();
+                try {
+                    chord.leave();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -376,9 +409,11 @@ public class DFS {
      * @param port Port to join
      * @throws Exception
      */
-    public void join(String Ip, int port) throws Exception {
+    @Override
+    public void join(String Ip, int port) throws Exception
+    {
         chord.joinRing(Ip, port);
-        chord.print();
+        System.out.println(((Chord) chord).print());
     }
 
 
@@ -387,8 +422,10 @@ public class DFS {
      *
      * @throws Exception
      */
-    public void leave() throws Exception {
-        chord.leave();
+    @Override
+    public void leave() throws Exception
+    {        
+       chord.leave();
     }
 
     /**
@@ -396,8 +433,10 @@ public class DFS {
      *
      * @throws Exception
      */
-    public void print() throws Exception {
-        chord.print();
+    @Override
+    public void print() throws Exception
+    {
+        System.out.println(((Chord) chord).print());
     }
 
     /**
@@ -406,7 +445,9 @@ public class DFS {
      * @return FilesJson object containing all "files", or null if an exception is encountered
      * @throws Exception
      */
-    public FilesJson readMetaData() throws Exception {
+    @Override
+    public FilesJson readMetaData() throws Exception
+    {
         FilesJson filesJson = null;
         long guid = md5("Metadata");
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -429,7 +470,7 @@ public class DFS {
         }
         catch (Exception ex)
         {
-            File metadata = new File(this.chord.prefix+guid);       // Create file object with filepath
+            File metadata = new File(this.chord.getPrefix()+guid);       // Create file object with filepath
             metadata.createNewFile();                                         // Create the physical file
 
             // Create initial data for metadata
@@ -452,7 +493,9 @@ public class DFS {
      * @param filesJson - Object that will form the new metadata to be written
      * @throws Exception
      */
-    public void writeMetaData(FilesJson filesJson) throws Exception {
+    @Override
+    public void writeMetaData(FilesJson filesJson) throws Exception
+    {
         long guid = md5("Metadata");
         ChordMessageInterface peer = chord.locateSuccessor(guid);
 
@@ -467,7 +510,9 @@ public class DFS {
      * @param newName New name of file
      * @throws Exception
      */
-    public void move(String oldName, String newName) throws Exception {
+    @Override
+    public void move(String oldName, String newName) throws Exception
+    {
         // Read Metadata
         FilesJson metadata = readMetaData();
 
@@ -493,7 +538,9 @@ public class DFS {
      * @return string containing the names of all files in the chord
      * @throws Exception
      */
-    public String lists() throws Exception {
+    @Override
+    public String lists() throws Exception
+    {
         StringBuilder listOfFiles = new StringBuilder("\nFiles:\n");                        // Initialize string to hold file names
 
         List<FileJson> myFiles = readMetaData().file;               // Get our list of files
@@ -504,12 +551,14 @@ public class DFS {
         return listOfFiles.toString();
     }
 
-    /**
-     * create an empty file
-     *
-     * @param fileName Name of the file
-     */
-    public void create(String fileName) throws Exception {
+/**
+ * create an empty file 
+  *
+ * @param fileName Name of the file
+ */
+    @Override
+    public void create(String fileName) throws Exception
+    {
         // Create new file
         FileJson newFile = new FileJson(fileName, (long) 0);
 
@@ -524,13 +573,15 @@ public class DFS {
 
         System.out.println("File:\t" + fileName + " created!\n");
     }
-
-    /**
-     * delete file
-     *
-     * @param fileName Name of the file
-     */
-    public void delete(String fileName) throws Exception {
+    
+/**
+ * delete file 
+  *
+ * @param fileName Name of the file
+ */
+    @Override
+    public void delete(String fileName) throws Exception
+    {
         // Read Metadata
         FilesJson metadata = readMetaData();
 
@@ -558,14 +609,16 @@ public class DFS {
         } else return;
 
     }
-
-    /**
-     * Read block pageNumber of fileName
-     *
-     * @param fileName   Name of the file
-     * @param pageNumber number of block.
-     */
-    public RemoteInputFileStream read(String fileName, int pageNumber) throws Exception {
+    
+/**
+ * Read block pageNumber of fileName 
+  *
+ * @param fileName Name of the file
+ * @param pageNumber number of block. 
+ */
+    @Override
+    public RemoteInputFileStream read(String fileName, int pageNumber) throws Exception
+    {
         // Read Metadata
         FilesJson metadata = readMetaData();
 
@@ -609,6 +662,7 @@ public class DFS {
 //     * @return The page as a byte array.
 //     * @throws Exception
 //     */
+    @Override
     public byte[] read(String filename, int pageNumber, int unused_variable) throws Exception
     {
         // Read Metadata
@@ -631,8 +685,49 @@ public class DFS {
 
             var peer = chord.locateSuccessor(page.getGUID());
 
+            file.decrementRef();
             writeMetaData(metadata);
             return peer.get(page.getGUID(), 0, 1024 << 9);
+        }
+        return null;
+    }
+
+
+    //    /**
+//     * Retrieves a byte array representation of the queried page.
+//     * @param filename Name of the file in the Metadata list.
+//     * @param pageNumber The page to retrieve.
+//     * @param offset The fragment number.
+//     * @param len The max length to be read in the buf
+//     * @return The page as a byte array.
+//     * @throws Exception
+//     */
+    @Override
+    public byte[] read(String filename, int pageNumber, int offset, int len) throws Exception
+    {
+        // Read Metadata
+        FilesJson metadata = readMetaData();
+
+        // Find file
+
+        var file = find(metadata.getFileList(), filename);
+        if (file != null) {
+            if(file.numberOfPages == 0 || pageNumber >= file.numberOfPages){
+                return null;
+            }
+
+            var timestamp = new Date().getTime();
+            var page = file.pages.get(pageNumber);
+            file.incrementRef();
+
+            file.readTS = timestamp;
+            page.readTS = timestamp;
+
+            var peer = chord.locateSuccessor(page.getGUID());
+
+            file.decrementRef();
+            writeMetaData(metadata);
+            return peer.get(page.getGUID(), offset, len);
         }
         return null;
     }
@@ -644,7 +739,9 @@ public class DFS {
      * @return First block of a file
      * @throws Exception
      */
-    public RemoteInputFileStream head(String fileName) throws Exception {
+    @Override
+    public RemoteInputFileStream head(String fileName) throws Exception
+    {
         return read(fileName, 0);
     }
 
@@ -655,7 +752,9 @@ public class DFS {
      * @return Last block of a file
      * @throws Exception
      */
-    public RemoteInputFileStream tail(String fileName) throws Exception {
+    @Override
+    public RemoteInputFileStream tail(String fileName) throws Exception
+    {
         // Read Metadata
         FilesJson metadata = readMetaData();
 
@@ -690,14 +789,16 @@ public class DFS {
             return peer.get(myPage.guid);
         } else return null;
     }
-
-    /**
-     * Add a page to the file
-     *
-     * @param fileName Name of the file
-     * @param data     RemoteInputStream.
-     */
-    public void append(String fileName, RemoteInputFileStream data) throws Exception {
+    
+ /**
+ * Add a page to the file                
+  *
+ * @param fileName Name of the file
+ * @param data RemoteInputStream. 
+ */
+    @Override
+    public void append(String fileName, RemoteInputFileStream data) throws Exception
+    {
         // Read Metadata
         FilesJson metadata = readMetaData();
 
@@ -728,14 +829,7 @@ public class DFS {
             writeMetaData(metadata);                                                        // Update metadata for write and refCount
             peer.put(pageGUID, data);
 
-            if(fileName.contains("music")) {
-                Thread.sleep(2000);
-                d.updateMusicOnFileAdd();
-                Server.updateSongList();
-                System.out.println("Append Complete");
-            }
-            else
-                System.out.println("Append Complete");
+            System.out.println("Append Complete");
         }else return;
     }
 
@@ -746,6 +840,7 @@ public class DFS {
      * @param text     The text to append.
      * @throws Exception
      */
+    @Override
     public void append(String filename, String text) throws Exception {
         FilesJson metadata = readMetaData();
 
@@ -764,12 +859,45 @@ public class DFS {
             ChordMessageInterface peer = chord.locateSuccessor(pageGUID);
             peer.put(pageGUID, text);                   // Store the file on the Chord
 
-            writeMetaData(metadata);
             target.decrementRef();
+            writeMetaData(metadata);
         }
         else {
             System.out.println("File '" + filename + "' not found.");
         }
+    }
+
+    @Override
+    public void appendEmptyPage(String file, Long page, String lowerBoundInterval) throws Exception
+    {
+        FilesJson metadata = readMetaData();
+
+        boolean find = false;
+        //int newPageIndex = 0;
+        int fileIndex = 0;
+        for(int i = 0; i < metadata.file.size(); i++){
+            if(metadata.file.get(i).getName().equals(file)){
+                fileIndex = i;
+                metadata.file.get(i).incrementRef();                                            // Increment file refCount
+                writeMetaData(metadata);                                                        // Write updated metadata
+                //newPageIndex = metadata.file.get(i).pages.size();
+
+                metadata.file.get(i).addPage(new PagesJson(page,  Long.valueOf(0), lowerBoundInterval), Long.valueOf(0));     // Add new page entry to file and update filesize
+                metadata.file.get(i).writeTS = date.getTime();              // Update file write timestamp
+                find = true;
+                break;
+            }
+        }
+
+        // If file was found append data and add to chord, else return
+        if(find){
+            //Find closest successor node and place data
+            metadata.file.get(fileIndex).decrementRef();                                    // Decrement refcount
+            ChordMessageInterface peer = chord.locateSuccessor(page);
+            writeMetaData(metadata);                                                        // Update metadata for write and refCount
+            peer.put(page, "");
+        }else return;
+
     }
 
     /**
@@ -779,7 +907,8 @@ public class DFS {
      * @param filename   The file filename
      * @return
      */
-    private FileJson find(List<FileJson> collection, String filename) {
+     @Override
+     public FileJson find(List<FileJson> collection, String filename) {
         for (var item : collection) {
             if (item.name.equals(filename)) {
                 return item;
@@ -787,6 +916,285 @@ public class DFS {
         }
         return null;
     }
-}
 
+    @Override
+    public void runMapReduce(String fileInput, String fileOutput) throws Exception {
+
+        MapReduceInterface mapReducer = new Mapper();
+        this.chord.getSuccessor().onChordSize(this.chord.getId(), 1);
+
+        int size;
+        while( (size = this.chord.getChordSize()) == 0 )
+            Thread.sleep(10);
+        System.out.println("on chord size: " + size);
+
+        int interval = 1369/size; //1936
+
+
+        createFile(fileOutput + ".map", interval, size);//
+        FilesJson metadata = readMetaData();
+
+        FileJson fj = null;
+        System.out.println("iterating throught json file");
+        for(int i = metadata.file.size() - 1; i >= 0 ; i--){//
+            fj = metadata.file.get(i);
+            if(fj.getName().equals(fileInput)){
+                break;
+            }
+        }
+        System.out.println("finished iterating throught json file \n " +
+                "now iterating through pages");
+        for(int i = 0; i < fj.pages.size(); i++)
+        {
+            PagesJson pg = fj.pages.get(i);
+            increaseCounter(fileOutput + ".map");
+            ChordMessageInterface peer = chord.locateSuccessor(pg.getGUID());
+
+
+            try {
+                peer.mapContext(pg.getGUID(), mapReducer,  this, fileOutput + ".map");
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        System.out.println("putting thread to sleep");
+        while(getCounter(fileOutput + ".map") != 0)
+            Thread.sleep(10);//
+        bulkTree(fileOutput + ".map", size);
+
+        createFile(fileOutput, interval, size);
+        metadata = readMetaData();
+
+        fj = null;
+        System.out.println("iterating through json file second time until we find the file");
+        for(int i = metadata.file.size() - 1; i >= 0 ; i--){
+            fj = metadata.file.get(i);
+            if(fj.getName().equals(fileOutput + ".map")){
+                break;
+            }
+        }
+
+        System.out.println("cycling through pages again");
+        for(int i = 0; i < fj.pages.size(); i++)
+        {
+            PagesJson pg = fj.pages.get(i);
+            increaseCounter(fileOutput);
+            ChordMessageInterface peer = chord.locateSuccessor(pg.getGUID());
+
+            peer.reduceContext(pg.getGUID(), mapReducer, this, fileOutput);
+        }
+
+        System.out.println("sleeping the thread again");
+        while(getCounter(fileOutput) != 0)
+            Thread.sleep(10);
+        bulkTree(fileOutput, size);
+
+        if(fileOutput.equals("songInvertedIndex"))
+        {
+            System.out.println("\n NOW RUNNING MAP REDUCE FOR ARTISTS...");
+            runMapReduce(fileInput, "artistInvertedIndex");
+            System.out.println("Map Reduce Complete");
+        }
+    }
+
+    /**
+     * After page has been mapped, remove it from the file's pages in metadata
+     * @param file - Name of the file being edited
+     * @throws Exception
+     */
+    public void onPageComplete(String file) throws Exception {
+        FilesJson metadata = this.readMetaData();
+        for(int i = metadata.file.size() - 1; i >= 0 ; i--){
+            if(metadata.file.get(i).getName().equals(file)){
+                metadata.file.get(i).decrementRef();
+                break;
+            }
+        }
+        writeMetaData(metadata);
+    }
+
+    public void increaseCounter(String file) throws Exception {
+        FilesJson metadata = this.readMetaData();
+        for(int i = metadata.file.size() - 1; i >= 0 ; i--){
+            if(metadata.file.get(i).getName().equals(file)){
+                metadata.file.get(i).incrementRef();
+                break;
+            }
+        }
+        writeMetaData(metadata);
+    }
+
+    public int getCounter(String file) throws Exception
+    {
+        FilesJson metadata = this.readMetaData();
+        for(int i = metadata.file.size() - 1; i >= 0 ; i--){
+            if(metadata.file.get(i).getName().equals(file)){
+                int count = metadata.file.get(i).referenceCount;
+                return count;
+            }
+        }
+        return -1;
+    }
+
+
+    @Override
+    public void bulkTree(String file, int size) throws Exception {
+        for(int i = 0; i < size; i++)
+        {
+            long pageGUID = md5(file+i);
+
+            FilesJson metadata = readMetaData();
+
+            FileJson fj = null;
+            for(int j = 0; j < metadata.file.size(); j++){
+                fj = metadata.file.get(j);
+                if(fj.getName().equals(file)){
+                    break;
+                }
+            }
+
+            PagesJson pg = null;
+            for(int k = 0; k < fj.numberOfPages; k++) {
+                pg = fj.pages.get(k);
+                if(pageGUID == pg.getGUID())
+                {
+                    ChordMessageInterface peer = chord.locateSuccessor(pageGUID);
+                    peer.bulk(pg, file);
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * Creates a file in the DFS
+     * @param file
+     * @param interval
+     * @param size
+     * @throws Exception
+     */
+     @Override
+     public void createFile(String file, int interval, int size) throws Exception {
+
+        int lower = 0;
+        this.create(file);
+        for(int i = 0; i < size; i++){
+            Long page = this.md5(file+i);
+            String lowerBoundInterval = String.valueOf(index[Math.floorDiv(lower, 37)]) + index[lower % 37];
+            appendEmptyPage(file, page, lowerBoundInterval);
+            lower += interval;
+        }
+
+    }
+
+    public DFS.PagesJson getPageToSearch(String key, String file) throws Exception {
+        key = key.toUpperCase();
+
+        FilesJson metadata = readMetaData();
+
+        DFS.FileJson fj = null;
+        for(int i = metadata.file.size() - 1; i >= 0 ; i--){
+            fj = metadata.file.get(i);
+            if(fj.getName().equals(file)){
+                break;
+            }
+        }
+        for(int i = 0; i < fj.numberOfPages - 1; i++) {
+            DFS.PagesJson page1 = fj.pages.get(i);
+            DFS.PagesJson page2 = fj.pages.get(i + 1);
+
+            String indexString = new String(getIndex());
+
+            int keyLetter1;
+            int keyLetter2;
+
+            try {
+                keyLetter1 = indexString.indexOf(key.charAt(0));
+            } catch (StringIndexOutOfBoundsException e) {
+                break;
+            }
+
+
+            int pg1Letter1 = indexString.indexOf(page1.lowerBoundInterval.charAt(0));
+            int pg2Letter1 = indexString.indexOf(page2.lowerBoundInterval.charAt(0));
+            int pg1Letter2 = indexString.indexOf(page1.lowerBoundInterval.charAt(1));
+            int pg2Letter2 = indexString.indexOf(page2.lowerBoundInterval.charAt(1));
+
+            try {
+                keyLetter2 = indexString.indexOf(key.charAt(1));
+            } catch (StringIndexOutOfBoundsException e) {
+                if(keyLetter1 >= pg1Letter1 && keyLetter1 < pg2Letter1)
+                    return page1;
+                break;
+            }
+
+
+            if ((keyLetter1 == pg1Letter1 && (keyLetter2 >= pg1Letter2 || key.charAt(1) == ' ')) ||
+                    (keyLetter1 == pg2Letter1 && keyLetter2 < pg2Letter2) ||
+                    (keyLetter1 > pg1Letter1 && keyLetter1 < pg2Letter1))
+            {
+                return page1;
+            } else if (i == fj.numberOfPages - 2) {
+                return page2;
+            }
+        }
+        return null;
+    }
+
+    public JsonArray search(String query) throws Exception {
+        PagesJson songPage = getPageToSearch(query, "songInvertedIndex");
+        PagesJson artistPage = getPageToSearch(query, "artistInvertedIndex");
+
+        JsonArray songArtistArray = new JsonArray();
+
+        if(songPage != null)
+            songArtistArray.add(searchPage(songPage, query));
+        if(artistPage != null)
+            songArtistArray.add(searchPage(artistPage, query));
+
+        if(songPage == null && artistPage == null) return null;
+
+        return songArtistArray;
+    }
+
+    public JsonArray searchPage(PagesJson page, String query) throws IOException {
+         Gson gson = new GsonBuilder()
+                 .setPrettyPrinting()
+                 .create();
+
+        ChordMessageInterface peer = chord.locateSuccessor(page.getGUID());
+        RemoteInputFileStream rifs = peer.get(page.getGUID());
+        rifs.connect();
+
+        TreeMap<String, ArrayList> invertedIndex = gson.fromJson(new JsonReader(new InputStreamReader(rifs)), TreeMap.class);
+        JsonArray ja = new JsonArray();
+        for(Map.Entry<String,ArrayList> entry : invertedIndex.entrySet())
+        {
+            if(entry.getKey().startsWith(query.toUpperCase()))
+            {
+                ArrayList result = entry.getValue();
+                for( Object o : result)
+                {
+                    JsonObject clwObject = new JsonObject(); // Single object for necessary CollectionLightWeight fields.
+                    JsonObject jo = gson.toJsonTree(o).getAsJsonObject();
+                    JsonObject release = jo.get("release").getAsJsonObject();
+                    JsonObject artist = jo.get("artist").getAsJsonObject();
+                    JsonObject song = jo.get("song").getAsJsonObject();
+
+                    clwObject.addProperty("idNum", release.getAsJsonObject().get("id").getAsLong());
+                    clwObject.addProperty("songName", song.getAsJsonObject().get("title").toString());
+                    clwObject.addProperty("artistName", artist.getAsJsonObject().get("name").toString());
+                    clwObject.addProperty("releaseName", release.getAsJsonObject().get("name").toString());
+
+                    ja.add(clwObject);
+                }
+            }
+        }
+
+        return ja;
+    }
+}
 

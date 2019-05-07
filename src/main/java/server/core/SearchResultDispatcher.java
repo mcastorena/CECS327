@@ -1,21 +1,15 @@
 package server.core;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import server.model.Collection;
-import server.model.SearchResult;
-import server.util.Search;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Base64;
-import java.util.List;
+
+import static server.core.Server.dfs;
 
 
-/**
- * This class dispatches SearchResults
- */
 public class SearchResultDispatcher extends Dispatcher implements DispatcherService {
 
     /**
@@ -48,24 +42,11 @@ public class SearchResultDispatcher extends Dispatcher implements DispatcherServ
      * @param query Song being searched
      * @return Size of the SearchResult as a byte array, as an Integer
      */
-    public Integer getSize(String query) {
-        SearchResult searchResult;
-        List<Collection> songResults;
+    public Integer getSize(String query) throws Exception {
 
-        searchResult = Search.search(query, Server.songList);
-        songResults = searchResult.getSongResultList();
+        // sResult returns as a JsonArray holding 2 JsonArray's, the first is the song search results/ 2nd is artist search results
+        JsonArray sResult = dfs.search(query);
 
-        // Convert search result to json
-        JsonArray sResult = new JsonArray();
-
-        for (Collection c : songResults) {
-            JsonObject singleSong = new JsonObject();
-            singleSong.addProperty("idNum", c.getId());
-            singleSong.addProperty("songName", c.getSongTitle());
-            singleSong.addProperty("artistName", c.getArtistName());
-            singleSong.addProperty("releaseName", c.getRelease().getName());
-            sResult.add(singleSong);
-        }
         System.out.println(sResult.toString());
 
         Server.byteSearchResult = sResult.toString().getBytes();

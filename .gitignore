@@ -2,6 +2,7 @@
 # Don't save the mp3 files
 *.mp3
 target
+[0-9]*
 
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 

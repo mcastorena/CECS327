@@ -1,40 +1,38 @@
-package server.model;
+package client.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * This class represents the result of a Song search and is used to obtain information to be displayed.
- */
+// Contains list of collections for song/artists
+// Can use this to obtain information to be displayed
 public class SearchResult {
 
-    /**
-     * List of Songs
-     */
-    List<Collection> songs;
+    List<CollectionLightWeight> songs;
+    List<CollectionLightWeight> artists;
 
-    /**
-     * List of Artists
-     */
-    List<Collection> artists;
-
-    /**
-     * Constructor
-     *
-     * @param songs   List of Collection objects representing Songs
-     * @param artists List of Collection objects representing Artists
-     */
-    public SearchResult(List<Collection> songs, List<Collection> artists) {
+    public SearchResult(List<CollectionLightWeight> songs, List<CollectionLightWeight> artists) {
         this.songs = songs;
         this.artists = artists;
     }
 
-    //region Getters and Setters
-    public List<Collection> getSongResultList() {
+    public SearchResult()
+    {
+    }
+
+    public List<CollectionLightWeight> getSongResultList() {
         return songs;
     }
 
-    public List<Collection> getArtistResultList() {
+    public List<CollectionLightWeight> getArtistResultList() {
         return artists;
+    }
+
+    public void setSongs(List<CollectionLightWeight> songs) {
+        this.songs = songs;
+    }
+
+    public void setArtists(List<CollectionLightWeight> artists) {
+        this.artists = artists;
     }
 
     public String getSongTitle(int index) {
@@ -57,14 +55,6 @@ public class SearchResult {
         return artists.size();
     }
 
-    public List<Collection> getSongs() {
-        return songs;
-    }
-
-    public List<Collection> getArtists() {
-        return artists;
-    }
-    //endregion
 
     @Override
     public String toString() {
