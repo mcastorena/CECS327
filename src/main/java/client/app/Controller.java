@@ -16,44 +16,82 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * Controller used for connecting with the Application
+ */
 public class Controller {
-    Stage stage; // The primary window of our app.
 
+    /**
+     * Primary window of application
+     */
+    Stage stage;
+
+    /**
+     * Proxy used for connection
+     */
     ProxyInterface proxy;
+
+    /**
+     * Presenter for the Landing page
+     */
     LandingPresenter landingPresenter;
+
+    /**
+     * Presenter for the Homepage
+     */
     HomepagePresenter homepagePresenter;
+
+    /**
+     * Presenter for the Main Display
+     */
     MainDisplayPresenter mainDisplayPresenter;
+
+    /**
+     * Presenter for the List of Playlists
+     */
     PlaylistListPresenter playlistListPresenter;
+
+    /**
+     * Presenter for the Searchbar
+     */
     SearchBarPresenter searchBarPresenter;
+
+    /**
+     * Presenter for the Music Player
+     */
     MusicPlayerPresenter musicPlayerPresenter;
 
+    /**
+     * Constructor using a supplied JavaFX stage and Proxy
+     *
+     * @param stage - JavaFX Stage
+     * @param proxy - Proxy
+     */
     public Controller(Stage stage, ProxyInterface proxy) {
         this.proxy = proxy;
 
         landingPresenter = new LandingPresenter(
-                        this,
-                                proxy,
-                                new LandingModel(),
-                                LandingService.getInstance(proxy)
-                            );
+                this,
+                proxy,
+                new LandingModel(),
+                LandingService.getInstance(proxy)
+        );
 
         mainDisplayPresenter = new MainDisplayPresenter(
-                                    new MainDisplayModel(),
-                                    homepagePresenter,
-                                    new SongSearchModel(),
-                                    proxy
-                                );
+                new MainDisplayModel(),
+                homepagePresenter,
+                new SongSearchModel(),
+                proxy
+        );
 
         playlistListPresenter = new PlaylistListPresenter(
-                                    mainDisplayPresenter,
-                                    homepagePresenter,
-                                    proxy
-                                );
+                mainDisplayPresenter,
+                homepagePresenter,
+                proxy
+        );
 
         searchBarPresenter = new SearchBarPresenter(mainDisplayPresenter);
-
         musicPlayerPresenter = new MusicPlayerPresenter(mainDisplayPresenter);
-
         homepagePresenter = new HomepagePresenter(
                 proxy,
                 mainDisplayPresenter,
@@ -62,19 +100,25 @@ public class Controller {
                 musicPlayerPresenter
         );
 
-
         this.stage = stage;
         this.stage.setScene(new Scene(landingPresenter.getView()));
     }
 
+    /**
+     * Receive and attempt to authorize a user via a login request
+     *
+     * @param sender   - JavaFX element sending the request
+     * @param username - Supplied username
+     * @param password - Supplied password
+     * @throws IllegalAccessException
+     */
     public void receiveLoginRequest(LandingPresenter sender, String username, String password) throws IllegalAccessException {
         try {
             if (LandingService.getInstance(proxy)
-                            .authorizeUser(username, password)) {
+                    .authorizeUser(username, password)) {
                 playlistListPresenter.loadPlaylists();
                 goToHomepage();
-            }
-            else {
+            } else {
                 throw new IllegalAccessException("Invalid login info.");
             }
         } catch (IOException e) {
@@ -83,6 +127,9 @@ public class Controller {
         }
     }
 
+    /**
+     * Inform the Application to set the Stage to the Homepage
+     */
     public void goToHomepage() {
         stage.setScene(new Scene(homepagePresenter.getView()));
     }
