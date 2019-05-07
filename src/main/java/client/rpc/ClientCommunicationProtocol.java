@@ -1,5 +1,6 @@
 package client.rpc;
 
+import javafx.beans.binding.IntegerExpression;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;

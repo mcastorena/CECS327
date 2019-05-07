@@ -18,9 +18,9 @@ import client.model.CollectionLightWeight;
 import java.io.IOException;
 
 /**
- * This class represents the song that is currently selected to be played
+ * An alternative to the first one without the 'By' label
  */
-public class MainDisplayItem {
+public class MainDisplayItem2 {
     /**
      * The parent view that contains this MainDisplayItem
      */
@@ -40,13 +40,7 @@ public class MainDisplayItem {
     protected @FXML
     AnchorPane songPane;
     protected @FXML
-    Label byLabel;
-    protected @FXML
-    Label onLabel;
-    protected @FXML
     Label songTitleLabel;
-    protected @FXML
-    Label artistNameLabel;
     protected @FXML
     Label albumNameLabel;
     //endregion
@@ -57,13 +51,13 @@ public class MainDisplayItem {
      * @param mainDisplayPresenter - Presenter associated with this item
      * @param song                 - Song selected to be displayed
      */
-    public MainDisplayItem(MainDisplayPresenter mainDisplayPresenter, CollectionLightWeight song) {
+    public MainDisplayItem2(MainDisplayPresenter mainDisplayPresenter, CollectionLightWeight song) {
         try {
             this.mainDisplayPresenter = mainDisplayPresenter;
             this.song = song;
 
             // Loader required for JavaFX to set the .fxml
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/ui/MainDisplayItemAlt.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/ui/MainDisplayItemAlt2.fxml"));
             loader.setController(this);
             view = loader.load();
         } catch (IOException e) {
@@ -76,7 +70,6 @@ public class MainDisplayItem {
      */
     public void initialize() {
         songTitleLabel.setText(song.getSongTitle());
-        artistNameLabel.setText(song.getArtistName());
         albumNameLabel.setText(song.getReleaseName());
 
         songPane.setOnMouseEntered(e -> {
@@ -95,7 +88,6 @@ public class MainDisplayItem {
 
         songPane.setOnMouseClicked(e -> sendPlayRequest());
 
-        // Set up drag-and-drop of a MainDisplayItem to a PlaylistItem
         songPane.setOnDragDetected(e -> {
             App.setCursorStyle(Cursor.CLOSED_HAND);
 
@@ -123,7 +115,7 @@ public class MainDisplayItem {
      * Receives the user's request to play the `song` and sends that request to the associated MainDisplayPresenter
      */
     private void sendPlayRequest() {
-        mainDisplayPresenter.receivePlayRequest(this, song);
+        mainDisplayPresenter.receivePlayRequest(null, song);
     }
 
 }

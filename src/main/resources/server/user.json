@@ -7,20 +7,122 @@
       "playlists": [
         {
           "first": [
-            287650,
-            300822,
-            300848,
-            41838,
-            514953,
-            611336
+            {
+              "release": {
+                "id": 287650,
+                "name": "\"Friend Or Foe\""
+              },
+              "artist": {
+                "name": "\"Adam Ant\""
+              },
+              "song": {
+                "title": "\"Something Girls\""
+              }
+            },
+            {
+              "release": {
+                "id": 300848,
+                "name": "\"Fear Itself\""
+              },
+              "artist": {
+                "name": "\"Casual\""
+              },
+              "song": {
+                "title": "\"I Didn\u0027t Mean To\""
+              }
+            }
           ]
         },
         {
           "second": [
-            300848,
-            41838,
-            514953,
-            611336
+            {
+              "release": {
+                "id": 451998,
+                "name": "\"The Texas Ranger Project\""
+              },
+              "artist": {
+                "name": "\"Bescenta\""
+              },
+              "song": {
+                "title": "\"Why\""
+              }
+            }
+          ]
+        },
+        {
+          "playable": [
+            {
+              "release": {
+                "id": 41838,
+                "name": "\"Ordinary Day\""
+              },
+              "artist": {
+                "name": "\"Jeff And Sheri Easter\""
+              },
+              "song": {
+                "title": "\"The Moon And I (Ordinary Day Album Version)\""
+              }
+            },
+            {
+              "release": {
+                "id": 287650,
+                "name": "\"Friend Or Foe\""
+              },
+              "artist": {
+                "name": "\"Adam Ant\""
+              },
+              "song": {
+                "title": "\"Something Girls\""
+              }
+            },
+            {
+              "release": {
+                "id": 300848,
+                "name": "\"Fear Itself\""
+              },
+              "artist": {
+                "name": "\"Casual\""
+              },
+              "song": {
+                "title": "\"I Didn\u0027t Mean To\""
+              }
+            },
+            {
+              "release": {
+                "id": 300822,
+                "name": "\"Dimensions\""
+              },
+              "artist": {
+                "name": "\"The Box Tops\""
+              },
+              "song": {
+                "title": "\"Soul Deep\""
+              }
+            },
+            {
+              "release": {
+                "id": 514953,
+                "name": "\"Las Numero 1 De La Sonora Santanera\""
+              },
+              "artist": {
+                "name": "\"Sonora Santanera\""
+              },
+              "song": {
+                "title": "\"Amor De Cabaret\""
+              }
+            },
+            {
+              "release": {
+                "id": 611336,
+                "name": "\"Muertos Vivos\""
+              },
+              "artist": {
+                "name": "\"Gob\""
+              },
+              "song": {
+                "title": "\"Face the Ashes\""
+              }
+            }
           ]
         }
       ]
@@ -32,22 +134,50 @@
       "playlists": [
         {
           "hits": [
-            300848,
-            555
+            {
+              "release": {
+                "id": 287650,
+                "name": "\"Friend Or Foe\""
+              },
+              "artist": {
+                "name": "\"Adam Ant\""
+              },
+              "song": {
+                "title": "\"Something Girls\""
+              }
+            }
           ]
         },
         {
           "New Songs": [
-            555
+            {
+              "release": {
+                "id": 300848,
+                "name": "\"Fear Itself\""
+              },
+              "artist": {
+                "name": "\"Casual\""
+              },
+              "song": {
+                "title": "\"I Didn\u0027t Mean To\""
+              }
+            }
           ]
         },
         {
           "jams": [
-            300848,
-            41838,
-            300822,
-            300848,
-            41838
+            {
+              "release": {
+                "id": 804859,
+                "name": "\"100 Love Evergreen\""
+              },
+              "artist": {
+                "name": "\"The Shangri-Las\""
+              },
+              "song": {
+                "title": "\"Remember (Walkin\u0027 In the Sand)\""
+              }
+            }
           ]
         }
       ]
@@ -59,20 +189,18 @@
       "playlists": [
         {
           "playlist1": [
-            287650,
-            300822,
-            300848,
-            41838,
-            514953,
-            611336
-          ]
-        },
-        {
-          "playlist2": [
-            300848,
-            41838,
-            514953,
-            611336
+            {
+              "release": {
+                "id": 300848,
+                "name": "\"Fear Itself\""
+              },
+              "artist": {
+                "name": "\"Casual\""
+              },
+              "song": {
+                "title": "\"I Didn\u0027t Mean To\""
+              }
+            }
           ]
         }
       ]

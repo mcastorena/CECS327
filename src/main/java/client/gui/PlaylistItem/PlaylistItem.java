@@ -101,6 +101,8 @@ public class PlaylistItem {
 
         //region PlaylistItemPane
         playlistItemPane.getChildren().add(deletePane);
+
+        // Set up event handling of MainDisplayItem dragged and dropped onto PlaylistItem
         playlistItemPane.setOnDragOver(e -> {
             Dragboard dragboard = e.getDragboard();
             if (e.getGestureSource() instanceof AnchorPane &&
@@ -121,6 +123,7 @@ public class PlaylistItem {
                 params.put("userToken", Integer.toString(App.userToken));
                 params.put("playlistName", playlist.getName());
                 params.put("song", Long.toString(song.getId()));
+                params.put("songName", song.getSongTitle());
                 parent.getProxy().asyncExecution("addSongToPlaylist", params);
 
                 dragCompleted = true;
@@ -129,6 +132,7 @@ public class PlaylistItem {
             App.setCursorStyle(Cursor.DEFAULT);
             e.setDropCompleted(dragCompleted);
             e.consume();
+
         });
         playlistItemPane.setOnMouseEntered(e -> {
             playlistItemPane.setStyle("-fx-background-color: #464646");

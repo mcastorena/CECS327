@@ -47,6 +47,10 @@ public class SearchResultDispatcher extends Dispatcher implements DispatcherServ
         // sResult returns as a JsonArray holding 2 JsonArray's, the first is the song search results/ 2nd is artist search results
         JsonArray sResult = dfs.search(query);
 
+        if (sResult == null) {
+            return 0;
+        }
+
         System.out.println(sResult.toString());
 
         Server.byteSearchResult = sResult.toString().getBytes();

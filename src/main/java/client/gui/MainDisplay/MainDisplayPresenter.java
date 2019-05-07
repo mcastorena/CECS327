@@ -8,12 +8,16 @@ import client.model.SearchResult;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.VBox;
 import client.model.CollectionLightWeight;
 import client.model.Playlist;
 import client.rpc.CECS327InputStream;
 import client.rpc.ProxyInterface;
+import server.model.Collection;
 
 import java.io.IOException;
 import java.util.List;
@@ -49,28 +53,48 @@ public class MainDisplayPresenter {
     ProxyInterface clientProxy;
 
     //region FXML components
+//    @FXML
+//    ScrollPane displayScroller;
+//    @FXML
+//    VBox displayVBox;
     @FXML
-    ScrollPane displayScroller;
+    TabPane displayTabPane;
     @FXML
-    VBox displayVBox;
+    Tab songTab;
+    @FXML
+    Tab artistTab;
+    @FXML
+    Tab playlistTab;
+    @FXML
+    VBox bySongDisplayVBox;
+    @FXML
+    VBox byArtistDisplayVBox;
+    @FXML
+    VBox playlistDisplayVBox;
+    @FXML
+    ScrollPane byArtistDisplayScroller;
+    @FXML
+    ScrollPane bySongDisplayScroller;
+    @FXML
+    ScrollPane playlistDisplayScroller;
     //endregion
 
     /**
      * Constructor
      *
-     * @param homepagePresenter - Presenter for the Homepage associated with this MainDisplay
+     * @param hp - Presenter for the Homepage associated with this MainDisplay
      */
-    public MainDisplayPresenter(HomepagePresenter homepagePresenter) {
+    public MainDisplayPresenter(MainDisplayModel mdm, HomepagePresenter hp, SongSearchModel ssm, ProxyInterface proxy) {
 
-        mainDisplayModel = new MainDisplayModel();
-        this.homepagePresenter = homepagePresenter;
-        clientProxy = homepagePresenter.getProxy();
-        songSearchModel = new SongSearchModel();
+        mainDisplayModel = mdm;
+        homepagePresenter = hp;
+        clientProxy = proxy;
+        songSearchModel = ssm;
 
         try {
             // Loader required for JavaFX to set the .fxml
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/client/ui/MainDisplay.fxml"));
+            loader.setLocation(getClass().getResource("/client/ui/MainDisplayTabbed.fxml"));
             loader.setController(this);
             view = loader.load();
         } catch (IOException e) {
@@ -80,6 +104,26 @@ public class MainDisplayPresenter {
 
     @FXML
     public void initialize() {
+        // Disable all display tabs until the user does something.
+        songTab.setDisable(true);
+        artistTab.setDisable(true);
+        playlistTab.setDisable(true);
+
+        // Fit scroll pane sizes to parent
+        bySongDisplayScroller.setFitToHeight(true);
+        bySongDisplayScroller.setFitToWidth(true);
+        byArtistDisplayScroller.setFitToHeight(true);
+        byArtistDisplayScroller.setFitToWidth(true);
+        playlistDisplayScroller.setFitToHeight(true);
+        playlistDisplayScroller.setFitToWidth(true);
+
+        // Bind the VBox sizes to parent (scroll panes)
+        bySongDisplayVBox.prefWidthProperty().bind(bySongDisplayScroller.prefViewportWidthProperty());
+        bySongDisplayVBox.prefHeightProperty().bind(bySongDisplayScroller.prefViewportHeightProperty());
+        byArtistDisplayVBox.prefWidthProperty().bind(byArtistDisplayScroller.prefViewportWidthProperty());
+        byArtistDisplayVBox.prefHeightProperty().bind(byArtistDisplayScroller.prefViewportHeightProperty());
+        playlistDisplayVBox.prefWidthProperty().bind(playlistDisplayScroller.prefViewportWidthProperty());
+        playlistDisplayVBox.prefHeightProperty().bind(playlistDisplayScroller.prefViewportHeightProperty());
     }
 
     /**
@@ -99,20 +143,83 @@ public class MainDisplayPresenter {
      *
      * @param result - SearchResult containing query results for artist/songs
      */
+//    private void showResults(SearchResult result) {
+//        // Clear the previous state of the VBox
+//        displayVBox.getChildren().clear();
+//
+//        List<CollectionLightWeight> searchResult = result.getSongResultList();
+//
+//        // Create a new item for display for each song in `searchResult`
+//        for (CollectionLightWeight song : searchResult) {
+//            SearchResultSongItem displayItem =
+//                    new SearchResultSongItem(this, song);
+//
+//            displayVBox.getChildren()
+//                    .add(displayItem
+//                            .getView());
+//        }
+//    }
+
+    /**
+     * Updates the display(s) with new search results.
+     * @param result The SearchResult containing a list of songs and a list of songs sorted by artist.
+     */
     private void showResults(SearchResult result) {
-        // Clear the previous state of the VBox
-        displayVBox.getChildren().clear();
+        // Bring focus to song tab
+        displayTabPane.getSelectionModel().select(songTab);
 
-        List<CollectionLightWeight> searchResult = result.getSongResultList();
+        updateBySongDisplay(result.getSongResultList());
+        updateByArtistDisplay(result.getArtistResultList());
 
-        // Create a new item for display for each song in `searchResult`
-        for (CollectionLightWeight song : searchResult) {
-            SearchResultSongItem displayItem =
-                    new SearchResultSongItem(this, song);
+    }
 
-            displayVBox.getChildren()
-                    .add(displayItem
-                            .getView());
+    /**
+     * Refreshes the 'By Song' results display.
+     * @param songResultsList The new list of results, sorted by song name
+     */
+    private void updateBySongDisplay(List<CollectionLightWeight> songResultsList) {
+        // Enable the display tabs
+        songTab.setDisable(false);
+
+        bySongDisplayVBox.getChildren().clear();
+
+        for (CollectionLightWeight song : songResultsList) {
+            var displayItem = new MainDisplayItem(this, song);
+            // Stretch the display item horizontally to fill the width of the display view
+            displayItem.songPane.prefWidthProperty().bind(bySongDisplayVBox.widthProperty());
+
+            bySongDisplayVBox.getChildren()
+                    .add(displayItem.getView());
+        }
+    }
+
+    /**
+     * Refreshes the 'By Artist' results display. Songs are grouped by artist name.
+     * @param artistResultsList The new list of results, sorted by artist name
+     */
+    private void updateByArtistDisplay(List<CollectionLightWeight> artistResultsList) {
+        // Enable the artist tab
+        artistTab.setDisable(false);
+
+        byArtistDisplayVBox.getChildren().clear();
+
+        for (int i = 0; i < artistResultsList.size(); i++) {
+            var song = artistResultsList.get(i);
+
+            String currentArtist = song.getArtistName();
+            String prevArtist = (i > 0 ? artistResultsList.get(i-1).getArtistName() : "");
+
+            // Group songs by artist
+            // Check if previous song's artist was the same
+            if ( i == 0 || !currentArtist.equals(prevArtist) )
+                byArtistDisplayVBox.getChildren().add(new ArtistLabel(currentArtist).getView());
+
+            var displayItem = new MainDisplayItem2(this, song);
+            // Stretch item UI to fit display width
+            displayItem.songPane.prefWidthProperty().bind(byArtistDisplayVBox.widthProperty());
+
+            byArtistDisplayVBox.getChildren()
+                    .add(displayItem.getView());
         }
     }
 
@@ -146,18 +253,22 @@ public class MainDisplayPresenter {
      * @param playlist - Playlist to be shown
      */
     private void showPlaylist(Playlist playlist) {
+        playlistTab.setDisable(false);
+        playlistTab.setText(playlist.getName());
+        // Bring focus to playlist tab
+        displayTabPane.getSelectionModel().select(playlistTab);
 
-        // Clear the VBox of songs
-        displayVBox.getChildren().clear();
-
+        playlistDisplayVBox.getChildren().clear();
         // Create new items for each song in the playlist
         for (CollectionLightWeight song : playlist.getSongList()) {
-            MainDisplayItem displayItem =
-                    new MainDisplayItem(this, song);
+            MainDisplayItem displayItem = new MainDisplayItem(this, song);
+
+            // Stretch the display item horizontally to fill the width of the display view
+            displayItem.songPane.prefWidthProperty().bind(bySongDisplayVBox.widthProperty());
 
             // Add the song to the VBox
-            displayVBox.getChildren()
-                    .add(displayItem.getView());
+            playlistDisplayVBox.getChildren()
+                               .add(displayItem.getView());
         }
     }
 
@@ -191,4 +302,9 @@ public class MainDisplayPresenter {
         return clientProxy;
     }
     //endregion
+
+    public void setHomepagePresenter(HomepagePresenter presenter)
+    {
+        homepagePresenter = presenter;
+    }
 }

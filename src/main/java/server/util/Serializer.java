@@ -26,14 +26,26 @@ public class Serializer {
      * @return A JSON array of integers.
      */
     public static JsonElement serialize(final Playlist p) {
-        JsonArray ids = new JsonArray();
+        JsonArray songs = new JsonArray();
+        for (Collection c : p.getSongList()) {
+            JsonObject collectionJo = new JsonObject();
+            JsonObject releaseJo = new JsonObject();
+            JsonObject songJo = new JsonObject();
+            JsonObject artistJo = new JsonObject();
+
+            releaseJo.addProperty("id", c.getId());
+            releaseJo.addProperty("name", c.getRelease().getName());
+            songJo.addProperty("title", c.getSongTitle());
+            artistJo.addProperty("name", c.getArtistName());
+
+            collectionJo.add("release", releaseJo);
+            collectionJo.add("artist", artistJo);
+            collectionJo.add("song", songJo);
+
+            songs.add(collectionJo);
+        }
         JsonObject playlistJO = new JsonObject();
-
-        for (Collection c : p.getSongList())
-            ids.add((int) c.getId());
-
-        playlistJO.add(p.getName(), ids);
-
+        playlistJO.add(p.getName(), songs);
         return playlistJO;
     }
 

@@ -21,21 +21,17 @@ public class SongDispatcher extends Dispatcher implements DispatcherService {
      */
     private static final int FRAGMENT_SIZE = 44100;
 
-    /**
-     * Relative file path for the music files
-     */
-    private static final String MUSIC_FILE_PATH;
-
-    static {
-        String tmp = null;
-        try {
-            tmp =
-                    Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("server/music")).getPath();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        MUSIC_FILE_PATH = tmp;
-    }
+//    private static final String MUSIC_FILE_PATH;
+//    static {
+//        String tmp = null;
+//        try {
+//            tmp =
+//                    Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResource("server/music.json")).getPath();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        MUSIC_FILE_PATH = tmp;
+//    }
 
     /**
      * getSongChunk: Gets a chunk of a given song
@@ -77,8 +73,14 @@ public class SongDispatcher extends Dispatcher implements DispatcherService {
      * @param key Song ID. Each song has a unique ID
      */
     public Integer getFileSize(Long key) {
-        File file = new File(MUSIC_FILE_PATH + File.separator + key + ".mp3");
-        return (int) file.length();
+//        File file = new File(MUSIC_FILE_PATH + File.separator + key + ".mp3");
+//        return (int)file.length();
+        try {
+            return dfs.getFileSize(key + ".mp3");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
 }

@@ -41,6 +41,8 @@ public class PlaylistListPresenter {
      */
     private PlaylistListModel playlistListModel;
 
+    private ProxyInterface proxy;
+
     //region FXML components
     @FXML
     VBox playlistPanel;
@@ -54,13 +56,14 @@ public class PlaylistListPresenter {
      * @param mainDisplayPresenter - MVP connection to the MainDisplay
      * @param homepagePresenter    - MVP connection to the Homepage
      */
-    public PlaylistListPresenter(MainDisplayPresenter mainDisplayPresenter, HomepagePresenter homepagePresenter) {
+    public PlaylistListPresenter(MainDisplayPresenter mainDisplayPresenter, HomepagePresenter homepagePresenter, ProxyInterface proxy) {
         try {
             this.mainDisplayPresenter = mainDisplayPresenter;
             this.homepagePresenter = homepagePresenter;
+            this.proxy = proxy;
 
             playlistListModel = new PlaylistListModel();
-            playlistListModel.setPlaylists(new CECS327InputStream(App.userToken, homepagePresenter.getProxy()));
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/client/ui/PlaylistListAlt.fxml"));
             loader.setController(this);
             view = loader.load();
@@ -69,7 +72,6 @@ public class PlaylistListPresenter {
             e.printStackTrace();
         }
     }
-
     /**
      * Required by JavaFX for accessing @FXML components
      */
@@ -78,7 +80,16 @@ public class PlaylistListPresenter {
         addButton.setOnMouseEntered(e -> App.getPrimaryStage().getScene().setCursor(Cursor.HAND));
         addButton.setOnMouseExited(e -> App.getPrimaryStage().getScene().setCursor(Cursor.DEFAULT));
         addButton.setOnMouseClicked(e -> showCreatePlaylistWindow());
-        renderPlaylists();
+    }
+
+    public void loadPlaylists() {
+        try {
+            playlistListModel.setPlaylists(new CECS327InputStream(App.userToken, proxy));
+            renderPlaylists();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -160,7 +171,7 @@ public class PlaylistListPresenter {
         Map<String, String> params = new HashMap<>();
         params.put("userToken", Integer.toString(App.userToken));
         params.put("playlistName", obj.getName());
-        homepagePresenter.getProxy().asyncExecution("deletePlaylist", params);
+        proxy.asyncExecution("deletePlaylist", params);
     }
 
     /**

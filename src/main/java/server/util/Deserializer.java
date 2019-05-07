@@ -37,7 +37,7 @@ public class Deserializer {
     /**
      * A list of all songs (from the Music JSON).
      */
-    private List<Collection> musicDatabase;
+    //private List<Collection> musicDatabase;
 
     /**
      * A container of references for PLAYABLE songs (i.e. the song's mp3 file exists in the music directory).
@@ -47,7 +47,7 @@ public class Deserializer {
     /**
      * A dictionary of the user's music library (as Collection objects).
      */
-    private HashMap<Integer, Collection> userLibrary; // key: song release ID, value: corresponding Collection object
+    private HashMap<Integer, Collection> userPlaylistLibrary; // key: song release ID, value: corresponding Collection object
 
     /**
      * The song release IDs present in the music directory. Used for quick lookup of available music.
@@ -58,12 +58,12 @@ public class Deserializer {
      * Initializes the Deserializer and loads the music files from the filesystem.
      */
     public Deserializer() {
-        userLibrary = new HashMap<>();
+        userPlaylistLibrary = new HashMap<>();
         //ownedIDs = new HashSet<>();
 
-        musicDatabase = deserializeSongsFromJson();
+        //musicDatabase = deserializeSongsFromJson();
         //loadOwnedMusicIDs();
-        initUserLibrary();
+        //initUserLibrary();
     }
 
 //    /**
@@ -154,13 +154,13 @@ public class Deserializer {
     /**
      * Initializes the userLibrary using the IDs of the songs in ownedIDs.
      */
-    private void initUserLibrary() {
-        for (Collection c : musicDatabase) {
-            //if (ownedIDs.contains((int) c.getId())) {
-            userLibrary.put((int) c.getId(), c);
-            //}
-        }
-    }
+//    private void initUserLibrary() {
+//        for (Collection c : musicDatabase) {
+//            //if (ownedIDs.contains((int) c.getId())) {
+//                userLibrary.put((int) c.getId(), c);
+//            //}
+//        }
+//    }
 
     /**
      * Parses the User JSON file and returns a list of User objects.
@@ -239,9 +239,11 @@ public class Deserializer {
         reader.beginArray(); // "playlists" array '['
 
         // Read each ID in the playlist
-        ArrayList<Integer> songIDs = new ArrayList<>();
-        while (reader.hasNext())
-            songIDs.add(reader.nextInt());
+        ArrayList<Collection> songs = new ArrayList<>();
+        while (reader.hasNext()) {
+            songs.add(deserializePlaylistItem(reader));
+
+        }
 
         reader.endArray(); // "playlists" ']'
         reader.endObject(); // Playlist object '}'
@@ -249,16 +251,48 @@ public class Deserializer {
         Playlist playlist = new Playlist(playlistName);
 
         // Add each Collection referenced (as an ID) in the playlist JsonArray to a Playlist.
-        for (int id : songIDs) {
+        for (Collection song : songs) {
             // Retrieve Collection from a pre-loaded HashMap
-            Collection c = userLibrary.get(id);
 
-            if (c != null)
-                playlist.addToPlaylist(c);
+            if (song != null) {
+                userPlaylistLibrary.put(Math.toIntExact(song.getId()), song);
+                playlist.addToPlaylist(song);
+            }
             else
-                System.out.println("Deserializer.deserializePlaylist() - Failed to add Collection ID: " + id + " to Playlist");
+                System.out.println("Deserializer.deserializePlaylist() - Failed to add Collection ID: " + song.getId() + " to Playlist");
         }
         return playlist;
+    }
+
+    public Collection deserializePlaylistItem(JsonReader r) throws IOException {
+        r.beginObject();
+
+        Release release = new Release();
+        r.nextName(); // release
+        r.beginObject();
+        r.nextName(); // id
+        release.setId(r.nextLong());
+        r.nextName(); // name
+        release.setName(r.nextString());
+        r.endObject();
+
+        Artist artist = new Artist();
+        r.nextName(); // artist
+        r.beginObject();
+        r.nextName(); // name
+        artist.setName(r.nextString());
+        r.endObject();
+
+        Song song = new Song();
+        r.nextName(); // song
+        r.beginObject();
+        r.nextName(); // name
+        song.setTitle(r.nextString());
+        r.endObject();
+
+        r.endObject();
+
+        return new Collection(release, artist, song);
     }
 
     /**
@@ -266,9 +300,9 @@ public class Deserializer {
      *
      * @return A List of songs, as Collections, from the music database.
      */
-    public List<Collection> getMusicDatabase() {
-        return musicDatabase;
-    }
+    //public List<Collection> getMusicDatabase() {
+//        return musicDatabase;
+//    }
 
     /**
      * Returns a dictionary of the user's
@@ -299,8 +333,8 @@ public class Deserializer {
      *
      * @return A HashMap of songs in the User's Library
      */
-    public HashMap<Integer, Collection> getUserLibrary() {
-        return userLibrary;
+    public HashMap<Integer, Collection> getUserPlaylistLibrary() {
+        return userPlaylistLibrary;
     }
 
     /**
@@ -308,8 +342,8 @@ public class Deserializer {
      */
     public void updateMusicOnFileAdd()
     {
-        musicDatabase = deserializeSongsFromJson();
-        initUserLibrary();
+       // musicDatabase = deserializeSongsFromJson();
+        //initUserLibrary();
     }
 
     /**
@@ -336,4 +370,31 @@ public class Deserializer {
         return null;
     }
 
+    public Collection jsonToCollectionLightWeight(JsonObject value) {
+
+        try {
+            Long idNum = value.get("idNum").getAsLong();
+            String songName = value.get("songName").getAsString();
+            String artistName = value.get("artistName").getAsString();
+            String releaseName = value.get("releaseName").getAsString();
+
+            Release release = new Release();
+            release.setName(releaseName);
+            release.setId(idNum);
+
+            Song song = new Song();
+            song.setTitle(songName);
+
+            Artist artist = new Artist();
+            artist.setName(artistName);
+
+
+            return new Collection(release, artist, song);
+        }
+        catch (Exception e) {
+            LOGGER.error("ERROR: jsonToCollectionLightWeight >> " + e);
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
