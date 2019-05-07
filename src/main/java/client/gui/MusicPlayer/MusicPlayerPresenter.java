@@ -47,17 +47,17 @@ public class MusicPlayerPresenter {
     private MainDisplayPresenter mainDisplayPresenter;
 
     /**
-     * TODO:
+     * Presenter's Node
      */
     private Node view;
 
     /**
-     * TODO:
+     * Boolean that informs whether the player is actively playing music
      */
     private boolean isPlaying;
 
     /**
-     * TODO:
+     * Base instance of the Music Player
      */
     private BasicPlayer myPlayer = new BasicPlayer();
 
@@ -190,9 +190,9 @@ public class MusicPlayerPresenter {
     }
 
     /**
-     * TODO:
+     * Constructor
      *
-     * @param mainDisplayPresenter - TODO
+     * @param mainDisplayPresenter - Main Displayer attached to this Music Player
      */
     public MusicPlayerPresenter(MainDisplayPresenter mainDisplayPresenter) {
         try {
