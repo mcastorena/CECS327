@@ -7,13 +7,15 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 
+/**
+ * Chord Interface
+ */
 public interface ChordMessageInterface extends Remote {
 
     public ChordMessageInterface getPredecessor() throws RemoteException;
 
     public ChordMessageInterface getSuccessor() throws RemoteException;
 
-    // Pass a GUID and returns the node contianing the key
     ChordMessageInterface locateSuccessor(long key) throws RemoteException;
 
     ChordMessageInterface closestPrecedingNode(long key) throws RemoteException;
@@ -27,7 +29,6 @@ public interface ChordMessageInterface extends Remote {
     public boolean isAlive() throws RemoteException;
 
     public long getId() throws RemoteException;
-
 
     public void leave() throws Exception;
 
@@ -45,7 +46,6 @@ public interface ChordMessageInterface extends Remote {
 
     public void delete(long guidObject) throws IOException, RemoteException;
 
-
     public void bulk(DFS.PagesJson page, String file) throws Exception;
 
     public void onChordSize(Long source, int n) throws RemoteException;
@@ -59,5 +59,4 @@ public interface ChordMessageInterface extends Remote {
     void emit(String key, JsonElement value, IDFSInterface context, String file) throws Exception;
 
     void addKeyValue(String key, String value, String filename, long guid) throws Exception;
-
 }

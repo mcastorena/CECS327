@@ -93,12 +93,12 @@ public class Server {
         }
     }
 
-    /**
-     * Updates the song list by using the d's getMusicDatabase method.
-     */
-    public static void updateSongList() {
-        songList = d.getMusicDatabase();
-    }
+//    /**
+//     * Updates the song list by using the d's getMusicDatabase method.
+//     */
+//    public static void updateSongList() {
+//        songList = d.getMusicDatabase();
+//    }
 
     /**
      * Main method for starting the Server
