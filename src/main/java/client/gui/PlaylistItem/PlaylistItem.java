@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
+ * Definition of characteristics of an item displayed in the Playlist
  */
 public class PlaylistItem {
 
@@ -154,7 +154,7 @@ public class PlaylistItem {
     }
 
     /**
-     * TODO:
+     * Helper function to transfer the action of deleting a Playlist
      *
      * @param sender - Object sending the message to delete the playlist
      */
@@ -170,7 +170,7 @@ public class PlaylistItem {
     }
 
     /**
-     * TODO:
+     * Display to the User a window to delete a Playlist
      */
     private void showDeletePlaylistWindow() {
         DeletePlaylistWindow dpw = new DeletePlaylistWindow(this);
@@ -178,7 +178,7 @@ public class PlaylistItem {
     }
 
     /**
-     * TODO:
+     * Inform the parent view that a drag action has completed
      */
     private void sendDragComplete() {
         parent.receiveSongAdd(this);

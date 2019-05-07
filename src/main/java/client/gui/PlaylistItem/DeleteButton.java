@@ -1,7 +1,7 @@
 package client.gui.PlaylistItem;
 
 /**
- * TODO:
+ * Required POJO for JavaFX to function properly
  */
 public class DeleteButton {
 }
