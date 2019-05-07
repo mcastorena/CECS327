@@ -48,6 +48,82 @@
               }
             }
           ]
+        },
+        {
+          "playable": [
+            {
+              "release": {
+                "id": 41838,
+                "name": "\"Ordinary Day\""
+              },
+              "artist": {
+                "name": "\"Jeff And Sheri Easter\""
+              },
+              "song": {
+                "title": "\"The Moon And I (Ordinary Day Album Version)\""
+              }
+            },
+            {
+              "release": {
+                "id": 287650,
+                "name": "\"Friend Or Foe\""
+              },
+              "artist": {
+                "name": "\"Adam Ant\""
+              },
+              "song": {
+                "title": "\"Something Girls\""
+              }
+            },
+            {
+              "release": {
+                "id": 300848,
+                "name": "\"Fear Itself\""
+              },
+              "artist": {
+                "name": "\"Casual\""
+              },
+              "song": {
+                "title": "\"I Didn\u0027t Mean To\""
+              }
+            },
+            {
+              "release": {
+                "id": 300822,
+                "name": "\"Dimensions\""
+              },
+              "artist": {
+                "name": "\"The Box Tops\""
+              },
+              "song": {
+                "title": "\"Soul Deep\""
+              }
+            },
+            {
+              "release": {
+                "id": 514953,
+                "name": "\"Las Numero 1 De La Sonora Santanera\""
+              },
+              "artist": {
+                "name": "\"Sonora Santanera\""
+              },
+              "song": {
+                "title": "\"Amor De Cabaret\""
+              }
+            },
+            {
+              "release": {
+                "id": 611336,
+                "name": "\"Muertos Vivos\""
+              },
+              "artist": {
+                "name": "\"Gob\""
+              },
+              "song": {
+                "title": "\"Face the Ashes\""
+              }
+            }
+          ]
         }
       ]
     },

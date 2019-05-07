@@ -63,6 +63,7 @@ public class HomepagePresenter {
 //            searchBarPresenter = new SearchBarPresenter(mainDisplayPresenter);
 //            musicPlayerPresenter = new MusicPlayerPresenter(this.mainDisplayPresenter);
             mainDisplayPresenter = mdp;
+            mdp.setHomepagePresenter(this);
             playlistListPresenter = plp;
             plp.setHomepage(this);
             searchBarPresenter = sbp;

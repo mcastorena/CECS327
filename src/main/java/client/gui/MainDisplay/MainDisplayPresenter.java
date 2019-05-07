@@ -302,4 +302,9 @@ public class MainDisplayPresenter {
         return clientProxy;
     }
     //endregion
+
+    public void setHomepagePresenter(HomepagePresenter presenter)
+    {
+        homepagePresenter = presenter;
+    }
 }
