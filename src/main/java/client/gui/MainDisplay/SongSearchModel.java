@@ -47,12 +47,8 @@ public class SongSearchModel {
                 artistSongList.add(gson.fromJson(reader, CollectionLightWeight.class));
             }
             reader.endArray();
-        } catch (EOFException e) {
-//            e.printStackTrace();
-        } catch (JsonIOException e) {
-//            e.printStackTrace();
-        } catch (JsonSyntaxException e) {
-//            e.printStackTrace();
+        } catch (EOFException | JsonIOException | JsonSyntaxException e) {
+            e.printStackTrace();
         }
 
         return new SearchResult(songList, artistSongList);

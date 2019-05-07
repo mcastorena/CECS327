@@ -139,29 +139,8 @@ public class MainDisplayPresenter {
     }
 
     /**
-     * Shows the search results from a list of retrieved songs
-     *
-     * @param result - SearchResult containing query results for artist/songs
-     */
-//    private void showResults(SearchResult result) {
-//        // Clear the previous state of the VBox
-//        displayVBox.getChildren().clear();
-//
-//        List<CollectionLightWeight> searchResult = result.getSongResultList();
-//
-//        // Create a new item for display for each song in `searchResult`
-//        for (CollectionLightWeight song : searchResult) {
-//            SearchResultSongItem displayItem =
-//                    new SearchResultSongItem(this, song);
-//
-//            displayVBox.getChildren()
-//                    .add(displayItem
-//                            .getView());
-//        }
-//    }
-
-    /**
      * Updates the display(s) with new search results.
+     *
      * @param result The SearchResult containing a list of songs and a list of songs sorted by artist.
      */
     private void showResults(SearchResult result) {
@@ -175,6 +154,7 @@ public class MainDisplayPresenter {
 
     /**
      * Refreshes the 'By Song' results display.
+     *
      * @param songResultsList The new list of results, sorted by song name
      */
     private void updateBySongDisplay(List<CollectionLightWeight> songResultsList) {
@@ -195,6 +175,7 @@ public class MainDisplayPresenter {
 
     /**
      * Refreshes the 'By Artist' results display. Songs are grouped by artist name.
+     *
      * @param artistResultsList The new list of results, sorted by artist name
      */
     private void updateByArtistDisplay(List<CollectionLightWeight> artistResultsList) {
@@ -207,11 +188,11 @@ public class MainDisplayPresenter {
             var song = artistResultsList.get(i);
 
             String currentArtist = song.getArtistName();
-            String prevArtist = (i > 0 ? artistResultsList.get(i-1).getArtistName() : "");
+            String prevArtist = (i > 0 ? artistResultsList.get(i - 1).getArtistName() : "");
 
             // Group songs by artist
             // Check if previous song's artist was the same
-            if ( i == 0 || !currentArtist.equals(prevArtist) )
+            if (i == 0 || !currentArtist.equals(prevArtist))
                 byArtistDisplayVBox.getChildren().add(new ArtistLabel(currentArtist).getView());
 
             var displayItem = new MainDisplayItem2(this, song);
@@ -268,7 +249,7 @@ public class MainDisplayPresenter {
 
             // Add the song to the VBox
             playlistDisplayVBox.getChildren()
-                               .add(displayItem.getView());
+                    .add(displayItem.getView());
         }
     }
 
@@ -303,8 +284,7 @@ public class MainDisplayPresenter {
     }
     //endregion
 
-    public void setHomepagePresenter(HomepagePresenter presenter)
-    {
+    public void setHomepagePresenter(HomepagePresenter presenter) {
         homepagePresenter = presenter;
     }
 }

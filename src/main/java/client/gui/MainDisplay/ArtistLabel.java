@@ -1,6 +1,5 @@
 package client.gui.MainDisplay;
 
-import client.gui.LoadableView;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,11 +8,19 @@ import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
 
+/**
+ * Define the characteristics of an Artist Label
+ */
 public class ArtistLabel {
+
+    /**
+     * Parent view containing the Artist Label
+     */
     private Parent view;
 
     @FXML
     BorderPane borderPane;
+
     @FXML
     Label artistLabel;
 
@@ -35,5 +42,7 @@ public class ArtistLabel {
         artistLabel.setText(artistName);
     }
 
-    public Parent getView() { return view; }
+    public Parent getView() {
+        return view;
+    }
 }
