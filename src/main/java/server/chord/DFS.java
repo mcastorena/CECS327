@@ -847,6 +847,11 @@ public class DFS implements Serializable, IDFSInterface {
     }
 
     @Override
+    /**
+     * Run's mapreduce on a file in the DFS
+     * fileInput - Name of the file being processes
+     * fileOutput - name of the file with the final output
+     */
     public void runMapReduce(String fileInput, String fileOutput) throws Exception {
 
         MapReduceInterface mapReducer = new Mapper();
@@ -945,6 +950,11 @@ public class DFS implements Serializable, IDFSInterface {
         writeMetaData(metadata);
     }
 
+    /**
+     * Increment's a file's reference count in metadata
+     * @param file - name of the file being edited
+     * @throws Exception
+     */
     public void increaseCounter(String file) throws Exception {
         FilesJson metadata = this.readMetaData();
         for(int i = metadata.file.size() - 1; i >= 0 ; i--){
@@ -956,6 +966,12 @@ public class DFS implements Serializable, IDFSInterface {
         writeMetaData(metadata);
     }
 
+    /**
+     *
+     * @param file - String of file name
+     * @return File's reference count in the metadata
+     * @throws Exception
+     */
     public int getCounter(String file) throws Exception
     {
         FilesJson metadata = this.readMetaData();
@@ -1024,9 +1040,9 @@ public class DFS implements Serializable, IDFSInterface {
     }
 
     /**
-     * 
-     * @param key
-     * @param file
+     * Get's a files pages to search through
+     * @param key - String used as search key
+     * @param file - Name of the file being searched
      * @return
      * @throws Exception
      */
@@ -1085,7 +1101,7 @@ public class DFS implements Serializable, IDFSInterface {
     }
 
     /**
-     *
+     * Searches the song and artists indexes for a query. Returns a JsonAray of search results
      * @param query - String being searched for
      * @return Search results in a JsonArray object; finds songs and artists matching query
      * @throws Exception
@@ -1107,7 +1123,7 @@ public class DFS implements Serializable, IDFSInterface {
     }
 
     /**
-     *
+     * Search a page's entries with a string query
      * @param page - PagesJson object being searched
      * @param query - String being searched for in page
      * @return - JsonArray object containing search results for data in page. Entries are added if their key in the TreemMap starts with the query
