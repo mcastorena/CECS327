@@ -834,7 +834,14 @@ public class DFS implements Serializable, IDFSInterface {
     }
 
     @Override
-    public void appendEmptyPage(String file, Long page, String lowerBoundInterval) throws Exception {
+    /**
+     * Appends empty page to file in metadata
+     * file - name of the file being edited
+     * page - GUID of page being added
+     * lowerBoundInterval - lowerBoundInterval for page to store
+     */
+    public void appendEmptyPage(String file, Long page, String lowerBoundInterval) throws Exception
+    {
         FilesJson metadata = readMetaData();
 
         boolean find = false;
@@ -883,6 +890,11 @@ public class DFS implements Serializable, IDFSInterface {
     }
 
     @Override
+    /**
+     * Run's mapreduce on a file in the DFS
+     * fileInput - Name of the file being processes
+     * fileOutput - name of the file with the final output
+     */
     public void runMapReduce(String fileInput, String fileOutput) throws Exception {
 
         MapReduceInterface mapReducer = new Mapper();
@@ -977,6 +989,11 @@ public class DFS implements Serializable, IDFSInterface {
         writeMetaData(metadata);
     }
 
+    /**
+     * Increment's a file's reference count in metadata
+     * @param file - name of the file being edited
+     * @throws Exception
+     */
     public void increaseCounter(String file) throws Exception {
         FilesJson metadata = this.readMetaData();
         for (int i = metadata.file.size() - 1; i >= 0; i--) {
@@ -988,7 +1005,14 @@ public class DFS implements Serializable, IDFSInterface {
         writeMetaData(metadata);
     }
 
-    public int getCounter(String file) throws Exception {
+    /**
+     *
+     * @param file - String of file name
+     * @return File's reference count in the metadata
+     * @throws Exception
+     */
+    public int getCounter(String file) throws Exception
+    {
         FilesJson metadata = this.readMetaData();
         for (int i = metadata.file.size() - 1; i >= 0; i--) {
             if (metadata.file.get(i).getName().equals(file)) {
@@ -1001,6 +1025,10 @@ public class DFS implements Serializable, IDFSInterface {
 
 
     @Override
+    /** Searches for file in metadata with name 'file' and runs bulk() on their pages
+     * file - Name of the file being processed
+     * size - size of the Chord
+     */
     public void bulkTree(String file, int size) throws Exception {
         for (int i = 0; i < size; i++) {
             long pageGUID = md5(file + i);
@@ -1029,10 +1057,9 @@ public class DFS implements Serializable, IDFSInterface {
 
     /**
      * Creates a file in the DFS
-     *
-     * @param file
-     * @param interval
-     * @param size
+     * @param file - Name of file being created
+     * @param interval - 1936/size
+     * @param size - Chord size as int
      * @throws Exception
      */
     @Override
@@ -1049,6 +1076,13 @@ public class DFS implements Serializable, IDFSInterface {
 
     }
 
+    /**
+     * Get's a files pages to search through
+     * @param key - String used as search key
+     * @param file - Name of the file being searched
+     * @return
+     * @throws Exception
+     */
     public DFS.PagesJson getPageToSearch(String key, String file) throws Exception {
         key = key.toUpperCase();
 
@@ -1102,6 +1136,12 @@ public class DFS implements Serializable, IDFSInterface {
         return null;
     }
 
+    /**
+     * Searches the song and artists indexes for a query. Returns a JsonAray of search results
+     * @param query - String being searched for
+     * @return Search results in a JsonArray object; finds songs and artists matching query
+     * @throws Exception
+     */
     public JsonArray search(String query) throws Exception {
         PagesJson songPage = getPageToSearch(query, "songInvertedIndex");
         PagesJson artistPage = getPageToSearch(query, "artistInvertedIndex");
@@ -1118,6 +1158,13 @@ public class DFS implements Serializable, IDFSInterface {
         return songArtistArray;
     }
 
+    /**
+     * Search a page's entries with a string query
+     * @param page - PagesJson object being searched
+     * @param query - String being searched for in page
+     * @return - JsonArray object containing search results for data in page. Entries are added if their key in the TreemMap starts with the query
+     * @throws IOException
+     */
     public JsonArray searchPage(PagesJson page, String query) throws IOException {
          Gson gson = new GsonBuilder()
                 .setPrettyPrinting()

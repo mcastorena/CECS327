@@ -638,9 +638,8 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
 
     /**
      * Runs reduce for mapreduce
-     *
-     * @param page        - Page being reduced
-     * @param reducer     - Mapper object performing the reduce
+     * @param pageGuid - GUID for page being reduced
+     * @param reducer - Mapper object performing the reduce
      * @param coordinator - DFS coordinating the reduce (this)
      * @param file        - Name of the file being reduced
      * @throws IOException
@@ -718,8 +717,8 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
 
     }
 
-    //    /**
-//     * Adds key, value pair to TreeMap data structure
+//    /**
+//     * Adds key, value pair to TreeMap data structure. If key exists, add value to it. If key not in TreeMap, make a new entry
 //     * @param key - Key value in string format
 //     * @param value - Content of entry being mapped (data)
 //     */
