@@ -57,8 +57,6 @@ public class SearchBarPresenter {
         });
     }
 
-    // TODO: Consolidate these two methods??
-
     /**
      * Takes the search text and submits it to the MainDisplay
      */
@@ -66,6 +64,11 @@ public class SearchBarPresenter {
         sendResultsToMainDisplay(searchField.getText());
     }
 
+    /**
+     * Sends search results to the Main Display
+     *
+     * @param searchText
+     */
     private void sendResultsToMainDisplay(String searchText) {
         try {
             this.mainDisplayPresenter.receiveSearchText(this, searchField.getText());
