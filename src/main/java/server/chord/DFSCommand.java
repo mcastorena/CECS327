@@ -1,30 +1,28 @@
 package server.chord;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import server.core.Server;
 import server.util.MusicJsonSplitter;
 
-import java.io.*;
-import java.rmi.RemoteException;
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static server.core.Server.*;
 
-public class DFSCommand
-{
+public class DFSCommand {
     public DFSCommand() throws Exception {
+        BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
+        String line = buffer.readLine();
 
-        BufferedReader buffer=new BufferedReader(new InputStreamReader(System.in));
-        String line = buffer.readLine();  
-        while (!line.equals("quit"))
-        {
+        while (!line.equals("quit")) {
             String[] result = line.split("\\s");
-            switch(result[0]) {
+            switch (result[0]) {
                 case "join":
                     // Add a new node to the chord
-                    if (result.length == 1){
+                    if (result.length == 1) {
                         try {
                             dfs = new DFS(NEXT_PORT);
 
@@ -48,12 +46,12 @@ public class DFSCommand
 
                 case "touch":
                     if (result.length == 2)
-                        dfs.create(result[1]);                  // User must specify a fileList name
+                        dfs.create(result[1]);  // User must specify a fileList name
                     break;
 
                 case "delete":
                     if (result.length == 2)
-                        dfs.delete(result[1]);                  // User must specify fileList name
+                        dfs.delete(result[1]);  // User must specify fileList name
                     break;
 
                 case "read":
@@ -68,13 +66,13 @@ public class DFSCommand
 
                 case "tail":
                     if (result.length == 2) {
-                        dfs.tail(result[1]);                    // User must specify fileList name
+                        dfs.tail(result[1]);    // User must specify fileList name
                     }
                     break;
 
                 case "head":
                     if (result.length == 2) {
-                        dfs.head(result[1]);                    // User must specify fileList name
+                        dfs.head(result[1]);    // User must specify fileList name
                     }
                     break;
 
@@ -88,9 +86,7 @@ public class DFSCommand
                             String text = matcher.group(1);
 
                             dfs.append(result[1], text); // Appends text
-                        }
-                        else if (result[1].contains("music"))
-                        {
+                        } else if (result[1].contains("music")) {
 
                             Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
@@ -112,19 +108,18 @@ public class DFSCommand
                                     e.printStackTrace();
                                 }
                             }
-                            d.updateMusicOnFileAdd();
-                            Server.updateSongList();
+                            //d.updateMusicOnFileAdd();
+                            //Server.updateSongList();
 
                             System.out.println("Done");
-                        }
-                        else
+                        } else
                             dfs.append(result[1], new RemoteInputFileStream(result[2]));        // User must specify filename they want to append data to and filepath of the data to be appended
                     }
                     break;
 
                 case "move":
                     if (result.length == 3) {
-                        dfs.move(result[1], result[2]);         // User must specify fileList to be edited and its new name
+                        dfs.move(result[1], result[2]); // User must specify fileList to be edited and its new name
                     }
                     break;
 
@@ -138,24 +133,9 @@ public class DFSCommand
                     break;
             }
 
-            line=buffer.readLine();  
+            line = buffer.readLine();
         }
         // If user inputs quit, exit program
         System.exit(0);
     }
-    
-//    static public void main(String args[]) throws Exception
-//    {
-//        DFSCommand dfsCommand=new DFSCommand(2008, 2000);
-////        if (args.length < 1 ) {
-////            throw new IllegalArgumentException("Parameter: <port> <portToJoin>");
-////        }
-////        if (args.length > 1 ) {
-////            DFSCommand dfsCommand=new DFSCommand(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
-////        }
-////        else
-////        {
-////            DFSCommand dfsCommand=new DFSCommand( Integer.parseInt(args[0]), 0);
-////        }
-//     }
 }

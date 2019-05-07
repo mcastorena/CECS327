@@ -22,15 +22,15 @@ class DeserializerTest {
 
 //    @Test
 //    void loadOwnedMusicIds() {
-//        System.out.println(deserializer.getOwnedIDs());
-//        assertNotNull(deserializer.getOwnedIDs());
+//        System.out.println(d.getOwnedIDs());
+//        assertNotNull(d.getOwnedIDs());
 //    }
 
-    @Test
-    void getMusicDatabase_notNull() {
-        System.out.println(deserializer.getMusicDatabase());
-        assertNotNull(deserializer.getMusicDatabase());
-    }
+//    @Test
+//    void getMusicDatabase_notNull() {
+//        System.out.println(deserializer.getMusicDatabase());
+//        assertNotNull(deserializer.getMusicDatabase());
+//    }
 
     @Test
     void deserializePlaylists() {

@@ -2,11 +2,22 @@ package server.model;
 
 import java.io.Serializable;
 
-// Holds release info from json, this class is created by gson
+/**
+ * This class represents the release info of a Song; created by GSON
+ */
 public class Release implements Serializable {
+
+    /**
+     * ID of the release
+     */
     private long id;
+
+    /**
+     * Name of the release
+     */
     private String name;
 
+    //region Getters and Setters
     public long getId() {
         return id;
     }
@@ -22,6 +33,7 @@ public class Release implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+    //endregion
 
     @Override
     public String toString() {

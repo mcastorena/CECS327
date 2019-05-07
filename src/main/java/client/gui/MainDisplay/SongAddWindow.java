@@ -1,7 +1,8 @@
 package client.gui.MainDisplay;
 
+
 /**
- * TODO::
+ * Required POJO for the window to add a song
  */
 public class SongAddWindow {
 }

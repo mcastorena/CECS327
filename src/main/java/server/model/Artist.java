@@ -2,8 +2,12 @@ package server.model;
 
 import java.io.Serializable;
 
-// Holds artist info from json, this class is created by gson
+/**
+ * This class represents Artist information contained in the music JSON; created by GSON
+ */
 public class Artist implements Serializable {
+
+    //region Metadata
     private float termsFreq;
     private String terms;
     private String name;
@@ -14,7 +18,9 @@ public class Artist implements Serializable {
     private double latitude;
     private String similar;
     private double hotttnesss;
+    //endregion
 
+    //region Getters and Setters
     public float getTermsFreq() {
         return termsFreq;
     }
@@ -94,6 +100,7 @@ public class Artist implements Serializable {
     public void setHotttness(double hotttness) {
         this.hotttnesss = hotttness;
     }
+    //endregion
 
     @Override
     public String toString() {

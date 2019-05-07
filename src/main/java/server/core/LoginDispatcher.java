@@ -8,16 +8,24 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Base64;
 
+/**
+ * This class represents a dispatcher for Login information
+ */
 public class LoginDispatcher extends Dispatcher implements DispatcherService {
+
+    /**
+     * Fragment size for Login information
+     */
     private static final int FRAGMENT_SIZE = 44100;
 
     /**
-     * login: return login token if authorized
-     * @param username: the username from client
-     * @param password: the password from client
+     * Return login token if authorized
+     *
+     * @param username the username from client
+     * @param password the password from client
      */
     public String login(String username, String password) throws IOException {
-        User user = Server.usersInfo.get(username+password);
+        User user = Server.usersInfo.get(username + password);
 
         if (user != null) {
             // User is valid, give token
@@ -33,13 +41,19 @@ public class LoginDispatcher extends Dispatcher implements DispatcherService {
         return null;
     }
 
+    /**
+     * Converts the supplied String to bytes, creates an InputStream from those bytes to read the information, and
+     * decodes the byte array back to a String.
+     *
+     * @param str String to be "bytetized"
+     * @return Original String after being "bytetized"
+     */
     // TODO: Move to serializer or something similar (...also give it a better name.)
     private String bytetize(String str) {
         byte[] strBytes = str.toString().getBytes();
-
         byte[] buf = new byte[FRAGMENT_SIZE];
-
         InputStream is = new ByteArrayInputStream(strBytes);
+
         try {
             is.read(buf);
             is.close();

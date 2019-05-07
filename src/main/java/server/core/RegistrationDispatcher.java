@@ -1,23 +1,36 @@
 package server.core;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import server.model.User;
 
 import java.io.IOException;
+
 import static server.core.Server.userList;
+
 import server.util.Serializer;
 import server.model.Profile;
 
+/**
+ * This class dispatches Registration information
+ */
 public class RegistrationDispatcher extends Dispatcher implements DispatcherService {
+
+    /**
+     * Fragment size
+     */
     private static final int FRAGMENT_SIZE = 8192;
 
     /**
-     * register: return successful registration message if info is valid
-     * @param username: the username from client
-     * @param password: the password from client
+     * Return successful registration message if info is valid
+     *
+     * @param username the username from client
+     * @param password the password from client
      */
     public String register(String username, String password) throws IOException {
-        User user = Server.usersInfo.get(username + password);
+        User user;
+
+        user = Server.usersInfo.get(username + password);
         if (user != null) {
 
             // User has already been registered, return error

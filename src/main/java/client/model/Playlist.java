@@ -2,6 +2,9 @@ package client.model;
 
 import java.util.ArrayList;
 
+/**
+ * Define the characteristics of a Playlist
+ */
 public class Playlist {
 
     private String id;

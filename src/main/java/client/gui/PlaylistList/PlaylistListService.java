@@ -1,7 +1,7 @@
 package client.gui.PlaylistList;
 
 /**
- * TODO
+ * Service for the list of Playlists
  */
 public class PlaylistListService {
 

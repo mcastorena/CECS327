@@ -11,8 +11,9 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import client.model.CollectionLightWeight;
 
+
 /**
- * TODO:
+ * Defines the appearance and characteristics Song as a Search Result
  */
 public class SearchResultSongItem extends MainDisplayItem {
 

@@ -26,7 +26,7 @@ public class MusicPlayerView {
     }
 
     /**
-     * TODO:
+     * Load the Music Player's view
      *
      * @return -
      */

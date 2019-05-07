@@ -15,62 +15,82 @@ import java.util.List;
 import static server.core.Server.dfs;
 
 /**
- * Serializes Users into JSON objects
- **/
+ * Serializes Users into JSON objects.
+ */
 public class Serializer {
+
     /**
      * Serializes a Playlist into JSON format.
      *
-     * @param p - A Playlist object.
+     * @param p A Playlist object.
      * @return A JSON array of integers.
      */
     public static JsonElement serialize(final Playlist p) {
-        JsonArray ids = new JsonArray();
-        for (Collection c : p.getSongList())
-            ids.add((int) c.getId());
+        JsonArray songs = new JsonArray();
+        for (Collection c : p.getSongList()) {
+            JsonObject collectionJo = new JsonObject();
+            JsonObject releaseJo = new JsonObject();
+            JsonObject songJo = new JsonObject();
+            JsonObject artistJo = new JsonObject();
 
+            releaseJo.addProperty("id", c.getId());
+            releaseJo.addProperty("name", c.getRelease().getName());
+            songJo.addProperty("title", c.getSongTitle());
+            artistJo.addProperty("name", c.getArtistName());
+
+            collectionJo.add("release", releaseJo);
+            collectionJo.add("artist", artistJo);
+            collectionJo.add("song", songJo);
+
+            songs.add(collectionJo);
+        }
         JsonObject playlistJO = new JsonObject();
-        playlistJO.add(p.getName(), ids);
+        playlistJO.add(p.getName(), songs);
         return playlistJO;
     }
 
     /**
      * Serializes a User into JSON format.
      *
-     * @param u - A User object
+     * @param u A User object
      * @return A JSON user object (see 'userList.json')
      */
     public JsonElement serialize(final User u) {
         JsonObject userJO = new JsonObject();
+        JsonArray playlistJA = new JsonArray();
+        List<Playlist> playlists = u.getUserProfile()
+                .getIterablePlaylists();
 
         userJO.addProperty("username", u.getUsername());
         userJO.addProperty("password", u.getPassword());
         userJO.addProperty("email", u.getEmail());
 
-        JsonArray playlistJA = new JsonArray();
-        List<Playlist> playlists = u.getUserProfile()
-                                    .getIterablePlaylists();
-
         if (playlists != null) {
             for (Playlist p : playlists)
                 playlistJA.add(serialize(p));
         }
-
         userJO.add("playlists", playlistJA);
+
         return userJO;
     }
 
-    // Does nothing for now.
+    // TODO: Does nothing for now.
     private JsonElement serialize(final Profile p, final Type Profile, final JsonSerializationContext jsonSerializationContext) {
         return null;
     }
 
+    /**
+     * Updates the user.json file.
+     *
+     * @param users HashMap of all registered Users
+     * @throws IOException
+     */
     public void updateUsersJson(HashMap<String, User> users) throws IOException {
         try (PrintWriter writer =
-                new PrintWriter(
-                        new File(
-                                getClass().getResource("/server/user.json")
-                                        .getPath()))) {
+                     new PrintWriter(
+                             new File(
+                                     getClass().getResource("/server/user.json")
+                                             .getPath()))) {
 
             Gson gson = new GsonBuilder()
                     .setPrettyPrinting()
@@ -92,8 +112,9 @@ public class Serializer {
     }
 
     /**
-     * Updates the user.json with a list of users
-     * @param users
+     * Updates the user.json file.
+     *
+     * @param users List of all registered Users
      * @throws IOException
      */
     public void updateUsersJson(List<User> users) throws IOException {
@@ -113,7 +134,6 @@ public class Serializer {
         usersJAO.add("userList", usersJA);
 
         String jsonStr = gson.toJson(usersJAO);
-//            System.out.println(jsonStr);
 
         // Delete and recreate a file since modifying multiple pages is tricky
         try {
@@ -125,16 +145,30 @@ public class Serializer {
         }
     }
 
+    /**
+     * TODO:
+     *
+     * @param collection A Song
+     * @return The Collection object as a byte-array
+     * @throws IOException
+     */
     public static byte[] serialize(Collection collection) throws IOException {
-        try(ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            ObjectOutput out = new ObjectOutputStream(bos)){
+        try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
+             ObjectOutput out = new ObjectOutputStream(bos)) {
             out.writeObject(collection);
             out.flush();
+
             return bos.toByteArray();
         }
     }
 
-    // TODO: Implement and test
+    /**
+     * TODO: Implement and test...and figure out what this does
+     *
+     * @param object
+     * @param size
+     * @return
+     */
     public static byte[] serialize(Object object, int size) {
         byte[] stream = null;
 
@@ -144,6 +178,7 @@ public class Serializer {
 
             oos.writeObject(object);
             stream = Arrays.copyOfRange(baos.toByteArray(), 0, size);
+
         } catch (IOException e) {
             e.printStackTrace();
         }

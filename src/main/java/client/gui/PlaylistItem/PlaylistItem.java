@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
+ * Definition of characteristics of an item displayed in the Playlist
  */
 public class PlaylistItem {
 
@@ -101,6 +101,8 @@ public class PlaylistItem {
 
         //region PlaylistItemPane
         playlistItemPane.getChildren().add(deletePane);
+
+        // Set up event handling of MainDisplayItem dragged and dropped onto PlaylistItem
         playlistItemPane.setOnDragOver(e -> {
             Dragboard dragboard = e.getDragboard();
             if (e.getGestureSource() instanceof AnchorPane &&
@@ -121,6 +123,7 @@ public class PlaylistItem {
                 params.put("userToken", Integer.toString(App.userToken));
                 params.put("playlistName", playlist.getName());
                 params.put("song", Long.toString(song.getId()));
+                params.put("songName", song.getSongTitle());
                 parent.getProxy().asyncExecution("addSongToPlaylist", params);
 
                 dragCompleted = true;
@@ -129,6 +132,7 @@ public class PlaylistItem {
             App.setCursorStyle(Cursor.DEFAULT);
             e.setDropCompleted(dragCompleted);
             e.consume();
+
         });
         playlistItemPane.setOnMouseEntered(e -> {
             playlistItemPane.setStyle("-fx-background-color: #464646");
@@ -150,7 +154,7 @@ public class PlaylistItem {
     }
 
     /**
-     * TODO:
+     * Helper function to transfer the action of deleting a Playlist
      *
      * @param sender - Object sending the message to delete the playlist
      */
@@ -166,7 +170,7 @@ public class PlaylistItem {
     }
 
     /**
-     * TODO:
+     * Display to the User a window to delete a Playlist
      */
     private void showDeletePlaylistWindow() {
         DeletePlaylistWindow dpw = new DeletePlaylistWindow(this);
@@ -174,7 +178,7 @@ public class PlaylistItem {
     }
 
     /**
-     * TODO:
+     * Inform the parent view that a drag action has completed
      */
     private void sendDragComplete() {
         parent.receiveSongAdd(this);

@@ -6,35 +6,41 @@ import java.util.HashMap;
 import java.util.List;
 
 
-// Access modifiers left out for now...
+/**
+ * This class represents the Profile of a registered User
+ * <p>
+ * Access modifiers left out for now.
+ */
 public class Profile {
-    BufferedImage avatar;
-    HashMap<String, Playlist> playlists; // key: playlist name | value: the playlist
 
+    /**
+     * The User's Avatar
+     */
+    BufferedImage avatar;
+
+    /**
+     * HashMap of Playlists.
+     * Key: Playlist name, Value: Playlist
+     */
+    HashMap<String, Playlist> playlists;
+
+    /**
+     * Constructor
+     */
     public Profile() {
         avatar = null;
         playlists = new HashMap<>();
     }
 
+    //region Getters and Setters
     public BufferedImage getAvatar() {
         return avatar;
     }
 
-    /**
-     * Sets the user's profile pic.
-     *
-     * @param img The BufferedImage to set as an avatar.
-     */
     public void setAvatar(BufferedImage img) {
         avatar = img;
     }
 
-    /**
-     * Retrieve a playlist from the user's collection.
-     *
-     * @param playlistName The name of the playlist.
-     * @return The Playlist object, or null if it doesn't exist.
-     */
     public Playlist getPlaylist(String playlistName) {
         if (!playlists.containsKey(playlistName)) {
             System.out.println("Playlist \"" + playlistName + "\" not found.");
@@ -44,6 +50,21 @@ public class Profile {
         return playlists.get(playlistName);
     }
 
+    public HashMap<String, Playlist> getPlaylists() {
+        return playlists;
+    }
+
+    public void setPlaylists(final HashMap<String, Playlist> playlists) {
+        this.playlists = playlists;
+    }
+    //endregion
+
+    /**
+     * Adds a song to a Playlist
+     *
+     * @param song         Collection object representing the song.
+     * @param playlistName Name of the Playlist to add the song to.
+     */
     public void addSongToPlaylist(Collection song, String playlistName) {
         if (!playlists.containsKey(playlistName)) {
             System.out.println("Profile.addSongToPlaylist() - Playlist \"" + playlistName + "\" not found.");
@@ -52,14 +73,6 @@ public class Profile {
 
         // No data checks performed
         playlists.get(playlistName).addToPlaylist(song);
-    }
-
-    public HashMap<String, Playlist> getPlaylists() {
-        return playlists;
-    }
-
-    public void setPlaylists(final HashMap<String, Playlist> playlists) {
-        this.playlists = playlists;
     }
 
     /**
@@ -81,7 +94,7 @@ public class Profile {
     /**
      * Removes a playlist from the profile's playlist collection.
      *
-     * @param playlistName
+     * @param playlistName Name of the Playlist to be removed
      */
     public void removePlaylist(String playlistName) {
         if (!playlists.containsKey(playlistName)) {
@@ -96,7 +109,7 @@ public class Profile {
     /**
      * Return the Playlists map as an iterable List of Playlists.
      *
-     * @return
+     * @return List of Playlists
      */
     public List<Playlist> getIterablePlaylists() {
         return new ArrayList<>(playlists.values());

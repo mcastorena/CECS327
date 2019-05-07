@@ -1,4 +1,5 @@
-package client.rpc; /**
+package client.rpc;
+/**
  * The CECS327InputStream extends InputStream class. The class implements
  * markers that are used in AudioInputStream
  *
@@ -11,6 +12,7 @@ package client.rpc; /**
 import com.google.gson.JsonObject;
 import org.apache.log4j.Logger;
 
+import javax.validation.constraints.Null;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Base64;
@@ -108,7 +110,11 @@ public class CECS327InputStream extends InputStream {
         params.put("query", query);
 
         JsonObject jsonRet = proxy.syncExecution("getSize", params);
-        this.total = Integer.parseInt(jsonRet.get("ret").getAsString());
+        try {
+            this.total = Integer.parseInt(jsonRet.get("ret").getAsString());
+        } catch (NullPointerException e) {
+            System.out.println("Server request returned nothing");
+        }
         getBuff(fragment);
         fragment++;
     }

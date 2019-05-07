@@ -9,8 +9,8 @@
    <children>
       <GridPane fx:id="gridPane">
         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="1000.0" minWidth="1000.0" percentWidth="0.0" prefWidth="1000.0" />
+            <ColumnConstraints hgrow="NEVER" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" />
+          <ColumnConstraints hgrow="NEVER" maxWidth="1000.0" minWidth="1000.0" percentWidth="0.0" prefWidth="1000.0" />
         </columnConstraints>
         <rowConstraints>
             <RowConstraints maxHeight="150.0" minHeight="150.0" prefHeight="150.0" vgrow="SOMETIMES" />

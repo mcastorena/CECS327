@@ -2,10 +2,13 @@ package client.gui.MainDisplay;
 
 import client.model.SearchResult;
 import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.JsonReader;
 import client.model.CollectionLightWeight;
 import client.rpc.CECS327InputStream;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -32,17 +35,21 @@ public class SongSearchModel {
         Gson gson = new Gson();
         JsonReader reader = new JsonReader(new InputStreamReader(is, "UTF-8"));
 
-        reader.beginArray();
-        reader.beginArray();
-        while (reader.hasNext()) {
-            songList.add(gson.fromJson(reader, CollectionLightWeight.class));
+        try {
+            reader.beginArray();
+            reader.beginArray();
+            while (reader.hasNext()) {
+                songList.add(gson.fromJson(reader, CollectionLightWeight.class));
+            }
+            reader.endArray();
+            reader.beginArray();
+            while (reader.hasNext()) {
+                artistSongList.add(gson.fromJson(reader, CollectionLightWeight.class));
+            }
+            reader.endArray();
+        } catch (EOFException | JsonIOException | JsonSyntaxException e) {
+            e.printStackTrace();
         }
-        reader.endArray();
-        reader.beginArray();
-        while (reader.hasNext()) {
-            artistSongList.add(gson.fromJson(reader, CollectionLightWeight.class));
-        }
-        reader.endArray();
 
         return new SearchResult(songList, artistSongList);
     }
