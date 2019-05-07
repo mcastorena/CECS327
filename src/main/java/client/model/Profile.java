@@ -7,7 +7,7 @@ import java.util.List;
 
 
 /**
- * This class represents a user's profile
+ * This class represents a User's profile
  */
 public class Profile {
 

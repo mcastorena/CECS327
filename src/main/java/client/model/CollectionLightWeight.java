@@ -3,11 +3,9 @@ package client.model;
 import java.io.Serializable;
 
 /**
- *
+ * A custom container for Songs
  */
 public class CollectionLightWeight implements Serializable {    // extends Collection
-
-    // A container to hold all json objects related to the same releaseName id
 
     /**
      * Artist of the song
