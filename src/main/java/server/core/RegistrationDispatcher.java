@@ -1,10 +1,13 @@
 package server.core;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import server.model.User;
 
 import java.io.IOException;
+
 import static server.core.Server.userList;
+
 import server.util.Serializer;
 import server.model.Profile;
 

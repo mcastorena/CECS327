@@ -80,9 +80,9 @@ public class Server {
      * Server request cache
      */
     static Map<String, String> requestCache;
-    
-        // Used to update userList and usersInfo after a new user registers
-    static void update(){
+
+    // Used to update userList and usersInfo after a new user registers
+    static void update() {
         //songList = d.getMusicDatabase();
         userList = d.deserializeUsers();
         for (User u : userList) {
@@ -123,7 +123,7 @@ public class Server {
         // Add user.json to chord
         String metaFile = "users";
         String dfsList = dfs.lists();
-        if(dfsList.contains(metaFile))
+        if (dfsList.contains(metaFile))
             dfs.delete(metaFile);
 
 
@@ -152,10 +152,12 @@ public class Server {
 
 //         DFS Interface
         new Thread() {
-            public void run(){
+            public void run() {
                 try {
                     new DFSCommand();
-                } catch(Exception e) {e.printStackTrace();}
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }.start();
     }
