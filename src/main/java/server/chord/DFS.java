@@ -970,6 +970,10 @@ public class DFS implements Serializable, IDFSInterface {
 
 
     @Override
+    /** Searches for file in metadata with name 'file' and runs bulk() on their pages
+     * file - Name of the file being processed
+     * size - size of the Chord
+     */
     public void bulkTree(String file, int size) throws Exception {
         for(int i = 0; i < size; i++)
         {
@@ -1000,9 +1004,9 @@ public class DFS implements Serializable, IDFSInterface {
 
     /**
      * Creates a file in the DFS
-     * @param file
-     * @param interval
-     * @param size
+     * @param file - Name of file being created
+     * @param interval - 1936/size
+     * @param size - Chord size as int
      * @throws Exception
      */
      @Override
@@ -1019,6 +1023,13 @@ public class DFS implements Serializable, IDFSInterface {
 
     }
 
+    /**
+     * 
+     * @param key
+     * @param file
+     * @return
+     * @throws Exception
+     */
     public DFS.PagesJson getPageToSearch(String key, String file) throws Exception {
         key = key.toUpperCase();
 
@@ -1073,6 +1084,12 @@ public class DFS implements Serializable, IDFSInterface {
         return null;
     }
 
+    /**
+     *
+     * @param query - String being searched for
+     * @return Search results in a JsonArray object; finds songs and artists matching query
+     * @throws Exception
+     */
     public JsonArray search(String query) throws Exception {
         PagesJson songPage = getPageToSearch(query, "songInvertedIndex");
         PagesJson artistPage = getPageToSearch(query, "artistInvertedIndex");
@@ -1089,6 +1106,13 @@ public class DFS implements Serializable, IDFSInterface {
         return songArtistArray;
     }
 
+    /**
+     *
+     * @param page - PagesJson object being searched
+     * @param query - String being searched for in page
+     * @return - JsonArray object containing search results for data in page. Entries are added if their key in the TreemMap starts with the query
+     * @throws IOException
+     */
     public JsonArray searchPage(PagesJson page, String query) throws IOException {
          Gson gson = new GsonBuilder()
                 .setPrettyPrinting()

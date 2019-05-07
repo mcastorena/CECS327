@@ -655,7 +655,7 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface
 
     /**
      * Runs reduce for mapreduce
-     * @param page - Page being reduced
+     * @param pageGuid - GUID for page being reduced
      * @param reducer - Mapper object performing the reduce
      * @param coordinator - DFS coordinating the reduce (this)
      * @param file - Name of the file being reduced
