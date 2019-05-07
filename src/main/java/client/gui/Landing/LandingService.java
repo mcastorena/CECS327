@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
- *
+ * Service connection for the Landing page
  */
 public class LandingService {
 

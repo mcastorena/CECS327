@@ -122,8 +122,6 @@ public class LandingPresenter {
 
         if (isAuthorized) {
             controller.goToHomepage();
-//            homepagePresenter = new HomepagePresenter(clientProxy);
-//            switchToHomepage();
         } else {
             displayError();
         }
