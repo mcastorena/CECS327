@@ -10,12 +10,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Mapper implements MapReduceInterface, Serializable {
-    public void map(String key, JsonObject value, IDFSInterface context, ChordMessageInterface chordContext, String file) throws Exception
-    {
+    public void map(String key, JsonObject value, IDFSInterface context, ChordMessageInterface chordContext, String file) throws Exception {
         Collection c = d.jsonToCollection(value);
         String newKey = c.getSongTitle();
-        if(file.contains("artist"))
-        {
+        if (file.contains("artist")) {
             newKey = c.getArtistName();
         }
 
@@ -35,8 +33,7 @@ public class Mapper implements MapReduceInterface, Serializable {
         chordContext.emit(newKey, jo1, context, file);
     }
 
-    public void reduce(String key, ArrayList valuesList, IDFSInterface context, ChordMessageInterface chordContext, String file) throws Exception
-    {
+    public void reduce(String key, ArrayList valuesList, IDFSInterface context, ChordMessageInterface chordContext, String file) throws Exception {
         //sort(values);
 
         Gson gson = new GsonBuilder()

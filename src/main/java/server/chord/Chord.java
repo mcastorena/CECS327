@@ -1,32 +1,26 @@
 package server.chord;
 /**
-* Chord implements Chord P2P
-*
-* @author  Oscar Morales-Ponce
-* @version 0.15
-* @since   03-3-2019
-*/
-
-import java.rmi.*;
-import java.rmi.registry.*;
-import java.rmi.server.*;
-import java.net.*;
-import java.util.*;
-import java.io.*;
+ * Chord implements Chord P2P
+ *
+ * @author Oscar Morales-Ponce
+ * @version 0.15
+ * @since 03-3-2019
+ */
 
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
-import jdk.jshell.execution.RemoteExecutionControl;
-import server.chord.ChordMessageInterface;
-import server.chord.RemoteInputFileStream;
-import server.model.Collection;
 
-import static server.core.Server.d;
+import java.io.*;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.*;
 
 /**
  * Chord extends from UnicastRemoteObject to support RMI.
  * It implements the ChordMessageInterface
- *
  */
 public class Chord extends UnicastRemoteObject implements ChordMessageInterface {
     // Numbers of fingers
@@ -34,9 +28,9 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
 
     // rmi registry for lookup the remote objects.
     Registry registry;
-    // Successor peeer
+    // Successor peer
     ChordMessageInterface successor;
-    // Predecessor peeer
+    // Predecessor peer
     ChordMessageInterface predecessor;
     // array of fingers
     ChordMessageInterface[] finger;
@@ -53,17 +47,16 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
     HashMap<Long, TreeMap<String, ArrayList>> myPageMap = new HashMap<>();
 
 
-
-/**
- * Constructor of the Chord.
- * <p>
- * The function is used to debug if the ring is correctly formed
- * </p>
-  *
- * @param  port it is the port where it listen. If the port is being used
- * for another process, it throw RemoteException.
- * @param guid the global unique id of the peer.
- */
+    /**
+     * Constructor of the Chord.
+     * <p>
+     * The function is used to debug if the ring is correctly formed
+     * </p>
+     *
+     * @param port it is the port where it listen. If the port is being used
+     *             for another process, it throw RemoteException.
+     * @param guid the global unique id of the peer.
+     */
     public Chord(int port, long guid) throws RemoteException {
         int j;
         // Initialize the variables
@@ -108,23 +101,23 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
             return (key > key1 || key < key2);
     }
 
-    public int getChordSize() throws RemoteException{
+    public int getChordSize() throws RemoteException {
         return chordSize;
     }
 
 
-/**
- *return true if the key is in the semi-open interval (key1, key2]
- */
-    public Boolean isKeyInSemiCloseInterval(long key, long key1, long key2)
-    {
-      return isKeyInOpenInterval(key, key1, key2) || key == key2;
+    /**
+     * return true if the key is in the semi-open interval (key1, key2]
+     */
+    public Boolean isKeyInSemiCloseInterval(long key, long key1, long key2) {
+        return isKeyInOpenInterval(key, key1, key2) || key == key2;
     }
 
     /**
-     *  put a file in the repository
-     * @param guidObject  GUID of the object to store
-     * @param stream  File to store
+     * put a file in the repository
+     *
+     * @param guidObject GUID of the object to store
+     * @param stream     File to store
      */
     public void put(long guidObject, RemoteInputFileStream stream) throws RemoteException {
         stream.connect();
@@ -140,9 +133,10 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
     }
 
     /**
-     *  put a text in guidObject
-     * @param guidObject  GUID of the object to store
-     * @param text text to store
+     * put a text in guidObject
+     *
+     * @param guidObject GUID of the object to store
+     * @param text       text to store
      */
     public void put(long guidObject, String text) throws RemoteException {
         try {
@@ -157,7 +151,8 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
 
     /**
      * return guidObject
-     * @param guidObject  GUID of the object to return
+     *
+     * @param guidObject GUID of the object to return
      */
     public RemoteInputFileStream get(long guidObject) throws RemoteException {
         RemoteInputFileStream file = null;
@@ -172,7 +167,8 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
 
     /**
      * return len bytes of guidObject from offset
-     * @param guidObject  GUID of the object to return
+     *
+     * @param guidObject GUID of the object to return
      */
     public byte[] get(long guidObject, long offset, int len) throws RemoteException {
         byte[] buf = new byte[len];
@@ -192,7 +188,8 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
 
     /**
      * deletes a file with guidObject from the repository
-     * @param guidObject  GUID of the object to delete
+     *
+     * @param guidObject GUID of the object to delete
      */
     public void delete(long guidObject) throws RemoteException {
         File file = new File(prefix + guidObject);
@@ -233,12 +230,12 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
         return successor;
     }
 
-/**
- * locates the successor of key
- * <p>
- * @param key
- * return the Chord Interface of the successor of key
- */
+    /**
+     * locates the successor of key
+     * <p>
+     *
+     * @param key return the Chord Interface of the successor of key
+     */
     public ChordMessageInterface locateSuccessor(long key) throws RemoteException {
         if (key == guid)
             throw new IllegalArgumentException("Key must be distinct that  " + guid);
@@ -257,8 +254,8 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
     /**
      * Returns the closest preceding node for the key
      * <p>
-     * @param key
-     * return the Chord Interface of the closet preceding node
+     *
+     * @param key return the Chord Interface of the closet preceding node
      */
     public ChordMessageInterface closestPrecedingNode(long key) throws RemoteException {
         if (key != guid) {
@@ -286,7 +283,8 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
     /**
      * It joins the ring in the peer (ip,port). The peer must exist
      * <p>
-     * @param ip of the peer
+     *
+     * @param ip   of the peer
      * @param port of the peer
      */
     public void joinRing(String ip, int port) throws RemoteException {
@@ -305,6 +303,7 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
     /**
      * It joins the ring in the peer ChordMessageInterface. The peer must exist
      * <p>
+     *
      * @param s is the successor
      */
     public void joinRing(ChordMessageInterface s) throws RemoteException {
@@ -313,7 +312,7 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
     }
 
     /**
-     *  If the successor fails, it tries to handle the failure using the
+     * If the successor fails, it tries to handle the failure using the
      * first finger available
      * <p>
      */
@@ -366,6 +365,7 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
      * A node notifies that it has a new predecessor j. It also moves all the
      * files that the predecessor must handle
      * </p>
+     *
      * @param j the new predecessor
      */
     public void notify(ChordMessageInterface j) throws RemoteException {
@@ -509,56 +509,50 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
         }
     }
 
-/**
- * Prints the successor, predecessor and fingers if they are not null.
- * <p>
- * The function is used to debug if the ring is correctly formed
- * </p>
- */
-    public String print()
-    {
+    /**
+     * Prints the successor, predecessor and fingers if they are not null.
+     * <p>
+     * The function is used to debug if the ring is correctly formed
+     * </p>
+     */
+    public String print() {
         int i;
         try {
             String out = "";
             if (successor != null)
-                out = "successor "+ successor.getId();
+                out = "successor " + successor.getId();
             if (predecessor != null)
-                out = out + "\npredecessor "+ predecessor.getId();
-            for (i=0; i<M; i++)
-            {
+                out = out + "\npredecessor " + predecessor.getId();
+            for (i = 0; i < M; i++) {
                 try {
                     if (finger[i] != null)
-                        out = out + "\nFinger "+ i + " " + finger[i].getId();
-                } catch(NullPointerException e)
-                {
+                        out = out + "\nFinger " + i + " " + finger[i].getId();
+                } catch (NullPointerException e) {
                     System.out.println("Cannot retrive id of the finger " + i);
                 }
             }
             return out;
-        }
-        catch(RemoteException e){
-	       System.out.println("Cannot retrive id of successor or predecessor");
+        } catch (RemoteException e) {
+            System.out.println("Cannot retrive id of successor or predecessor");
         }
         return null;
     }
 
 
-    public String getPrefix()
-    {
+    public String getPrefix() {
         return prefix;
     }
+
     /**
-     *
      * @param source - GUID of the chord peer that initiates onChordSize
-     * @param n - number of nodes counted, init 1
+     * @param n      - number of nodes counted, init 1
      * @return n - the number of nodes in the chord
      */
     public void onChordSize(Long source, int n) throws RemoteException {
 
-        if(source != this.guid){
+        if (source != this.guid) {
             this.successor.onChordSize(source, ++n);
-        }
-        else {
+        } else {
             this.chordSize = n;
         }
         // When source == this.guid then all nodes in the chord have been counted
@@ -567,6 +561,7 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
 
     /**
      * Store tree in the page in order
+     *
      * @param page - Page receiving TreeMap Data
      */
     public void bulk(DFS.PagesJson page, String file) throws Exception {
@@ -576,13 +571,11 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
 
         try {
             long pageGuid = page.getGUID();
-            if(myPageMap.get(pageGuid) != null) {
-                    put(pageGuid, gson.toJson(myPageMap.get(pageGuid)));
-                    myPageMap.remove(pageGuid);
+            if (myPageMap.get(pageGuid) != null) {
+                put(pageGuid, gson.toJson(myPageMap.get(pageGuid)));
+                myPageMap.remove(pageGuid);
             }
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             System.out.println("Error: Chord.bulk ");
             e.printStackTrace();
 
@@ -591,10 +584,11 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
 
     /**
      * Runs map for mapreduce
-     * @param pageGuid - Page being mapped
-     * @param mapper - Mapper object performing the mapping
+     *
+     * @param pageGuid    - Page being mapped
+     * @param mapper      - Mapper object performing the mapping
      * @param coordinator - DFS coordinating the mapreduce (this)
-     * @param file - Name of the file being mapped
+     * @param file        - Name of the file being mapped
      * @throws Exception
      */
     public void mapContext(long pageGuid, MapReduceInterface mapper, IDFSInterface coordinator, String file) throws Exception {
@@ -605,7 +599,7 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
         RemoteInputFileStream rifs = get(pageGuid);
         rifs.connect();
         JsonArray page = gson.fromJson(new JsonReader(new InputStreamReader(rifs)), JsonArray.class);
-        for(int i = 0; i < page.size(); i++){
+        for (int i = 0; i < page.size(); i++) {
             int index = i;
             JsonObject value = (JsonObject) page.get(index);
             mapper.map(Integer.toString(index), value, coordinator, this, file);
@@ -616,10 +610,11 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
 
     /**
      * Runs reduce for mapreduce
-     * @param page - Page being reduced
-     * @param reducer - Mapper object performing the reduce
+     *
+     * @param page        - Page being reduced
+     * @param reducer     - Mapper object performing the reduce
      * @param coordinator - DFS coordinating the reduce (this)
-     * @param file - Name of the file being reduced
+     * @param file        - Name of the file being reduced
      * @throws IOException
      */
     public void reduceContext(long pageGuid, MapReduceInterface reducer, DFS coordinator, String file) throws Exception {
@@ -632,7 +627,7 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
             RemoteInputFileStream rifs = get(pageGuid);
             rifs.connect();
             TreeMap<String, ArrayList> page = gson.fromJson(new JsonReader(new InputStreamReader(rifs)), TreeMap.class);
-            if(page != null) {
+            if (page != null) {
                 Set<Map.Entry<String, ArrayList>> entrySet = page.entrySet();
 
 
@@ -640,8 +635,7 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
                     reducer.reduce(entry.getKey(), entry.getValue(), coordinator, this, file);
                 }
             }
-        } catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         coordinator.onPageComplete(file);
@@ -654,13 +648,13 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
         DFS.FilesJson metadata = context.readMetaData();
 
         DFS.FileJson fj = null;
-        for(int i = metadata.file.size() - 1; i >= 0 ; i--){
+        for (int i = metadata.file.size() - 1; i >= 0; i--) {
             fj = metadata.file.get(i);
-            if(fj.getName().equals(file)){
+            if (fj.getName().equals(file)) {
                 break;
             }
         }
-        for(int i = 0; i < fj.numberOfPages - 1; i++) {
+        for (int i = 0; i < fj.numberOfPages - 1; i++) {
             DFS.PagesJson page1 = fj.pages.get(i);
             DFS.PagesJson page2 = fj.pages.get(i + 1);
 
@@ -684,8 +678,7 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
 
             if ((keyLetter1 == pg1Letter1 && (keyLetter2 >= pg1Letter2 || key.charAt(1) == ' ')) ||
                     (keyLetter1 == pg2Letter1 && keyLetter2 < pg2Letter2) ||
-                    (keyLetter1 > pg1Letter1 && keyLetter1 < pg2Letter1))
-            {
+                    (keyLetter1 > pg1Letter1 && keyLetter1 < pg2Letter1)) {
                 ChordMessageInterface peer = locateSuccessor(page1.getGUID());
                 peer.addKeyValue(key, value.toString(), file, page1.getGUID());
                 break;
@@ -697,7 +690,7 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
 
     }
 
-//    /**
+    //    /**
 //     * Adds key, value pair to TreeMap data structure
 //     * @param key - Key value in string format
 //     * @param value - Content of entry being mapped (data)
@@ -710,7 +703,7 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
         JsonParser parser = new JsonParser();
 
         JsonElement value = null;
-        if(filename.endsWith(".map"))
+        if (filename.endsWith(".map"))
             value = parser.parse(valueString).getAsJsonObject();
         else
             value = parser.parse(valueString).getAsJsonArray();
@@ -718,26 +711,22 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
         TreeMap<String, ArrayList> myMap = null;
         try {
             myMap = myPageMap.get(guid);
-        } catch(Exception e)
-        {
-          e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        if(myMap == null)
-        {
+        if (myMap == null) {
             myPageMap.put(guid, new TreeMap<>());
             myMap = myPageMap.get(guid);
         }
 
-        if(filename.endsWith(".map")) {
+        if (filename.endsWith(".map")) {
             if (!myMap.containsKey(key)) {                            // If key is not in map, add an entry
                 ArrayList tmpList = new ArrayList();
                 myMap.put(key, tmpList);
             }
             myMap.get(key).add(value);                              // Add value to map
-        }
-        else
-        {
+        } else {
             ArrayList values = gson.fromJson(value, ArrayList.class);
             myMap.put(key, values);
         }

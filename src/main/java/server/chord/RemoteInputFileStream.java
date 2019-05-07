@@ -4,9 +4,9 @@ package server.chord;
  * files. It creates a server and return the address
  * The client must call connect() before reading
  *
- * @author  Oscar Morales-Ponce
+ * @author Oscar Morales-Ponce
  * @version 0.16
- * @since   03-3-2019
+ * @since 03-3-2019
  */
 
 import java.io.*;
@@ -46,7 +46,7 @@ public class RemoteInputFileStream extends InputStream implements Serializable {
      *  Semaphore required for multithreading
      */
     public Semaphore sem;
-    private static int BUFFER_LENGTH = 1<< 16;
+    private static int BUFFER_LENGTH = 1 << 16;
     /**
      * It stores a buffer with FRAGMENT_SIZE bytes for the current reading.
      * This variable is useful for UDP sockets. Thus buf is the datagram
@@ -67,10 +67,9 @@ public class RemoteInputFileStream extends InputStream implements Serializable {
     /**
      * Connects to the server to provide the file
      */
-    public void connect()
-    {
+    public void connect() {
         //this.buf  = new byte[BUFFER_LENGTH];
-        this.nextBuf  = new byte[BUFFER_LENGTH];
+        this.nextBuf = new byte[BUFFER_LENGTH];
         pos = 0;
         try {
             Socket socket = new Socket(IP.getLoopbackAddress(), port);
@@ -118,9 +117,8 @@ public class RemoteInputFileStream extends InputStream implements Serializable {
                         Socket socket = serverSocket.accept();
                         OutputStream socketOutputStream = socket.getOutputStream();
                         FileInputStream is = new FileInputStream(pathName);
-                        byte[] b =new byte[BUFFER_LENGTH];
-                        while (is.available() > 0)
-                        {
+                        byte[] b = new byte[BUFFER_LENGTH];
+                        while (is.available() > 0) {
                             is.read(b);
                             socketOutputStream.write(b);
                         }
@@ -156,22 +154,18 @@ public class RemoteInputFileStream extends InputStream implements Serializable {
     protected void getBuff(int fragment) throws IOException {
         new Thread() {
             public void run() {
-                try
-                {
+                try {
 
-                    while ((Math.floor(total/BUFFER_LENGTH) <= fragment ||
+                    while ((Math.floor(total / BUFFER_LENGTH) <= fragment ||
                             input.available() < BUFFER_LENGTH) &&
-                            (Math.floor(total/BUFFER_LENGTH) > fragment ||
-                                    (input.available() < total % BUFFER_LENGTH)))
-                    {
+                            (Math.floor(total / BUFFER_LENGTH) > fragment ||
+                                    (input.available() < total % BUFFER_LENGTH))) {
 
                         Thread.sleep(1);
                     }
                     input.read(nextBuf);
                     sem.release();
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
 
                 }
             }
@@ -190,8 +184,7 @@ public class RemoteInputFileStream extends InputStream implements Serializable {
             return -1;
         }
         int posmod = pos % BUFFER_LENGTH;
-        if (posmod == 0)
-        {
+        if (posmod == 0) {
             try {
                 sem.acquire();
             } catch (InterruptedException exc) {

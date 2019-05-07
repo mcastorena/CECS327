@@ -1,19 +1,18 @@
 package server.chord;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import server.core.Server;
 import server.util.MusicJsonSplitter;
 
-import java.io.*;
-import java.rmi.RemoteException;
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static server.core.Server.*;
 
-public class DFSCommand
-{
+public class DFSCommand {
     public DFSCommand() throws Exception {
         BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
         String line = buffer.readLine();
@@ -87,9 +86,7 @@ public class DFSCommand
                             String text = matcher.group(1);
 
                             dfs.append(result[1], text); // Appends text
-                        }
-                        else if (result[1].contains("music"))
-                        {
+                        } else if (result[1].contains("music")) {
 
                             Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
@@ -115,8 +112,7 @@ public class DFSCommand
                             Server.updateSongList();
 
                             System.out.println("Done");
-                        }
-                        else
+                        } else
                             dfs.append(result[1], new RemoteInputFileStream(result[2]));        // User must specify filename they want to append data to and filepath of the data to be appended
                     }
                     break;
