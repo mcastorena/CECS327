@@ -26,24 +26,30 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
     // Numbers of fingers
     public static final int M = 7;
 
-    // rmi registry for lookup the remote objects.
+    // RMI (Remote Method Invokation) registry for lookup the remote objects.
     Registry registry;
+
     // Successor peer
     ChordMessageInterface successor;
+
     // Predecessor peer
     ChordMessageInterface predecessor;
-    // array of fingers
+
+    // Array of fingers
     ChordMessageInterface[] finger;
-    // it is used to keep the fingers updated
+
+    // Used to keep the fingers updated
     int nextFinger;
-    // GUID
+
+    // Global Universally Unique Identifier
     long guid;
 
     int chordSize = 0;
 
-    // path prefix
+    // Path prefix
     String prefix;
 
+    //
     HashMap<Long, TreeMap<String, ArrayList>> myPageMap = new HashMap<>();
 
 
@@ -59,8 +65,9 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
      */
     public Chord(int port, long guid) throws RemoteException {
         int j;
+
         // Initialize the variables
-        prefix = "." + File.separator + guid + File.separator + "repository" + File.separator;      // Local repository for each peer
+        prefix = "." + File.separator + guid + File.separator + "repository" + File.separator;  // Local repository for each peer
         finger = new ChordMessageInterface[M];
         for (j = 0; j < M; j++) {
             finger[j] = null;
@@ -92,7 +99,12 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
 
 
     /**
-     * return true if the key is in the open interval (key1, key2)
+     * Return true if the key is in the open interval, (key1, key2)
+     *
+     * @param key  - Key being checked
+     * @param key1 - Lower bound of interval
+     * @param key2 - Upper bound of interval
+     * @return true if key is in (key1, key2)
      */
     public Boolean isKeyInOpenInterval(long key, long key1, long key2) {
         if (key1 < key2)
@@ -101,20 +113,31 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
             return (key > key1 || key < key2);
     }
 
+    /**
+     * Get the size of this Chord
+     *
+     * @return size, as an int, of this Chord
+     * @throws RemoteException - Why?
+     */
     public int getChordSize() throws RemoteException {
         return chordSize;
     }
 
 
     /**
-     * return true if the key is in the semi-open interval (key1, key2]
+     * Return true if the key is in the semi-open interval, (key1, key2]
+     *
+     * @param key  - Key being checked
+     * @param key1 - Lower bound of interval
+     * @param key2 - Upper bound of interval
+     * @return true if key is in (key1, key2]
      */
     public Boolean isKeyInSemiCloseInterval(long key, long key1, long key2) {
         return isKeyInOpenInterval(key, key1, key2) || key == key2;
     }
 
     /**
-     * put a file in the repository
+     * Put a file in the repository
      *
      * @param guidObject GUID of the object to store
      * @param stream     File to store
@@ -128,12 +151,12 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
                 output.write(stream.read());
             output.close();
         } catch (IOException e) {
-            System.out.println(e);
+            System.out.println(e.getMessage());
         }
     }
 
     /**
-     * put a text in guidObject
+     * Put a text in guidObject
      *
      * @param guidObject GUID of the object to store
      * @param text       text to store
@@ -145,12 +168,12 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
             output.write(text.getBytes());
             output.close();
         } catch (IOException e) {
-            System.out.println(e);
+            System.out.println(e.getMessage());
         }
     }
 
     /**
-     * return guidObject
+     * Return guidObject
      *
      * @param guidObject GUID of the object to return
      */
@@ -166,7 +189,7 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
 
 
     /**
-     * return len bytes of guidObject from offset
+     * Return len bytes of guidObject from offset
      *
      * @param guidObject GUID of the object to return
      */
@@ -187,7 +210,7 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
 
 
     /**
-     * deletes a file with guidObject from the repository
+     * Delete a file with guidObject from the repository
      *
      * @param guidObject GUID of the object to delete
      */
@@ -197,44 +220,48 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
     }
 
     /**
-     * returns the id of the peer
+     * Return the GUID of the peer
      */
     public long getId() throws RemoteException {
         return guid;
     }
 
     /**
-     * It is used to detect that the peer is still alive
-     * <p>
-     * return true
+     * Detect that the peer is still alive.
+     *
+     * @return true
+     * @throws RemoteException
      */
     public boolean isAlive() throws RemoteException {
         return true;
     }
 
     /**
-     * return the predecessor
-     * <p>
-     * return the Chord Interface of the predecessor
+     * Return the Chord's predecessor.
+     *
+     * @return predecessor as a CMI
+     * @throws RemoteException
      */
     public ChordMessageInterface getPredecessor() throws RemoteException {
         return predecessor;
     }
 
     /**
-     * return the predecessor
-     * <p>
-     * return the Chord Interface of the predecessor
+     * Return the Chord's successor.
+     *
+     * @return successor as a CMI
+     * @throws RemoteException
      */
     public ChordMessageInterface getSuccessor() throws RemoteException {
         return successor;
     }
 
     /**
-     * locates the successor of key
-     * <p>
+     * Locate the successor of a peer given that peer's key, i.e., the peer's GUID
      *
-     * @param key return the Chord Interface of the successor of key
+     * @param key - Key of the peer
+     * @return successor of the peer, if it exists
+     * @throws RemoteException
      */
     public ChordMessageInterface locateSuccessor(long key) throws RemoteException {
         if (key == guid)
@@ -252,10 +279,11 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface 
     }
 
     /**
-     * Returns the closest preceding node for the key
-     * <p>
+     * Return the closest preceding node for a peer given that peer's key (GUID)
      *
-     * @param key return the Chord Interface of the closet preceding node
+     * @param key - GUID of peer
+     * @return the closest preceding node of the peer
+     * @throws RemoteException
      */
     public ChordMessageInterface closestPrecedingNode(long key) throws RemoteException {
         if (key != guid) {
