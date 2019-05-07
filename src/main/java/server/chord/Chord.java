@@ -586,8 +586,9 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface
     {
         return prefix;
     }
+
     /**
-     *
+     * Determines and returns the number of peers in the Chord
      * @param source - GUID of the chord peer that initiates onChordSize
      * @param n - number of nodes counted, init 1
      * @return n - the number of nodes in the chord
@@ -687,6 +688,9 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface
     }
 
     @Override
+    /**
+     *
+     */
     public void emit(String key, JsonElement value, IDFSInterface context, String file) throws Exception {
         key = key.toUpperCase();
 
