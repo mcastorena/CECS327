@@ -18,7 +18,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 /**
- * TODO:
+ * Defines the characteristics of the window shown when creating a Playlist
  */
 public class CreatePlaylistWindow {
 

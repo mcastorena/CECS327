@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 /**
- *
+ * Defines the characteristics of the window displayed when deleting a Playlist
  */
 public class DeletePlaylistWindow {
 

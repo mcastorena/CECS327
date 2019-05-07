@@ -72,6 +72,7 @@ public class PlaylistListPresenter {
             e.printStackTrace();
         }
     }
+
     /**
      * Required by JavaFX for accessing @FXML components
      */
@@ -175,7 +176,7 @@ public class PlaylistListPresenter {
     }
 
     /**
-     * TODO:
+     * Informs the application that a song was just added to a Playlist
      *
      * @param sender - PlaylistItem
      */
