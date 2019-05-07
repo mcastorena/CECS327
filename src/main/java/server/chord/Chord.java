@@ -737,7 +737,7 @@ public class Chord extends UnicastRemoteObject implements ChordMessageInterface
     }
 
 //    /**
-//     * Adds key, value pair to TreeMap data structure
+//     * Adds key, value pair to TreeMap data structure. If key exists, add value to it. If key not in TreeMap, make a new entry
 //     * @param key - Key value in string format
 //     * @param value - Content of entry being mapped (data)
 //     */
