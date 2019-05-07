@@ -1,10 +1,10 @@
 package client.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
-// Contains list of collections for song/artists
-// Can use this to obtain information to be displayed
+/**
+ * Define the characteristics of a Search Result
+ */
 public class SearchResult {
 
     List<CollectionLightWeight> songs;
@@ -15,10 +15,10 @@ public class SearchResult {
         this.artists = artists;
     }
 
-    public SearchResult()
-    {
+    public SearchResult() {
     }
 
+    //region Getters and Setters
     public List<CollectionLightWeight> getSongResultList() {
         return songs;
     }
@@ -55,7 +55,6 @@ public class SearchResult {
         return artists.size();
     }
 
-
     @Override
     public String toString() {
         return "SearchResult{" +
@@ -63,4 +62,5 @@ public class SearchResult {
                 ",\n artists=" + artists +
                 '}';
     }
+    //endregion
 }

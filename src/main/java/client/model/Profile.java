@@ -9,7 +9,6 @@ import java.util.List;
 /**
  * This class represents a user's profile
  */
-// Access modifiers left out for now...
 public class Profile {
 
     /**
