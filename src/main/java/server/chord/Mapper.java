@@ -10,6 +10,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Mapper implements MapReduceInterface, Serializable {
+    /**
+     *
+     * @param key - Index of value from it's PagesJson object
+     * @param value - JsonObject from a page being mapped
+     * @param context - DFS in which the mapreduce is being executed
+     * @param chordContext - Chord in which the mapreduce is being executed. Used by IDFSInterface context
+     * @param file - Name of file being mapped
+     * @throws Exception
+     */
     public void map(String key, JsonObject value, IDFSInterface context, ChordMessageInterface chordContext, String file) throws Exception
     {
         Collection c = d.jsonToCollection(value);
@@ -35,6 +44,15 @@ public class Mapper implements MapReduceInterface, Serializable {
         chordContext.emit(newKey, jo1, context, file);
     }
 
+    /**
+     * Runs reduce on a each entry in the TreeMap in the chord of the DFS
+     * @param key - Key of map entry
+     * @param valuesList - Value of entry in map
+     * @param context - DFS in which reduce is being executed
+     * @param chordContext - Chord in which reduce is being executed
+     * @param file - Name of file being reduced
+     * @throws Exception
+     */
     public void reduce(String key, ArrayList valuesList, IDFSInterface context, ChordMessageInterface chordContext, String file) throws Exception
     {
         //sort(values);
