@@ -3,7 +3,7 @@ package client.model;
 import java.util.ArrayList;
 
 /**
- * Define the characteristics of a Playlist
+ * Defines the characteristics of a Playlist
  */
 public class Playlist {
 
