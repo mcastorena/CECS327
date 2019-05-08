@@ -5,20 +5,29 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.internal.LinkedTreeMap;
 import server.model.Collection;
+
 import static server.core.Server.d;
 
 import java.util.Comparator;
 
+/**
+ * Custom comparator for Collection objects
+ */
 public class CollectionComparator implements Comparator<LinkedTreeMap> {
 
     String file;
-    public CollectionComparator(String file)
-    {
+
+    /**
+     * Constructor
+     *
+     * @param file
+     */
+    public CollectionComparator(String file) {
         super();
         this.file = file;
     }
+
     /**
-     *
      * Compares two collections. Used for sorting values.
      */
     @Override
@@ -33,14 +42,12 @@ public class CollectionComparator implements Comparator<LinkedTreeMap> {
         Collection c2 = d.jsonToCollection(jo2);
 
         // Sort values by song title for artistInvertedIndex.
-        if(file.contains("artist")) {
+        if (file.contains("artist")) {
             String song1 = c1.getSongTitle();
             String song2 = c2.getSongTitle();
 
             return song1.compareToIgnoreCase(song2);
-        }
-        else
-        {
+        } else {
             // Sort values by artist name for musicInvertedIndex.
             String artist1 = c1.getArtistName();
             String artist2 = c2.getArtistName();

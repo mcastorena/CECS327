@@ -12,7 +12,6 @@ package client.rpc;
 import com.google.gson.JsonObject;
 import org.apache.log4j.Logger;
 
-import javax.validation.constraints.Null;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Base64;
@@ -69,8 +68,6 @@ public class CECS327InputStream extends InputStream {
      *
      * @param fileName The name of the file
      */
-    // TODO: De-hardcode addition of parameters by name --> i.e. move to client near-gui code (i.e. attach to the
-    // forms themselves or something.
     public CECS327InputStream(Long fileName, ProxyInterface proxy) {
         sem = new Semaphore(1);
         try {
@@ -93,7 +90,12 @@ public class CECS327InputStream extends InputStream {
         fragment++;
     }
 
-    // For Search Result
+    /**
+     * Constructor intended for Search Results
+     *
+     * @param query - Song being queried for
+     * @param proxy - Proxy being used
+     */
     public CECS327InputStream(String query, ProxyInterface proxy) {
         sem = new Semaphore(1);
         try {
@@ -119,7 +121,14 @@ public class CECS327InputStream extends InputStream {
         fragment++;
     }
 
-    // For login
+    /**
+     * Constructor intended for User Login
+     *
+     * @param username - User's username
+     * @param password - User's password
+     * @param proxy    - Proxy that the User is using
+     * @throws IOException
+     */
     public CECS327InputStream(String username, String password, ProxyInterface proxy) throws IOException {
         sem = new Semaphore(1);
         try {
@@ -148,7 +157,13 @@ public class CECS327InputStream extends InputStream {
         System.out.println("Read Buffer");
     }
 
-    // For retrieving playlists
+    /**
+     * Constructor intended for retrieving Playlists
+     *
+     * @param userToken - Token unique to the User
+     * @param proxy     - Proxy that the User is using
+     * @throws IOException
+     */
     public CECS327InputStream(Integer userToken, ProxyInterface proxy) throws IOException {
         sem = new Semaphore(1);
         try {
@@ -232,8 +247,6 @@ public class CECS327InputStream extends InputStream {
      */
     @Override
     public synchronized int read() throws IOException {
-
-
         if (pos >= total) {
             pos = 0;
             return -1;
@@ -320,7 +333,9 @@ public class CECS327InputStream extends InputStream {
     }
 
     /**
-     * Marks the current position in this input stream.
+     * Marks the current position in this input stream
+     *
+     * @param readAheadLimit - Amount to read ahead
      */
     @Override
     public void mark(int readAheadLimit) {
@@ -328,8 +343,8 @@ public class CECS327InputStream extends InputStream {
     }
 
     /**
-     * Repositions this stream to the position at the time the
-     * mark method was last called on this input stream.
+     * Repositions this stream to the position at the time the mark method was
+     * last called on this input stream.
      */
     @Override
     public synchronized void reset() throws IOException {
@@ -341,8 +356,8 @@ public class CECS327InputStream extends InputStream {
     }
 
     /**
-     * Closes this input stream and releases any system resources
-     * associated with the stream.
+     * Closes this input stream and releases any system resources associated
+     * with the stream.
      */
     @Override
     public void close() throws IOException {

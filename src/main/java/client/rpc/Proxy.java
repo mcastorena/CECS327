@@ -1,4 +1,6 @@
-package client.rpc; /**
+package client.rpc;
+
+/**
  * The Proxy implements ProxyInterface class. The class is incomplete
  *
  * @author Oscar Morales-Ponce
@@ -26,19 +28,38 @@ import java.util.UUID;
  */
 public class Proxy implements ProxyInterface {
 
+    /**
+     * Logger for the Proxy
+     */
     private static final Logger LOGGER = Logger.getLogger(Proxy.class);
+
+    /**
+     * Connection to Client
+     */
     private ClientCommunicationProtocol communicate;
+
+    /**
+     * Location of Music
+     */
     private static final URL MUSIC_URL = Proxy.class.getResource("/client/appdata/methods.json");
 
-    // Constructor
+    /**
+     * Constructor
+     *
+     * @param portNumber - Port to open the Proxy on
+     */
     public Proxy(int portNumber) {
         this.communicate = new ClientCommunicationProtocol();
         communicate.connect(portNumber);
     }
 
-    /*
-     * Executes the  remote method "remoteMethod". The method blocks until
-     * it receives the reply of the message.
+    /**
+     * Synchronous execution of a remote method. The method blocks until it
+     * receives the reply of the message.
+     *
+     * @param remoteMethod - Remote method being executed
+     * @param params       - Parameters being sent to the remote method
+     * @return Server response as a JSON object
      */
     public synchronized JsonObject syncExecution(String remoteMethod, Map<String, String> params) {
         JsonObject remoteMethodJO = getRemoteMethodFromJson(remoteMethod);
@@ -50,7 +71,7 @@ public class Proxy implements ProxyInterface {
 
         System.out.println("Sending request: " + remoteMethodJO.toString());
         String strRet = communicate.sendRequest(remoteMethodJO.toString().trim(), callSemantic);
-        if(strRet == null) return null;
+        if (strRet == null) return null;
         System.out.println("Returning response from server to inputstream: " + strRet);
         String myReturn = strRet.trim();
 
@@ -59,6 +80,12 @@ public class Proxy implements ProxyInterface {
         return parser.parse(myReturn).getAsJsonObject();
     }
 
+    /**
+     * Asynchronous execution of a remote method.
+     *
+     * @param remoteMethod - Remote method being executed
+     * @param params       - Parameters being sent to the remote method
+     */
     public synchronized void asyncExecution(String remoteMethod, Map<String, String> params) {
         JsonObject remoteMethodJO = getRemoteMethodFromJson(remoteMethod);
 
@@ -68,6 +95,12 @@ public class Proxy implements ProxyInterface {
         communicate.sendAsyncRequest(remoteMethodJO.toString().trim());
     }
 
+    /**
+     * Retrieves a remote method given it's name.
+     *
+     * @param remoteMethod - Name of the remote method being searched for
+     * @return The remote method if found, otherwise null
+     */
     public JsonObject getRemoteMethodFromJson(String remoteMethod) {
         Gson gson = new Gson();
 
@@ -82,6 +115,12 @@ public class Proxy implements ProxyInterface {
         }
     }
 
+    /**
+     * Attaches parameters to the remote method object.
+     *
+     * @param methodObject - Remote method
+     * @param params       - Parameters to be attached
+     */
     private void attachParams(JsonObject methodObject, Map<String, String> params) {
         JsonObject paramsObject = methodObject.get("params").getAsJsonObject();
 
@@ -94,24 +133,25 @@ public class Proxy implements ProxyInterface {
         methodObject.add("params", paramsObject);
     }
 
+    /**
+     * Attaches UUID to the remote method.
+     *
+     * @param methodObject - Remote method to have UUID attached
+     */
     private void attachUUID(JsonObject methodObject) {
         UUID uuid = Generators.timeBasedGenerator().generate();
         methodObject.addProperty("requestId", uuid.toString());
     }
 
+    /**
+     * Retrieves the call semantic from the remote method.
+     *
+     * @param methodObject - Remote method being accessed
+     * @return Call semantic associated with the remote method
+     */
     private String getCallSemanticFromJson(JsonObject methodObject) {
         return methodObject.get("callSemantic").getAsString();
     }
-
-    /*
-     * Executes the  remote method remoteMethod and returns without waiting
-     * for the reply. It does similar to syncExecution but does not
-     * return any value
-     *
-     */
-//    public void asynchExecution(String remoteMethod, String[] param) {
-//        return;
-//    }
 }
 
 
