@@ -2,7 +2,6 @@ package server.chord;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import server.core.Server;
 import server.util.MusicJsonSplitter;
 
 import java.io.BufferedReader;
@@ -10,9 +9,14 @@ import java.io.InputStreamReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static server.core.Server.*;
+import static server.core.Server.NEXT_PORT;
+import static server.core.Server.dfs;
 
+/**
+ * Defines the DFS commands that can be executed in the terminal.
+ */
 public class DFSCommand {
+
     public DFSCommand() throws Exception {
         BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in));
         String line = buffer.readLine();
@@ -92,8 +96,6 @@ public class DFSCommand {
 
                             var chunks =
                                     MusicJsonSplitter.getMusicJsonChunks(result[2], 100);
-//                                DFSCommand.class.getResource("/server/music.json").getPath(),
-//                                100);
 
                             System.out.println("Adding pages to music.json...");
                             int i = 0;
@@ -108,12 +110,10 @@ public class DFSCommand {
                                     e.printStackTrace();
                                 }
                             }
-                            //d.updateMusicOnFileAdd();
-                            //Server.updateSongList();
 
                             System.out.println("Done");
                         } else
-                            dfs.append(result[1], new RemoteInputFileStream(result[2]));        // User must specify filename they want to append data to and filepath of the data to be appended
+                            dfs.append(result[1], new RemoteInputFileStream(result[2]));    // User must specify filename they want to append data to and filepath of the data to be appended
                     }
                     break;
 
